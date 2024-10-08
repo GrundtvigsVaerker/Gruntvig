@@ -50,7 +50,7 @@ public class DoSearch extends Application {
      */
     /* KK 2014-02-13, 2014-03-06 */
     public static void avanceret() {
-        System.out.println("Advanced search");
+        System.out.println("----------- Advanced search");
         String lucene = params.get("lucene");
         String grundtvig = params.get("grundtvig");
         String kommentar = params.get("kommentar");
