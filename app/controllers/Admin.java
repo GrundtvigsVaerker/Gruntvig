@@ -49,5 +49,11 @@ public class Admin extends Application {
         Asset.deleteAll();
         Controller.renderHtml("All data removed");
     }
-
+    public static void indexAll() { 
+    	List<Asset> all = Asset.findAll();
+	for (Asset asset : all) {
+	   asset.index();
+ 	   System.out.println(asset);
+	}
+    }
 }
