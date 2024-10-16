@@ -116,6 +116,12 @@ caption, th, td {
 	text-align: left;
 	font-weight: normal;
 }
+
+caption, th, td {
+	text-align: center;
+	font-weight: normal;
+}
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: "";
