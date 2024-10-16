@@ -3367,7 +3367,7 @@
     
     <xsl:template match="TEI:table[@type='plain']//TEI:cell">
         <xsl:choose>
-            <xsl:when test="@rows">
+            <xsl:when test="@rows"> 
                 <td class="plain" rowspan="{@rows}">
                     <xsl:apply-templates/>
                 </td>
@@ -3384,6 +3384,11 @@
             </xsl:when>
             <xsl:when test="@cols and @rend='center'">
                 <td class="plainCenter" colspan="{@cols}">
+                    <xsl:apply-templates/>
+                </td>
+            </xsl:when>
+            <xsl:when test="not(@cols) and @rend">
+                <td class="{@rend}">
                     <xsl:apply-templates/>
                 </td>
             </xsl:when>
