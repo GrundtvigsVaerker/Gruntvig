@@ -191,7 +191,6 @@ td, td.shortForm
         {
         border: 0px solid red;
         width: 60%;
-        text-align: center;
         /*color: #4DBC4D;*/
         }
 
@@ -219,6 +218,12 @@ td.returnTop
 a.returnTop 
         {        
         text-decoration: none;
+        }
+
+td.center 
+        {
+        border: 0px solid;
+        text-align: center;
         }
 
         
