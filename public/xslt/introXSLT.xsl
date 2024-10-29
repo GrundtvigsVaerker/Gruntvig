@@ -187,6 +187,7 @@
     </xsl:template>
     
     <!--toc intro_menu -->
+
     <xsl:template match="TEI:teiHeader/TEI:fileDesc/TEI:titleStmt/TEI:editor[@role='editor']">        
         <div class="editor">
             <xsl:apply-templates/>
@@ -230,6 +231,22 @@
             <!--xsl:attribute name="class"><xsl:value-of select="name()"/></xsl:attribute-->
             <xsl:apply-templates/>
         </div>
+    </xsl:template>
+    
+    <xsl:template match="TEI:g">
+        <xsl:choose>
+            <xsl:when test="@rend='reverse' and @rendition='rotate'">
+                <span class="rotate">
+                    <xsl:apply-templates/>
+                </span>
+            </xsl:when>
+            <xsl:when test="@rend='start' and @rendition='repeat'">
+                <span>//:</span>
+            </xsl:when>
+            <xsl:when test="@rend='end' and @rendition='repeat'">
+                <span>://</span>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template match="TEI:div[@type='litList']">
