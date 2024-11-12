@@ -16,3 +16,4 @@ nbproject/project.xml
 logs/
 server.pid
 nohup.out
+conf/application.conf
