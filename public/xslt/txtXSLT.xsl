@@ -1170,6 +1170,12 @@
                     <xsl:when test="//TEI:idno[@type='addCom']='1.22'">
                         <xsl:text>, 1. november 2023</xsl:text>
                     </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addCom']='1.23'">
+                        <xsl:text>, 1. maj 2024</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addCom']='1.24'">
+                        <xsl:text>, 1. november 2024</xsl:text>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
@@ -1251,6 +1257,12 @@
                     <xsl:when test="//TEI:idno[@type='addIntro']='1.22'">
                         <xsl:text>, 1. november 2023</xsl:text>
                     </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addIntro']='1.23'">
+                        <xsl:text>, 1. maj 2024</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addIntro']='1.24'">
+                        <xsl:text>, 1. november 2024</xsl:text>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
@@ -1331,6 +1343,12 @@
                     </xsl:when>
                     <xsl:when test="//TEI:idno[@type='addTxr']='1.22'">
                         <xsl:text>, 1. november 2023</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addTxr']='1.23'">
+                        <xsl:text>, 1. maj 2024</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addTxr']='1.24'">
+                        <xsl:text>, 1. november 2024</xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
@@ -1497,6 +1515,9 @@
         </xsl:if>
         <xsl:if test="//TEI:idno[@type='changeVersion'][position()=last()]='1.23'">
             <xsl:text>, maj 2024</xsl:text>
+        </xsl:if>
+        <xsl:if test="//TEI:idno[@type='changeVersion'][position()=last()]='1.24'">
+            <xsl:text>, november 2024</xsl:text>
         </xsl:if>
     </xsl:template>
     
