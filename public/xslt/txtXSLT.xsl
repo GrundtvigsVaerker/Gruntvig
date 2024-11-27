@@ -3456,6 +3456,12 @@
         </xsl:choose>
     </xsl:template>
     
+    <xsl:template match="TEI:table[@type='subscription']">
+        <table class="subscription">
+            <xsl:apply-templates/>
+        </table>
+    </xsl:template>
+    
     <xsl:template match="TEI:table[@type='subscription']/TEI:row">
         <tr class="subscription">
             <xsl:apply-templates/>
