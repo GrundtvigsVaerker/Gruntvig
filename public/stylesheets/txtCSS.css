@@ -1196,7 +1196,7 @@ a:active.index
 
 #tekst_innhold table.subscription, #tekst_innhold tr.subscription, #tekst_innhold td.subscription
         {
-        border: 0px solid black;        
+        border: 1px solid black;        
         text-align: center;
         padding: 10px;
         }
