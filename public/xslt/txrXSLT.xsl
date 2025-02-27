@@ -741,11 +741,17 @@
                                                 <xsl:text>, </xsl:text>
                                             </i>                                    
                                         </xsl:if>
+                                        <xsl:if test="TEI:lem/@wit='A'">
+                                            <i>
+                                                <xsl:value-of select="TEI:lem/@wit"/>
+                                                <xsl:text>, </xsl:text>
+                                            </i>                                    
+                                        </xsl:if>
                                         <xsl:if test="TEI:rdg[not(@type) and not(child::TEI:g)]">
-                                            <xsl:apply-templates select="TEI:rdg"/>
+                                            <xsl:apply-templates select="TEI:rdg[not(@type) and not(child::TEI:g)]"/>
                                         </xsl:if>
                                         <xsl:if test="TEI:rdg[not(@type) and child::TEI:g]">
-                                            <xsl:apply-templates select="TEI:rdg"/>
+                                            <xsl:apply-templates select="TEI:rdg[not(@type) and child::TEI:g]"/>
                                         </xsl:if>
                                         <xsl:if test="TEI:rdg[@type='add']">
                                             <xsl:apply-templates select="TEI:rdg[@type='add']"/>
@@ -762,7 +768,7 @@
                                 </tr>
                             </xsl:when>
                             <xsl:when test="@select='disc'">
-                                <tr style="background-color: #B3CCFF">
+                                <tr>
                                     <td>
                                         <xsl:value-of select="preceding::TEI:pb[@type='text'][1]/@n"/>
                                         &#x2003;
