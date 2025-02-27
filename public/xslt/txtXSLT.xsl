@@ -3495,7 +3495,7 @@
     <xsl:template match="TEI:table[@type='subscription']">
         <table class="subscription">
             <xsl:apply-templates/>
-        </table>lay star
+        </table>
     </xsl:template>
     
     <xsl:template match="TEI:table[@type='subscription']/TEI:row">
