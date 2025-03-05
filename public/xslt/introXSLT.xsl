@@ -282,7 +282,7 @@
     
     -->
     
-    <xsl:template match="TEI:list">
+    <xsl:template match="TEI:list/TEI:item[not(@n and @target)]">
         <xsl:if test="@type='decimal'">
             <ul>
                 <xsl:for-each select="TEI:item">
@@ -362,7 +362,7 @@
         <xsl:if test="@type='litList'">
             <div class="litList">
                 <ul>
-                    <xsl:for-each select="TEI:item">
+                    <xsl:for-each select="TEI:item[not(@n and @target)]">
                         <li class="litList">
                             <xsl:apply-templates/>
                             <xsl:text>.</xsl:text>
@@ -379,10 +379,10 @@
         </li>
     </xsl:template>
     
-    <xsl:template match="TEI:item[@n]">
+    <xsl:template match="TEI:item[@n and @target]">        
         <li class="liOrdered">
-            <a href="{@target}" target="_blank">                
-                <xsl:apply-templates/>                
+            <a href="{@target}">
+                <xsl:apply-templates/>
             </a>
             <xsl:text> (</xsl:text>
             <xsl:number value="substring(@n, 9,2)" format="1"/>
@@ -390,7 +390,7 @@
             <xsl:value-of select="substring('&month;',substring(@n,6,2)*10+1,9)"/>
             <xsl:text> </xsl:text>
             <xsl:value-of select="substring(@n, 1,4)"/>
-            <xsl:text>).</xsl:text>
+            <xsl:text>)</xsl:text>
         </li>
     </xsl:template>
     
