@@ -119,6 +119,9 @@
                             <xsl:when test="//TEI:idno[@type='firstUpload']='1.24'">
                                 <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, november 2024</xsl:text>
                             </xsl:when>
+                            <xsl:when test="//TEI:idno[@type='firstUpload']='1.25'">
+                                <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, maj 2025</xsl:text>
+                            </xsl:when>
                         </xsl:choose>
                     </div>
                     
@@ -1065,9 +1068,17 @@
                     
                 </div>
                 
-                
-                
             </div>
+
+    </xsl:template>
+            
+    <xsl:template match="TEI:num[@rendition='fraction']">
+        <num>
+            <xsl:variable name="rendValue" select="@rend"/>
+            <xsl:variable name="numerator" select="substring-before($rendValue, '-')"/>
+            <xsl:variable name="denominator" select="substring-after($rendValue, '-')"/>
+            <xsl:value-of select="concat($numerator, '&#x2044;', $denominator)"/>
+        </num>
     </xsl:template>
     
     <xsl:template match="TEI:del">
