@@ -1207,14 +1207,20 @@ a:active.index
         line-height: 100%;
         }
 
+#tekst_innhold tr.subscription:nth-child(1) > td.subscription
+        {
+        margin-left: -2em;
+        }
+
+#tekst_innhold tr.subscription:nth-child(:last-child) > td.subscription
+        {
+        margin-left: -2em;
+        height: 25em;
+        }
+
 #tekst_innhold tr.subscription:nth-child(3) > td.subscription
         {
         height: 40em;
-        }
-
-#tekst_innhold td.subscription
-        {
-        margin-left: -2em;
         }
 
 /* table type subscription END */
