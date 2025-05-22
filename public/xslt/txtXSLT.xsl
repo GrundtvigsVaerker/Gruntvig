@@ -1077,7 +1077,7 @@
             <xsl:variable name="rendValue" select="@rend"/>
             <xsl:variable name="numerator" select="substring-before($rendValue, '-')"/>
             <xsl:variable name="denominator" select="substring-after($rendValue, '-')"/>
-            <xsl:value-of select="concat($numerator, '&#x2044;', $denominator)"/>
+            <xsl:text>&#x202F;</xsl:text><xsl:value-of select="concat($numerator, '&#x2044;', $denominator)"/>
         </num>
     </xsl:template>
     
