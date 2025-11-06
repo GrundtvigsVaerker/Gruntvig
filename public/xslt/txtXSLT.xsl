@@ -122,6 +122,9 @@
                             <xsl:when test="//TEI:idno[@type='firstUpload']='1.25'">
                                 <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, maj 2025</xsl:text>
                             </xsl:when>
+                            <xsl:when test="//TEI:idno[@type='firstUpload']='1.26'">
+                                <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, december 2026</xsl:text>
+                            </xsl:when>
                         </xsl:choose>
                     </div>
                     
@@ -235,6 +238,9 @@
                                     <xsl:when test="//TEI:idno[@type='addCom']='1.25'">
                                         <xsl:text>, maj 2025</xsl:text>
                                     </xsl:when>
+                                    <xsl:when test="//TEI:idno[@type='addCom']='1.26'">
+                                        <xsl:text>, december 2025</xsl:text>
+                                    </xsl:when>
                                 </xsl:choose>
                             </xsl:if>
                         </xsl:variable>
@@ -337,6 +343,9 @@
                                                     </xsl:when>
                                                     <xsl:when test="//TEI:idno[@type='addCom']='1.25'">
                                                         <xsl:text>, maj 2025</xsl:text>
+                                                    </xsl:when>
+                                                    <xsl:when test="//TEI:idno[@type='addCom']='1.26'">
+                                                        <xsl:text>, december 2025</xsl:text>
                                                     </xsl:when>
                                                 </xsl:choose>
                                             </xsl:when>
@@ -1211,6 +1220,9 @@
                     <xsl:when test="//TEI:idno[@type='addCom']='1.25'">
                         <xsl:text>, maj 2025</xsl:text>
                     </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addCom']='1.26'">
+                        <xsl:text>, december 2025</xsl:text>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
@@ -1301,6 +1313,9 @@
                     <xsl:when test="//TEI:idno[@type='addIntro']='1.25'">
                         <xsl:text>, maj 2025</xsl:text>
                     </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addIntro']='1.26'">
+                        <xsl:text>, december 2025</xsl:text>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
@@ -1390,6 +1405,9 @@
                     </xsl:when>
                     <xsl:when test="//TEI:idno[@type='addTxr']='1.25'">
                         <xsl:text>, maj 2025</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addTxr']='1.26'">
+                        <xsl:text>, december 2025</xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
@@ -1562,6 +1580,9 @@
         </xsl:if>
         <xsl:if test="//TEI:idno[@type='changeVersion'][position()=last()]='1.25'">
             <xsl:text>, maj 2025</xsl:text>
+        </xsl:if>
+        <xsl:if test="//TEI:idno[@type='changeVersion'][position()=last()]='1.26'">
+            <xsl:text>, december 2025</xsl:text>
         </xsl:if>
     </xsl:template>
     
@@ -2807,25 +2828,25 @@
                     <xsl:value-of select="@ed"/>:<xsl:value-of select="@n"/>
                 </span>
             </xsl:when>
-            <xsl:when test="@ed='PS'">
-                <span class="pb{@ed}" title="Poetiske Skrifter">
-                    <xsl:text>|</xsl:text>
-                    <xsl:value-of select="@ed"/>:<xsl:value-of select="@n"/>
-                </span>
-            </xsl:when>
             <xsl:when test="@ed='Rønning'">
                 <span class="pb{@ed}" title="Fr. Rønnings oversættelse">
                     <xsl:text>|</xsl:text>
                     <xsl:value-of select="@ed"/>:<xsl:value-of select="@n"/>
                 </span>
             </xsl:when>
-            <xsl:when test="@ed='US'">
+            <xsl:when test="starts-with(@ed, 'PS')">
+                <span class="pb{@ed}" title="Poetiske Skrifter">
+                    <xsl:text>|</xsl:text>
+                    <xsl:value-of select="@ed"/>:<xsl:value-of select="@n"/>
+                </span>
+            </xsl:when>
+            <xsl:when test="starts-with(@ed, 'US')">
                 <span class="pb{@ed}" title="Udvalgte Skrifter">
                     <xsl:text>|</xsl:text>
                     <xsl:value-of select="@ed"/>:<xsl:value-of select="@n"/>
                 </span>
             </xsl:when>
-            <xsl:when test="@ed='VU'">
+            <xsl:when test="starts-with(@ed, 'VU')">
                 <span class="pb{@ed}" title="Værker i Udvalg">
                     <xsl:text>|</xsl:text>
                     <xsl:value-of select="@ed"/>:<xsl:value-of select="@n"/>
@@ -3665,6 +3686,11 @@
             <xsl:when test="@style='shortLine' and @rend='firstIndentRight'">
                 <div class="firstIndentRight">
                     <hr align="left" width="8%"/>
+                </div>
+            </xsl:when>
+            <xsl:when test="@style='longLine' and @rend='supp'">
+                <div class="longLine" align="center">
+                    <span>[ ────── ]</span>
                 </div>
             </xsl:when>
         </xsl:choose>
