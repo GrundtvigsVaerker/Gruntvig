@@ -446,6 +446,9 @@
                                         <tr>
                                             <td class="sigel">
                                                 <xsl:choose>
+                                                    <xsl:when test="@xml:id='A-2'">
+                                                        <xsl:text>A</xsl:text>
+                                                    </xsl:when>
                                                     <xsl:when test="@xml:id='DU'">
                                                         <xsl:text>D&amp;U</xsl:text>
                                                     </xsl:when>
