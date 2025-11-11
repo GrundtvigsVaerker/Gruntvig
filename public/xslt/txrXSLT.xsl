@@ -659,7 +659,9 @@
                                         </xsl:if>
                                         <xsl:if test="TEI:note[@type='add']">
                                             <xsl:text> </xsl:text>
-                                            <xsl:apply-templates select="TEI:note[@type='add']"/>
+                                            <i>
+                                                <xsl:apply-templates select="TEI:note[@type='add']"/>
+                                            </i>
                                             <xsl:text> </xsl:text>
                                             <i>
                                                 <xsl:apply-templates select="TEI:note[@type='add']/@subtype"/>
