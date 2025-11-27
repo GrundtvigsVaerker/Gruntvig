@@ -25,7 +25,7 @@
         
  table END*/
 
-.innledningContent table.source
+.innledningContent table.source, .innledningContent table.plain
         {
         border: 1px solid black;
         border-collapse: collapse;
@@ -43,20 +43,20 @@
         text-align: center;
         }
 
-.innledningContent table.source td
+.innledningContent table.source td, .innledningContent table.plain
         {
         border: 1px solid black;
         padding: 3px;
         }
 
-.innledningContent table.source td:nth-child(1)
+.innledningContent table.source td:nth-child(1), .innledningContent table.plain td:nth-child(1)
         {
         width: 35%;
         border: 1px solid black;
         border-collapse: collapse;
         }
 
-.innledningContent table.source td:nth-child(2)
+.innledningContent table.source td:nth-child(2), .innledningContent table.plain td:nth-child(2)
         {
         width:55%;
         border: 1px solid black;
