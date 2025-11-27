@@ -462,7 +462,7 @@
                 </tr>
             </xsl:when>
             <xsl:when test="..//parent::TEI:table[@rend='plain']">
-                <tr class="synopsis">
+                <tr class="plain">
                     <xsl:apply-templates/>
                 </tr>
             </xsl:when>
@@ -488,6 +488,11 @@
             </xsl:when>
             <xsl:when test="..//ancestor::TEI:table[@rend='synopsis']">
                 <td class="synopsis">
+                    <xsl:apply-templates/>
+                </td>
+            </xsl:when>
+            <xsl:when test="..//ancestor::TEI:table[@rend='plain']">
+                <td class="plain">
                     <xsl:apply-templates/>
                 </td>
             </xsl:when>
