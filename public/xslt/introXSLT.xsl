@@ -461,6 +461,11 @@
                     <xsl:apply-templates/>
                 </tr>
             </xsl:when>
+            <xsl:when test="..//parent::TEI:table[@rend='plain']">
+                <tr class="synopsis">
+                    <xsl:apply-templates/>
+                </tr>
+            </xsl:when>
             <xsl:otherwise>
                 <tr>
                     <xsl:apply-templates/>
