@@ -123,7 +123,10 @@
                                 <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, maj 2025</xsl:text>
                             </xsl:when>
                             <xsl:when test="//TEI:idno[@type='firstUpload']='1.26'">
-                                <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, december 2026</xsl:text>
+                                <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, december 2025</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="//TEI:idno[@type='firstUpload']='1.27'">
+                                <xsl:text>Offentliggjort i</xsl:text> <i><xsl:text> Grundtvigs Værker </xsl:text></i> <xsl:text>første gang i version </xsl:text><xsl:value-of select="//TEI:idno[@type='firstUpload']"/><xsl:text>, maj 2026</xsl:text>
                             </xsl:when>
                         </xsl:choose>
                     </div>
@@ -241,6 +244,9 @@
                                     <xsl:when test="//TEI:idno[@type='addCom']='1.26'">
                                         <xsl:text>, december 2025</xsl:text>
                                     </xsl:when>
+                                    <xsl:when test="//TEI:idno[@type='addCom']='1.27'">
+                                        <xsl:text>, maj 2026</xsl:text>
+                                    </xsl:when>
                                 </xsl:choose>
                             </xsl:if>
                         </xsl:variable>
@@ -346,6 +352,9 @@
                                                     </xsl:when>
                                                     <xsl:when test="//TEI:idno[@type='addCom']='1.26'">
                                                         <xsl:text>, december 2025</xsl:text>
+                                                    </xsl:when>
+                                                    <xsl:when test="//TEI:idno[@type='addCom']='1.27'">
+                                                        <xsl:text>, maj 2026</xsl:text>
                                                     </xsl:when>
                                                 </xsl:choose>
                                             </xsl:when>
@@ -1226,6 +1235,9 @@
                     <xsl:when test="//TEI:idno[@type='addCom']='1.26'">
                         <xsl:text>, december 2025</xsl:text>
                     </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addCom']='1.27'">
+                        <xsl:text>, maj 2026</xsl:text>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
@@ -1319,6 +1331,9 @@
                     <xsl:when test="//TEI:idno[@type='addIntro']='1.26'">
                         <xsl:text>, december 2025</xsl:text>
                     </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addIntro']='1.27'">
+                        <xsl:text>, maj 2026</xsl:text>
+                    </xsl:when>
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
@@ -1411,6 +1426,9 @@
                     </xsl:when>
                     <xsl:when test="//TEI:idno[@type='addTxr']='1.26'">
                         <xsl:text>, december 2025</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="//TEI:idno[@type='addTxr']='1.27'">
+                        <xsl:text>, maj 2026</xsl:text>
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
@@ -1587,6 +1605,9 @@
         <xsl:if test="//TEI:idno[@type='changeVersion'][position()=last()]='1.26'">
             <xsl:text>, december 2025</xsl:text>
         </xsl:if>
+        <xsl:if test="//TEI:idno[@type='changeVersion'][position()=last()]='1.27'">
+            <xsl:text>, maj 2027</xsl:text>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template name="philologist">
@@ -1616,6 +1637,12 @@
             </xsl:when>
             <xsl:when test="//TEI:titleStmt/TEI:editor[@xml:id='CJB']">
                 C.J. Brandt (udg.)
+                <i>
+                    <xsl:apply-templates select="//TEI:title[@rend='main']"/>
+                </i>
+            </xsl:when>
+            <xsl:when test="//TEI:titleStmt/TEI:editor[@xml:id='FENGER']">
+               J.F. Fenger og R.Th. Fenger (udg.)
                 <i>
                     <xsl:apply-templates select="//TEI:title[@rend='main']"/>
                 </i>
