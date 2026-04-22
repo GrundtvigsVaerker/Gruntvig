@@ -130,6 +130,15 @@
         </xsl:choose>
     </xsl:template>
     
+    <xsl:template match="TEI:num[@rendition='fraction']">
+        <num>
+            <xsl:variable name="rendValue" select="@rend"/>
+            <xsl:variable name="numerator" select="substring-before($rendValue, '-')"/>
+            <xsl:variable name="denominator" select="substring-after($rendValue, '-')"/>
+            <xsl:value-of select="concat($numerator, '&#x2044;', $denominator)"/>
+        </num>
+    </xsl:template>
+    
     <xsl:template name="delimiter">
         <xsl:choose>
             <xsl:when test="position() &lt; last()-1">
