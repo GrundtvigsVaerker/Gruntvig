@@ -10,8 +10,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
-import javax.persistence.*;
-import javax.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import play.db.jpa.GenericModel;
 import play.data.validation.Required;
 import org.w3c.dom.*;
@@ -44,13 +44,13 @@ public class Chapter extends GenericModel {
     @GeneratedValue(generator = "chapter_id_seq_gen")
     public long id;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String name;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String html;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String htmlAsText;
     @Required
     @ManyToOne

@@ -7,7 +7,7 @@ package models;
 import helpers.Helpers;
 import java.io.File;
 import java.util.List;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
@@ -33,17 +33,17 @@ public class TextReference extends GenericModel {
     @GeneratedValue(generator = "reference_id_seq_gen")
     public long id;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String textId;
     public long alternativTo;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String showName;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String type;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String fileName;
 
     public TextReference(String textId, long alternativeTo, String showName, String type) {

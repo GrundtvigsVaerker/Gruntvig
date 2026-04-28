@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import play.db.jpa.GenericModel;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.Processor;
@@ -49,22 +49,22 @@ public class Asset extends GenericModel {
     @SequenceGenerator(name = "asset_id_seq_gen", sequenceName = "asset_id_seq")
     public long id;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String xml;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String html;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String htmlAsText;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String comment;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String name;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String fileName;
     public int variant;
     public int pictureNumber = 0;
@@ -72,13 +72,13 @@ public class Asset extends GenericModel {
     @Temporal(TemporalType.TIMESTAMP)
     public java.util.Date importDate;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String rootName;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String type;
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String refs;
     
     /* no enum-support in db, unfornately */
