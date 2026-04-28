@@ -103,6 +103,10 @@ public class Asset extends GenericModel {
     public static String bibliografi = "bibliografi";
     public static String titleType = "titleRef"; /*added 2016-03-17 by KK*/
 
+    public Asset() {
+
+    }
+
     /**
      * Used by images
      * images on form rootname_number.jpg

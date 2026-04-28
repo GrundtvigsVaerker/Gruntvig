@@ -46,6 +46,10 @@ public class TextReference extends GenericModel {
     @Column(columnDefinition = "text")
     public String fileName;
 
+    public TextReference() {
+
+    }
+
     public TextReference(String textId, long alternativeTo, String showName, String type) {
         this.textId = textId;
         this.alternativTo = alternativeTo;

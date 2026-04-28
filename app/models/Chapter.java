@@ -57,6 +57,10 @@ public class Chapter extends GenericModel {
     public Asset asset;
     public int num;
 
+    public Chapter() {
+
+    }
+
     public Chapter(String name, int num, Asset asset, String html) {
         this.name = name;
         this.num = num;
