@@ -40,6 +40,7 @@ import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.jsoup.Jsoup;
+import play.Play;
 
 /**
  *
@@ -271,7 +272,7 @@ public class Helpers {
     
     public static synchronized SolrServer getSolrServer() {
         if (server == null) {
-            String url = "http://localhost:8983/solr/gv";
+            String url = Play.configuration.getProperty("solr.url", "http://localhost:8983/solr/gv");
             server = new HttpSolrServer( url );
         }
         return server;
