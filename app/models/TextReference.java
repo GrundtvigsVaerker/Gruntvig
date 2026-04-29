@@ -24,6 +24,10 @@ import org.w3c.dom.NodeList;
  * 
  */
 @Entity
+@Table(indexes = {
+    @Index(name = "idx_textreference_textid", columnList = "textId"),
+    @Index(name = "idx_textreference_type", columnList = "type")
+})
 public class TextReference extends GenericModel {
 
     @Id

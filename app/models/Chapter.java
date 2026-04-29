@@ -36,6 +36,9 @@ import play.db.jpa.JPABase;
  *
  */
 @Entity
+@Table(indexes = {
+    @Index(name = "idx_chapter_asset_num", columnList = "asset_id,num")
+})
 public class Chapter extends GenericModel {
 
     @Id

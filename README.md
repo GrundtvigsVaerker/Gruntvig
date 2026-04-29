@@ -29,3 +29,27 @@ If Solr needs to be reindexed do the following:
 - Run `curl "http://localhost:8983/solr/gv/update?commit=true" -H "Content-Type: text/xml" --data-binary '<delete><query>*:*</query></delete>'` locally on the
 - machine with the Solr server running.
 - Go to `https://xxx/admin/reindex` in a browser and wait one hour or so.
+
+
+# TODO ON SERVER POSTGRES:
+
+```postgresql
+BEGIN;
+
+CREATE INDEX IF NOT EXISTS idx_asset_filename_type
+ON asset (filename, type);
+
+CREATE INDEX IF NOT EXISTS idx_asset_rootname_type_variant
+ON asset (rootname, type, variant);
+
+CREATE INDEX IF NOT EXISTS idx_chapter_asset_num
+ON chapter (asset_id, num);
+
+CREATE INDEX IF NOT EXISTS idx_textreference_textid
+ON textreference (textid);
+
+CREATE INDEX IF NOT EXISTS idx_textreference_type
+ON textreference (type);
+
+COMMIT;
+```

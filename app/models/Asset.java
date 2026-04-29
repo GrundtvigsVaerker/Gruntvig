@@ -41,6 +41,10 @@ import play.db.jpa.JPABase;
  *
  */
 @Entity
+@Table(indexes = {
+    @Index(name = "idx_asset_filename_type", columnList = "fileName,type"),
+    @Index(name = "idx_asset_rootname_type_variant", columnList = "rootName,type,variant")
+})
 public class Asset extends GenericModel {
 
     @Id
