@@ -21,7 +21,7 @@ section of the file and change values as needed. (Do not include in GIT).
 ## Development
 - Start solr by navigating to the solr `example` directory e.g. `/app-bin/solr-4.10.4/example` and run `java -jar start.jar`.
   - Solr should be running on `localhost:8983` and the dashboard should be available on `localhost:8983/solr`.
-- Start play by nagigating to the play directory e.g. `/app-bin/play-1.11.0` and run `play run PATH_TO_REPOSITORY` e.g. `play run /git/grundtvigsværker.dk`.
+- Start play by nagigating to the play directory e.g. `/app-bin/play-1.11.0` and run `./play run PATH_TO_REPOSITORY` e.g. `play run /git/grundtvigsværker.dk`.
   - Play should be running on `localhost:9000`.
 
 ## Reindexing Solr
