@@ -25,7 +25,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
-import org.hibernate.annotations.Type;
 import play.db.jpa.JPABase;
 
 /**
@@ -43,14 +42,10 @@ public class Chapter extends GenericModel {
     @SequenceGenerator(name = "chapter_id_seq_gen", sequenceName = "chapter_id_seq")
     @GeneratedValue(generator = "chapter_id_seq_gen")
     public long id;
-    @Lob
-    @Column(columnDefinition = "text")
     public String name;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String html;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String htmlAsText;
     @Required
     @ManyToOne

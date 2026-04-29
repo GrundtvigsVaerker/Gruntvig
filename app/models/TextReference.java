@@ -13,9 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-import org.hibernate.annotations.Type;
 import play.db.jpa.GenericModel;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,18 +30,12 @@ public class TextReference extends GenericModel {
     @SequenceGenerator(name = "reference_id_seq_gen", sequenceName = "reference_id_seq")
     @GeneratedValue(generator = "reference_id_seq_gen")
     public long id;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 10_000)
     public String textId;
     public long alternativTo;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String showName;
-    @Lob
-    @Column(columnDefinition = "text")
     public String type;
-    @Lob
-    @Column(columnDefinition = "text")
     public String fileName;
 
     public TextReference() {

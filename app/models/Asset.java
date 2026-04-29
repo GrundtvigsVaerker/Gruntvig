@@ -27,7 +27,6 @@ import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
-import org.hibernate.annotations.Type;
 import play.db.jpa.JPABase;
 
 /**
@@ -48,37 +47,24 @@ public class Asset extends GenericModel {
     @GeneratedValue(generator = "asset_id_seq_gen")
     @SequenceGenerator(name = "asset_id_seq_gen", sequenceName = "asset_id_seq")
     public long id;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String xml;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String html;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String htmlAsText;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String comment;
-    @Lob
-    @Column(columnDefinition = "text")
     public String name;
-    @Lob
-    @Column(columnDefinition = "text")
     public String fileName;
     public int variant;
     public int pictureNumber = 0;
     @Column(name = "import_date")
     @Temporal(TemporalType.TIMESTAMP)
     public java.util.Date importDate;
-    @Lob
-    @Column(columnDefinition = "text")
     public String rootName;
-    @Lob
-    @Column(columnDefinition = "text")
     public String type;
-    @Lob
-    @Column(columnDefinition = "text")
+    @Column(length = 1_000_000)
     public String refs;
     
     /* no enum-support in db, unfornately */
