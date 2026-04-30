@@ -12,8 +12,12 @@ GET     /vejledning/{fileName}                  ShowAsset.vejledning
 GET     /register_side                          Application.register_side
 GET     /js/                                    staticDir:public/javascripts
 GET     /public/                                staticDir:public
-GET     /img/                                   staticDir:public/images
-GET     /pdf/                                   staticDir:public/images
+GET     /images/                                staticDir:public/images
+# GET     /img/                                   staticDir:public/images
+# GET     /pdf/                                   staticDir:public/images
+GET     /img/{<.*>filePath}                     PublicFiles.getImgFile
+GET     /xml/{<.*>filePath}                     PublicFiles.getXmlFile
+GET     /pdf/{<.*>filePath}                     PublicFiles.getPdfFile
 GET     /css/img/                               staticDir:public/images
 GET     /css/images/                            staticDir:public/images
 GET     /css/                                   staticDir:public/stylesheets

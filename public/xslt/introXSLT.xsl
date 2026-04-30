@@ -17,7 +17,7 @@
         <!-- Midlertidig visning af epitekst, se <ref type="epiText">, KK 2013-09-26 
 
         <style>
-.pdf        {background-image: url(../img/pdficon_small.png);
+.pdf        {background-image: url(../images/pdficon_small.png);
              padding-left: 20px;
              background-repeat: no-repeat;
              background-position: left center;}

@@ -31,6 +31,10 @@ If Solr needs to be reindexed do the following:
 - Go to `https://xxx/admin/reindex` in a browser and wait one hour or so.
 
 
+# TODO ON SERVER FILES:
+Når vi får data tag hele public mappens indhold og lav bash filter der finder alle billeder og kopier til DATA-DIR/img alle pdf til DATA-DIR/pdf 
+og alle xml til DATA-DIR/xml. Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
+
 # TODO ON SERVER POSTGRES:
 
 ```postgresql
