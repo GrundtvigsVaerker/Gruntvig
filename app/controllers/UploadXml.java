@@ -5,10 +5,10 @@
 package controllers;
 
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.nio.file.Path;
+
+import helpers.Helpers;
 import models.Asset;
-import models.Chapter;
 import models.TextReference;
 import play.mvc.Controller;
 
@@ -46,9 +46,9 @@ public class UploadXml extends Application {
                 fileName.equals("pub.xml") ||
                 fileName.equals("unpub.xml")
                 ) {
-            String tidslinjeDir = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "tidslinje";
-            String filePath = tidslinjeDir + File.separator + fileName;
-            File theDir = new File(tidslinjeDir);
+            Path tidslinjeDir = Helpers.getXmlDataDirPath( "tidslinje");
+            Path filePath = tidslinjeDir.resolve(fileName);
+            File theDir = tidslinjeDir.toFile();
             if (!theDir.exists()) {
               System.out.println("creating directory: " + tidslinjeDir);
               boolean result = theDir.mkdir();  
@@ -57,7 +57,7 @@ public class UploadXml extends Application {
                }
             }
             try {
-                helpers.Helpers.copyfile(theFile.getAbsolutePath(), filePath);
+                helpers.Helpers.copyfile(theFile.getAbsolutePath(), filePath.toString());
             } catch (Exception e) {
                 Controller.renderHtml("Something went wrong: " + e.getMessage());
             }
@@ -71,14 +71,17 @@ public class UploadXml extends Application {
                 if (fileName.contains("_fax")) {
                     Asset.uploadFax(filesname, comment, theFile);
                 } else {
-                    Asset.uploadIBinary(fileName, comment, theFile);
+                    Asset.uploadImgBinary(fileName, comment, theFile);
                 }
             }
-        } else 
-        if (fileName.endsWith(".pdf") || fileName.endsWith("_img.html") ) {
-            Asset.uploadIBinary(fileName, comment, theFile);
-        } else {
+        } else if (fileName.endsWith(".pdf")) {
+            Asset.uploadPdf(fileName, comment, theFile);
+        } else if (fileName.endsWith(".html")) {
+            Asset.uploadHtml(fileName, comment, theFile);
+        } else if (fileName.endsWith(".xml")) {
             asset = Asset.uploadXmlFile(filesname, comment, theFile);
+        } else { // everything else is just stored as an image
+            Asset.uploadImgBinary(fileName, comment, theFile);
         }
         if (fileName.equals("place.xml")) {
             TextReference.uploadReferenceFilePlace(asset);

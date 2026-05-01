@@ -17,6 +17,7 @@ import java.io.StringWriter;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -239,6 +240,33 @@ public class Helpers {
             System.out.println(e.getMessage());
         }
     }
+
+    private static Path getDataDirPath(String subDir, String... paths) {
+        Path path = Path.of(Play.configuration.getProperty("data.dir"), subDir);
+
+        for (String pathPart : paths) {
+            path = path.resolve(pathPart);
+        }
+
+        return path;
+    }
+
+    public static Path getImgDataDirPath(String... paths) {
+        return getDataDirPath("img", paths);
+    }
+
+    public static Path getXmlDataDirPath(String... paths) {
+        return getDataDirPath("xml", paths);
+    }
+
+    public static Path getPdfDataDirPath(String... paths) {
+        return getDataDirPath("pdf", paths);
+    }
+
+    public static Path getHtmlDataDirPath(String... paths) {
+        return getDataDirPath("html", paths);
+    }
+
 
     
     /**

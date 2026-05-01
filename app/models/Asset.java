@@ -11,6 +11,7 @@ import helpers.Helpers;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -306,17 +307,28 @@ public class Asset extends GenericModel {
         String fileName = file.getName();
         Asset asset = new Asset(name, fileName, comment, Asset.countryImage);
         asset.importDate = new Date();
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "images" + File.separator + fileName;
-        Helpers.copyfile(file.getAbsolutePath(), filePath); 
+        Path filePath = Helpers.getImgDataDirPath(fileName);
+        Helpers.copyfile(file.getAbsolutePath(), filePath.toString());
         asset.save();
         return asset;
     }
 
-    
-    public static void uploadIBinary(String name, String comment, File file) {
+    public static void uploadPdf(String name, String comment, File file) {
         String fileName = file.getName();
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "images" + File.separator + fileName;
-        Helpers.copyfile(file.getAbsolutePath(), filePath);
+        Path filePath = Helpers.getPdfDataDirPath(fileName);
+        Helpers.copyfile(file.getAbsolutePath(), filePath.toString());
+    }
+
+    public static void uploadHtml(String name, String comment, File file) {
+        String fileName = file.getName();
+        Path filePath = Helpers.getHtmlDataDirPath(fileName);
+        Helpers.copyfile(file.getAbsolutePath(), filePath.toString());
+    }
+
+    public static void uploadImgBinary(String name, String comment, File file) {
+        String fileName = file.getName();
+        Path filePath = Helpers.getImgDataDirPath(fileName);
+        Helpers.copyfile(file.getAbsolutePath(), filePath.toString());
         return;
     }
     
@@ -343,8 +355,8 @@ public class Asset extends GenericModel {
             asset = new Asset(name, fileName, comment, Asset.imageType);
         }
         asset.importDate = new Date();
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "images" + File.separator + fileName;
-        Helpers.copyfile(file.getAbsolutePath(), filePath);
+        Path filePath = Helpers.getImgDataDirPath(fileName);
+        Helpers.copyfile(file.getAbsolutePath(), filePath.toString());
         String[] pictureNums = fileName.replace(".jpg", "").split("_");
         int pictureNum = Integer.parseInt(pictureNums[pictureNums.length - 1]);
         asset.pictureNumber = pictureNum;
@@ -358,9 +370,10 @@ public class Asset extends GenericModel {
      * 
      */
     private static String copyXmlToXmlDirectory(File epub) {
-        File newFile = new File(play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xml" + File.separator + epub.getName());
-        Helpers.copyfile(epub.getAbsolutePath(), newFile.getAbsolutePath());
-        return newFile.getAbsolutePath();
+        Path filePath = Helpers.getXmlDataDirPath(epub.getName());
+        String destPath = filePath.toString();
+        Helpers.copyfile(epub.getAbsolutePath(), destPath);
+        return destPath;
     }
 
     /**

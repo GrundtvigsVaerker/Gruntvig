@@ -24,8 +24,11 @@ GET     /css/                                   staticDir:public/stylesheets
 GET     /public/stylesheets/                    staticDir:public/stylesheets
 GET     /doc                                    staticDir:javadoc
 GET     /admin/removeXmlFile/{fileId}           Admin.removeXmlFile
+GET     /admin/listXmlFiles                     Admin.listXmlFiles
 GET     /admin/deleteAll                        Admin.removeAllData
-GET     /admin/reindex				Admin.indexAll
+GET     /admin/reindex				            Admin.indexAll
+GET     /admin/uploadXml/uploadForm             UploadXml.uploadForm
+POST    /admin/uploadXml/uploadFile             UploadXml.uploadFile
 GET     /tekstvisning/{assetId}/{chapterNum}    ShowAsset.tekstvisning
 GET     /steder                                 ShowAsset.placevisning
 GET     /personer                               ShowAsset.personvisning
@@ -61,5 +64,5 @@ GET     /avanceret                                            DoSearch.avanceret
 GET     /tools                                                DoSearch.tools
 GET     /favicon.ico                                          404
 
-# Catch all
-*       /{controller}/{action}                  {controller}.{action}
+# Catch all (NOT SECURE MAKE EXPLICIT MAPPINGS)
+# *       /{controller}/{action}                  {controller}.{action}
