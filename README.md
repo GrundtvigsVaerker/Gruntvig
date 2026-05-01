@@ -31,9 +31,26 @@ If Solr needs to be reindexed do the following:
 - Go to `https://xxx/admin/reindex` in a browser and wait one hour or so.
 
 
+# ÆNDRINGER
+- Opgradering til Play 1.11 og JDK 21
+- `/uploadXml/uploadForm` er flytter til `/admin/uploadXml/uploadForm`
+- Alle automatiske stier er disablet, så hvis der er en sti der mangler skal den enables i `routes` filen
+- Alle uploadede (bruger-filer) er flyttet uden for kode-repositoriet, så det er nemmere og sikrere at vedligeholde (kræver migration af data ved overgang)
+- JPA mappings er ændret til at resolve til text kolonner i stedet for LOB, dette skal formentlig transformeres i databasen ved migrationen. Dette burde 
+  forøge performance og muliggør indekses på kolonnerne.
+- Der er tilføjet indexes til JPA-mappings. Disse skal køres manuelt på database ved migration (efter LOB -> text transformation).
+
+- 
+
 # TODO ON SERVER FILES:
-Når vi får data tag hele public mappens indhold og lav bash filter der finder alle billeder og kopier til DATA-DIR/img alle pdf til DATA-DIR/pdf 
-og alle xml til DATA-DIR/xml. Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
+Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der finder alle billeder, pdfs etc. og kopier:
+- alle billeder til DATA-DIR/img (jpeg, jpg,,, andre?)
+- alle pdf til DATA-DIR/pdf 
+- alle xml til DATA-DIR/xml
+- alle html til DATA-DIR/html
+- lav sanity tjek om der er andre fil-formater (som ikke er de png og gif der hører til i public/images), hvis der er, så kopier til DATA-DIR/img
+- Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
+- OBS: erstat IKKE public/images med det overleverede pulic/ dir, public/* skal komme fra git-hub, alt brugergenereret skal ligge eksternt.
 
 # TODO ON SERVER POSTGRES:
 
