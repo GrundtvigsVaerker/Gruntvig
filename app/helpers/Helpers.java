@@ -241,6 +241,20 @@ public class Helpers {
         }
     }
 
+    private static Path getAppPublicDirPath(String subDir, String ...paths) {
+        Path path = Path.of(Play.applicationPath.getAbsolutePath(), subDir);
+
+        for (String pathPart : paths) {
+            path = path.resolve(pathPart);
+        }
+
+        return path;
+    }
+
+    public static Path getAppPublicXsltPath(String ...paths) {
+        return getAppPublicDirPath("xslt", paths);
+    }
+
     private static Path getDataDirPath(String subDir, String... paths) {
         Path path = Path.of(Play.configuration.getProperty("data.dir"), subDir);
 

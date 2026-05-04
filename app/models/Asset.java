@@ -11,6 +11,7 @@ import helpers.Helpers;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
@@ -673,70 +674,65 @@ public class Asset extends GenericModel {
     /**
      * Combine xml and xslt for ref-type assets
      */
-    public static String xmlRefToHtml(String fileName, String xsltPath) {
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + xsltPath;
-        return xmlToHtml(fileName, filePath);
+    public static String xmlRefToHtml(String xmlFilePath, String xlstFileName) {
+        String xlstFilePath = Helpers.getAppPublicXsltPath(xlstFileName).toString();
+        return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
     /**
      * Combine xml and xslt for myth-type assets
      */
-    public static String xmlToHtmlMyth(String fileName) {
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + "mythXSLT.xsl";
-        return xmlToHtml(fileName, filePath);
+    public static String xmlToHtmlMyth(String xmlFilePath) {
+        String xlstFilePath = Helpers.getAppPublicXsltPath("mythXSLT.xsl").toString();
+        return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
     /**
      * Combine xml and xslt for manus-type assets
      */
-    public static String xmlToHtmlManus(String fileName) {
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + "msXSLT.xsl";
-        return xmlToHtml(fileName, filePath);
+    public static String xmlToHtmlManus(String xmlFilePath) {
+        String xlstFilePath = Helpers.getAppPublicXsltPath("msXSLT.xsl").toString();
+        return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
     /**
      * Combine xml and xslt for intro-type assets
      */
-    public static String xmlToHtmlIntro(String fileName) {
-        System.out.println("Uploading introduction");
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + "introXSLT.xsl";
-        return xmlToHtml(fileName, filePath);
+    public static String xmlToHtmlIntro(String xmlFilePath) {
+        String xlstFilePath = Helpers.getAppPublicXsltPath("introXSLT.xsl").toString();
+        return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
     /**
      * Combine xml and xslt for var-type assets
      */
-    public static String xmlToHtmlVariant(String fileName) {
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + "varXSLT.xsl";
-        return xmlToHtml(fileName, filePath);
+    public static String xmlToHtmlVariant(String xmlFilePath) {
+        String xlstFilePath = Helpers.getAppPublicXsltPath("varXSLT.xsl").toString();
+        return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
     /**
      * Combine xml and xslt for root-type assets
      */
-    public static String xmlToHtml(String fileName) {
-        // String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + "xhtml2" + File.separator + "tei.xsl";
-        String filePath = play.Play.applicationPath.getAbsolutePath() + File.separator + "public" + File.separator + "xslt" + File.separator + "txtXSLT.xsl";
-        return xmlToHtml(fileName, filePath);
+    public static String xmlToHtml(String xmlFilePath) {
+        String xlstFilePath = Helpers.getAppPublicXsltPath("txtXSLT.xsl").toString();
+        return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
     
     /**
-     * Does the xslt-transformation of a xml-file and and a xslt-file
-     * @params fileName - name of xml-file
-     * @params fileName - name of xslt - file
+     * Does the xslt-transformation of a XML-file and a XLST-file.
+     * @param xmlFilePath - name of xml-file
+     * @param xlstFilePath - name of xslt - file
      * 
      */
-    public static String xmlToHtml(String fileName, String filePath) {
-        System.out.println("User dir: " + System.getProperty("user.dir"));
+    public static String xmlToHtml(String xmlFilePath, String xlstFilePath) {
         try {
-            File xmlIn = new File(fileName);
+            File xmlIn = new File(xmlFilePath);
             StreamSource source = new StreamSource(xmlIn);
             Processor proc = new Processor(false);
             XsltCompiler comp = proc.newXsltCompiler();
-            System.out.println("Filepath: " + filePath);
-            XsltExecutable exp = comp.compile(new StreamSource(new File(filePath)));
-            Serializer out = new Serializer();
+            XsltExecutable exp = comp.compile(new StreamSource(new File(xlstFilePath)));
             ByteArrayOutputStream buf = new ByteArrayOutputStream();
             out.setOutputProperty(Serializer.Property.METHOD, "xhtml");
             out.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
