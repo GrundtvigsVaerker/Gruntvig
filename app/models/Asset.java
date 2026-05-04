@@ -734,10 +734,11 @@ public class Asset extends GenericModel {
             XsltCompiler comp = proc.newXsltCompiler();
             XsltExecutable exp = comp.compile(new StreamSource(new File(xlstFilePath)));
             ByteArrayOutputStream buf = new ByteArrayOutputStream();
+            Serializer out = proc.newSerializer();
             out.setOutputProperty(Serializer.Property.METHOD, "xhtml");
             out.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
             out.setOutputProperty(Serializer.Property.INDENT, "no");
-            out.setOutputProperty(Serializer.Property.ENCODING, "utf-8");
+            out.setOutputProperty(Serializer.Property.ENCODING, StandardCharsets.UTF_8.name());
             out.setOutputStream(buf);
             // out.setOutputFile(new File("tour.html"));
             XsltTransformer trans = exp.load();
@@ -746,7 +747,7 @@ public class Asset extends GenericModel {
             trans.setDestination(out);
             trans.transform();
             // System.out.println("Output generated: " + buf.toString());
-            return buf.toString("utf-8");
+            return buf.toString(StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return ("Error: " + e.toString());
