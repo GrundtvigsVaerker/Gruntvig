@@ -46,6 +46,7 @@ If Solr needs to be reindexed do the following:
 Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der finder alle billeder, pdfs etc. og kopier:
 - alle billeder til DATA-DIR/img (jpeg, jpg,,, andre?)
 - alle pdf til DATA-DIR/pdf 
+- public/tidslinje skal ind i DATA-DIR/xml/tidslinje
 - alle xml til DATA-DIR/xml
 - alle html til DATA-DIR/html
 - lav sanity tjek om der er andre fil-formater (som ikke er de png og gif der hører til i public/images), hvis der er, så kopier til DATA-DIR/img

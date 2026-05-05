@@ -19,7 +19,7 @@ var addFaksimile = function(num) {
 
     // vis faksimile (https://github.com/can3p/iviewer)
     var iviewer = {};
-    var iviewer_src = "/public/images/" + rootFile;
+    var iviewer_src = "/img/" + rootFile;
     var iviewer_num = 1;
     
     this.gotoPage = function(page) {
