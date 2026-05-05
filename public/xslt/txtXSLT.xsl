@@ -3447,7 +3447,7 @@
     </xsl:template>
 
     <xsl:template match="TEI:ref[@type='imgText']">
-        <a  href="public/images/{@target}" onclick="return blank('txt',this.href)">
+        <a  href="img/{@target}" onclick="return blank('txt',this.href)">
             <xsl:apply-templates/>
         </a>       
     </xsl:template>
