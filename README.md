@@ -14,9 +14,9 @@
 section of the file and change values as needed. (Do not include in GIT).
 
 ### Solr configuration
-- Copy `./solr/example/solr/collection1` to `./solr/example/solr/gv`.
-- Open `./solr/example/solr/gv/core.properties` and change the value of the `name` property to `gv`.
-- Replace `./solr/example/solr/gv/conf/schema.xml` with `./conf/schema.xml`. from the git repository.
+- Copy `./solr/example/solr/collection1` to `./solr/example/solr/grundtvig`.
+- Open `./solr/example/solr/grundtvig/core.properties` and change the value of the `name` property to `grundtvig`.
+- Replace `./solr/example/solr/grundtvig/conf/schema.xml` with `./conf/schema.xml`. from the git repository.
 
 ## Development
 - Start solr by navigating to the solr `example` directory e.g. `/app-bin/solr-4.10.4/example` and run `java -jar start.jar`.
@@ -26,7 +26,7 @@ section of the file and change values as needed. (Do not include in GIT).
 
 ## Reindexing Solr
 If Solr needs to be reindexed do the following:
-- Run `curl "http://localhost:8983/solr/gv/update?commit=true" -H "Content-Type: text/xml" --data-binary '<delete><query>*:*</query></delete>'` locally on the
+- Run `curl "http://localhost:8983/solr/grundtvig/update?commit=true" -H "Content-Type: text/xml" --data-binary '<delete><query>*:*</query></delete>'` locally on the
 - machine with the Solr server running.
 - Go to `https://xxx/admin/reindex` in a browser and wait one hour or so.
 
