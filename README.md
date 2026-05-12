@@ -55,6 +55,81 @@ Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der
 
 # TODO ON SERVER POSTGRES:
 
+Login to the db as grundtvig user:
+
+```
+psql -U grundtvig -d grundtvig -h localhost
+```
+
+## Change to TEXT
+
+Find all Lob columns:
+
+```
+SELECT
+    table_schema,
+    table_name,
+    column_name,
+    data_type,
+    udt_name
+FROM information_schema.columns
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+  AND udt_name = 'oid'
+ORDER BY table_schema, table_name, ordinal_position;
+```
+
+for each table+column that is LOB do:
+
+```
+ALTER TABLE __table_name__
+ALTER COLUMN __column_name__ TYPE text
+USING convert_from(lo_get(xml), 'UTF8');
+```
+
+Exit the db and run:
+
+```
+vacuumlo -U grundtvig -h localhost grundtvig
+```
+
+to remove any Lob leftovers.
+
+Log into the db again:
+
+```
+psql -U grundtvig -d grundtvig -h localhost
+```
+
+And test no Lob remains:
+
+```
+SELECT
+    table_schema,
+    table_name,
+    column_name,
+    udt_name
+FROM information_schema.columns
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+  AND udt_name = 'oid'
+ORDER BY table_schema, table_name, ordinal_position;
+```
+
+Verify the converted column types:
+
+```
+SELECT
+    table_name,
+    column_name,
+    data_type,
+    udt_name
+FROM information_schema.columns
+WHERE table_schema = 'public'
+ORDER BY table_name, ordinal_position;
+```
+
+
+## Add indexes
+
 ```postgresql
 BEGIN;
 
