@@ -209,7 +209,7 @@ var hovedtekstSelect = 'Vis variant: #{variantsAsDropDown variants:variants /}';
 						</select>
 						</span>
 					
-                                        %{ nextChapter = [chapter.num + 1, chapters.size - 1].min(); }%
+                                        %{ nextChapter = [chapter.num + 1, chapters.size() - 1].min(); }%
                                         
                                         <!--
 					<a href="tekstvisning/${asset.id}/${nextChapter}" class="next" title="Neste kapitel"></a>
