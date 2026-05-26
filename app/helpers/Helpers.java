@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.*;
+
 import javax.xml.xpath.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
@@ -31,6 +32,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
 import models.Asset;
 import models.TextReference;
 import net.sf.saxon.s9api.Processor;
@@ -45,14 +47,14 @@ import play.Play;
 
 /**
  *
- * 
+ *
  * This class keeps utility-functions which are common for different parts of the program
- * 
- * 
+ *
+ *
  */
 public class Helpers {
-    
-    
+
+
     static SolrServer server;
 
     /**
@@ -73,7 +75,7 @@ public class Helpers {
     /**
      * Extracts references from a xml
      * Note: Currently not in use, keep some time before delete
-     * 
+     *
      */
     public static String getReferencesFromXml(String xml, String fileName) {
         StringBuilder refs = new StringBuilder(xml);
@@ -148,9 +150,9 @@ public class Helpers {
 
     /**
      * Iterate a doc for all children with this tagname
-     * 
+     *
      * @return List of nodes
-     * 
+     *
      */
     public static List<Node> getChildrenOfType(Node parent, String tagName) {
         ArrayList<Node> nodes = new ArrayList<Node>();
@@ -177,9 +179,9 @@ public class Helpers {
     }
 
     /**
-     * 
+     *
      * Currently not in use, keep for example
-     * 
+     *
      */
     public static String xmlToHtml(String xml, String filePath) {
         try {
@@ -194,7 +196,7 @@ public class Helpers {
             // out.setOutputProperty(Serializer.Property.INDENT, "yes");
             out.setOutputProperty(Serializer.Property.INDENT, "no");
             out.setOutputProperty(Serializer.Property.SAXON_INDENT_SPACES, "no");
- 
+
             out.setOutputStream(buf);
             // out.setOutputFile(new File("tour.html"));
             XsltTransformer trans = exp.load();
@@ -212,9 +214,9 @@ public class Helpers {
     }
 
     /**
-     * 
+     *
      * Clone a file in the filesystem
-     * 
+     *
      */
     public static void copyfile(String srFile, String dtFile) {
         try {
@@ -241,8 +243,8 @@ public class Helpers {
         }
     }
 
-    private static Path getAppPublicDirPath(String subDir, String ...paths) {
-        Path path = Path.of(Play.applicationPath.getAbsolutePath(), subDir);
+    private static Path getAppPublicDirPath(String subDir, String... paths) {
+        Path path = Path.of(Play.applicationPath.getAbsolutePath(), "public", subDir);
 
         for (String pathPart : paths) {
             path = path.resolve(pathPart);
@@ -251,7 +253,7 @@ public class Helpers {
         return path;
     }
 
-    public static Path getAppPublicXsltPath(String ...paths) {
+    public static Path getAppPublicXsltPath(String... paths) {
         return getAppPublicDirPath("xslt", paths);
     }
 
@@ -282,11 +284,10 @@ public class Helpers {
     }
 
 
-    
     /**
-     * 
+     *
      * Remove html-formatting from a tring
-     * 
+     *
      */
     public static String stripHtml(String html) {
         if (html == null) return ""; // in case of pictures :-)
@@ -294,9 +295,9 @@ public class Helpers {
     }
 
     /**
-     * 
+     *
      * Helper function to create search-teasers
-     * 
+     *
      */
     public static String createTeaser(String str, String lookfor, int len) {
         int lookforStart = str.indexOf(lookfor);
@@ -311,13 +312,13 @@ public class Helpers {
 
         return str.substring(start, stop);
     }
-    
+
     public static synchronized SolrServer getSolrServer() {
         if (server == null) {
             String url = Play.configuration.getProperty("solr.url", "http://localhost:8983/solr/gv");
-            server = new HttpSolrServer( url );
+            server = new HttpSolrServer(url);
         }
         return server;
     }
-    
+
 }
