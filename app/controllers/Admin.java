@@ -1,14 +1,15 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
- * 
+ *
  * Petter was here
- * 
+ *
  */
 
 package controllers;
 
 import java.util.List;
+
 import models.Asset;
 import models.Chapter;
 import models.TextReference;
@@ -16,16 +17,16 @@ import play.mvc.Controller;
 
 /**
  *
- * 
- * 
+ *
+ *
  * Admin-page to keep track of uploaded files
  * Based on play-crud
- * 
- * 
+ *
+ *
  */
 public class Admin extends Application {
 
-    
+
     public static void uploadXmlFile() {
         render();
     }
@@ -38,7 +39,7 @@ public class Admin extends Application {
 
     public static void removeXmlFile(long fileId) {
         Asset asset = Asset.findById(fileId);
-        Chapter.delete("asset = ?", asset);
+        Chapter.delete("asset = ?1", asset);
         asset.delete();
         render();
     }
@@ -49,11 +50,12 @@ public class Admin extends Application {
         Asset.deleteAll();
         Controller.renderHtml("All data removed");
     }
-    public static void indexAll() { 
-    	List<Asset> all = Asset.findAll();
-	for (Asset asset : all) {
-	   asset.index();
- 	   System.out.println(asset);
-	}
+
+    public static void indexAll() {
+        List<Asset> all = Asset.findAll();
+        for (Asset asset : all) {
+            asset.index();
+            System.out.println(asset);
+        }
     }
 }

@@ -5,28 +5,32 @@
 package models;
 
 import helpers.Helpers;
+
 import java.io.File;
 import java.util.List;
+
 import jakarta.persistence.*;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
 import play.db.jpa.GenericModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * 
+ *
  * Text-refs which are shown in popups are kept in this model
- * 
+ *
  */
 @Entity
 @Table(indexes = {
-    @Index(name = "idx_textreference_textid", columnList = "textId"),
-    @Index(name = "idx_textreference_type", columnList = "type")
+        @Index(name = "idx_textreference_textid", columnList = "textId"),
+        @Index(name = "idx_textreference_type", columnList = "type")
 })
 public class TextReference extends GenericModel {
 
@@ -87,18 +91,18 @@ public class TextReference extends GenericModel {
         System.out.println("Deleted " + deleted + " old references");
     }
 
-    
+
     /**
-     * 
+     *
      * Handle upload of comments shown in the the comments-tab
      * Each comment is kept precompiiled and separately in the database and the complete comments-doc is concatenated
      * If the strucure of com-files it chaged, this function must be updated
-     * 
-     * 
+     *
+     *
      */
     public static void uploadComments(Asset asset) {
         System.out.println("Processing asset: " + asset.html);
-        int del = TextReference.delete("fileName =  ? and type = ?", asset.fileName, Asset.commentType);
+        int del = TextReference.delete("fileName =  ?1 and type = ?2", asset.fileName, Asset.commentType);
         System.out.println("Number of deleted comments: " + del);
         Document doc = Helpers.stringToNode(asset.html);
         List<Node> refs = Helpers.getChildrenOfType(doc, "div");
@@ -107,10 +111,10 @@ public class TextReference extends GenericModel {
         for (Node row : refs) {
             // String id = asset.fileName.replace("_com.xml", "") + "_" + row.getAttributes().getNamedItem("id").getNodeValue();
             // System.out.println("Processing row: " + Helpers.nodeToString(row));
-            if ((row.getAttributes().getNamedItem("class") != null) &&  (row.getAttributes().getNamedItem("class").getNodeValue().contains("about"))) 
+            if ((row.getAttributes().getNamedItem("class") != null) && (row.getAttributes().getNamedItem("class").getNodeValue().contains("about")))
                 strB.append(Helpers.nodeToString(row));
-            if ((row.getAttributes().getNamedItem("class") != null) &&  (row.getAttributes().getNamedItem("class").getNodeValue().contains("litList"))) 
-                strB.append(Helpers.nodeToString(row));                        
+            if ((row.getAttributes().getNamedItem("class") != null) && (row.getAttributes().getNamedItem("class").getNodeValue().contains("litList")))
+                strB.append(Helpers.nodeToString(row));
             if (row.getAttributes().getNamedItem("id") == null) continue;
             i++;
             String id = "scrollTarget" + "_" + asset.fileName.replace("_com.xml", "") + "_" + row.getAttributes().getNamedItem("id").getNodeValue();
@@ -124,26 +128,26 @@ public class TextReference extends GenericModel {
         }
         System.out.println("Number of comments in file: " + i);
 
-        asset.html =  strB.toString();
+        asset.html = strB.toString();
         asset.save();
     }
 
     /**
      * Extract text-references to be shown i popups
      * Each ref is kept separately and precompiled in the database
-     * 
+     *
      */
     // check if dtd sequence is set, this is an assumption here
     public static void uploadReferenceFile(Asset asset) {
         //System.out.println("Uploading reference-file: " + asset.html);
-        TextReference.delete("type = ?", asset.type);
+        TextReference.delete("type = ?1", asset.type);
         try {
             Document doc = Helpers.stringToNode(asset.html);
             List<Node> refs = Helpers.getChildrenOfType(doc, "div");
             System.out.println("Number of refs: " + refs.size());
             // System.out.println("Trasformed refs as html: " + asset.html);
             for (Node ref : refs) {
-                if(ref.getAttributes().getNamedItem("id") == null) continue; // do not create post for altName
+                if (ref.getAttributes().getNamedItem("id") == null) continue; // do not create post for altName
                 String id = ref.getAttributes().getNamedItem("id").getNodeValue();
                 System.out.println("Creating ref-id: " + id);
                 System.out.println("  " + Helpers.nodeToString(ref));
@@ -155,14 +159,14 @@ public class TextReference extends GenericModel {
             e.printStackTrace();
         }
     }
-    
-    
+
+
     public static void uploadReferenceFilePlace(Asset asset) {
         // System.out.println("Uploading reference-file: " + asset.html);
-        TextReference.delete("type = ?", asset.type);
+        TextReference.delete("type = ?1", asset.type);
         try {
             Document doc = Helpers.stringToNode(asset.html);
-            
+
             List<Node> refs = Helpers.getChildrenOfType(doc, "div");
             System.out.println("Number of possible refs: " + refs.size());
             for (Node ref : refs) {
@@ -178,11 +182,11 @@ public class TextReference extends GenericModel {
             e.printStackTrace();
         }
     }
-    
+
     public static void uploadReferenceFileBible(Asset asset) {
-        TextReference.delete("type = ?", asset.type);
+        TextReference.delete("type = ?1", asset.type);
         try {
-            Document doc = Helpers.stringToNode(asset.xml);            
+            Document doc = Helpers.stringToNode(asset.xml);
             XPathExpression expr = XPathFactory.newInstance().newXPath().compile("//*:rs");
             NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
             System.out.println("------- Number of bible-references found: " + nodes.getLength());
@@ -194,22 +198,22 @@ public class TextReference extends GenericModel {
                 TextReference textRef = new TextReference(ref, -1, html, asset.type, asset.fileName);
                 textRef.save();
             }
-            System.out.println("Number of bible refs: " + TextReference.find("type = ?", asset.type).fetch().size());
+            System.out.println("Number of bible refs: " + TextReference.find("type = ?1", asset.type).fetch().size());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    
+
 
     /**
      * Get a reference based on its id
      * Used from ajax-lookups
+     *
      * @return ref as html
-     * 
+     *
      */
     public static String getReference(String textId) {
-        TextReference ref = TextReference.find("textId = ?", textId).first();
+        TextReference ref = TextReference.find("textId = ?1", textId).first();
         if (ref != null) {
             System.out.println("Refname: " + ref.showName);
         } else {

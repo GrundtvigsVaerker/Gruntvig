@@ -1,13 +1,14 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
- * 
- * 
+ *
+ *
  */
 package models;
 
 import controllers.DoSearch;
 import helpers.Helpers;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +20,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import jakarta.persistence.*;
 import play.db.jpa.GenericModel;
+
 import javax.xml.transform.stream.StreamSource;
+
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XsltCompiler;
@@ -38,14 +42,14 @@ import play.db.jpa.JPABase;
  * Variants of originals are held in variant-counter, original is number 0
  * Name of xml-file as given when uploaded is overridden by the title in the teiHeader (KK 2014-03-05)
  * Name of assets should be on type
- *
+ * <p>
  * Enunmeration of asset-type is kept in string due to db-restrinctions on jpa-enums
  *
  */
 @Entity
 @Table(indexes = {
-    @Index(name = "idx_asset_filename_type", columnList = "fileName,type"),
-    @Index(name = "idx_asset_rootname_type_variant", columnList = "rootName,type,variant")
+        @Index(name = "idx_asset_filename_type", columnList = "fileName,type"),
+        @Index(name = "idx_asset_rootname_type_variant", columnList = "rootName,type,variant")
 })
 public class Asset extends GenericModel {
 
@@ -72,7 +76,7 @@ public class Asset extends GenericModel {
     public String type;
     @Column(length = 1_000_000)
     public String refs;
-    
+
     /* no enum-support in db, unfornately */
     public static String imageType = "imageType";
     public static String countryImage = "countryuImage";
@@ -127,9 +131,8 @@ public class Asset extends GenericModel {
         System.out.println("Root-name: " + rootName);
     }
 
-    
-        
-   private static boolean nonEmpty(Asset var) {
+
+    private static boolean nonEmpty(Asset var) {
         Pattern p = Pattern.compile("type\\s*=\\s*[\"'](minusVar|unknownVar)[\"']");
         Matcher m = p.matcher(var.xml);
         if (m.find()) {
@@ -137,13 +140,13 @@ public class Asset extends GenericModel {
         } else {
             return true;
         }
-   }
-    
-/**
- * 
- * Save element to solr
- * 
- */   
+    }
+
+    /**
+     *
+     * Save element to solr
+     *
+     */
     public void index() {
         boolean doIndex = true;
         // add rules where not to index
@@ -168,8 +171,8 @@ public class Asset extends GenericModel {
             }
         }
     }
-   
-   
+
+
     /**
      * Always make html searchable as text before saving
      */
@@ -181,7 +184,7 @@ public class Asset extends GenericModel {
         index();
         return t;
     }
-        
+
 
     @Override
     public <T extends JPABase> T delete() {
@@ -194,24 +197,24 @@ public class Asset extends GenericModel {
         }
         return super.delete();
     }
-    
-    
+
+
     /**
      * create teaser for search-list
-     * 
+     *
      * @return html with lookfor highlighted
      */
     public String getTeaser(String lookfor) {
         return DoSearch.createTeaser(htmlAsText, lookfor);
     }
 
-    
+
     /**
      * Get the id for an asset
      * Use the filename is a key
      *
      * @return database-id
-     * 
+     *
      */
     public Long getCorrespondingRootId() {
         Long res = null;
@@ -219,7 +222,7 @@ public class Asset extends GenericModel {
         try {
             Asset root = Asset.find("rootName = :rootName and type = :type").setParameter("rootName", rootName).setParameter("type", Asset.rootType).first();
             res = root.id;
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Could not find root-class of file: " + this.fileName);
         }
         return res;
@@ -228,18 +231,19 @@ public class Asset extends GenericModel {
     /**
      * The txt-file should have a corresponding intro-file
      * get file name from teiHeader (KK 2014-03-05)
+     *
      * @return id of intro-file asset
-     * 
+     *
      */
     public String getCorrespondingIntro() { //<note type="intro" target="1804_28_intro.xml">
-        String rN= rootName;
-        Pattern p= Pattern.compile( "<note [^>]*type=[\"'](intro|noIntro)[\"'][^>]*>" );
-        Matcher m= p.matcher( xml );
-        if( m.find() ) {
-            p= Pattern.compile( "target=[\"']([^\"]*)[\"']" );
-            m= p.matcher( m.group(0) );
-            if( m.find() )
-                rN= getRootName( m.group(1).trim(), Asset.introType );
+        String rN = rootName;
+        Pattern p = Pattern.compile("<note [^>]*type=[\"'](intro|noIntro)[\"'][^>]*>");
+        Matcher m = p.matcher(xml);
+        if (m.find()) {
+            p = Pattern.compile("target=[\"']([^\"]*)[\"']");
+            m = p.matcher(m.group(0));
+            if (m.find())
+                rN = getRootName(m.group(1).trim(), Asset.introType);
         }
 
         System.out.println("Looking for intro rootname: " + rN);
@@ -249,8 +253,9 @@ public class Asset extends GenericModel {
 
     /**
      * The txt-file should have a corresponding txr-file
+     *
      * @return id of txt-file
-     * 
+     *
      */
     public String getCorrespondingTxr() {
         Asset txr = Asset.find("rootName = :rootName and type = :type").setParameter("rootName", rootName).setParameter("type", Asset.txrType).first();
@@ -262,7 +267,7 @@ public class Asset extends GenericModel {
      * The txt-file should have a corresponding comment-file
      *
      * @return comment-content as String after preprocessing
-     * 
+     *
      */
     public String getCorrespondingComment() {
         Asset comment = Asset.find("fileName = :fileName and type = :type").setParameter("fileName", rootName + "_com.xml").setParameter("type", Asset.commentType).first();
@@ -281,6 +286,7 @@ public class Asset extends GenericModel {
     /**
      * Calculates root name of an asset, based on the syntax of the filename
      * The root-name is stored in the asset model
+     *
      * @return root-name of the asset
      */
     public static String getRootName(String fileNameIn, String assetType) {
@@ -292,7 +298,7 @@ public class Asset extends GenericModel {
                 assetType.equals(Asset.txrType) ||
                 assetType.equals(Asset.veiledningType) ||
                 assetType.equals(Asset.varListType)) return fileName;
-        
+
         Pattern pattern = Pattern.compile("(.*)_.*\\d+$");
         Matcher matcher = pattern.matcher(fileName);
         if (!matcher.matches()) {
@@ -332,16 +338,15 @@ public class Asset extends GenericModel {
         Helpers.copyfile(file.getAbsolutePath(), filePath.toString());
         return;
     }
-    
-    
-    
+
+
     /**
-     * 
+     *
      * Handles upload of fix-image
      * Binary file is copied and kept in the application-path
      * Every picture has a number, this is calculated based on the file-name
      * Asset with type Asset.imageType is created
-     * 
+     *
      */
     public static Asset uploadFax(String name, String comment, File file) {
         String fileName = file.getName();
@@ -368,7 +373,7 @@ public class Asset extends GenericModel {
     /**
      * Keep a local version of the uploaded xml
      * Might not be needed?
-     * 
+     *
      */
     private static String copyXmlToXmlDirectory(File epub) {
         Path filePath = Helpers.getXmlDataDirPath(epub.getName());
@@ -379,27 +384,27 @@ public class Asset extends GenericModel {
 
     /**
      * Get the content of <tag attrName="attrValue"> in xml
-     * 
+     *
      */
     /* KK 2014-03-05, 2015-10-08, 2017-03-29 */
-    public static String getXmlElem( String xml, String tag, String attrName, String attrValue ) {
-        Pattern p= Pattern.compile( "<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']" + attrValue + "[\"'][^>]*>(.*?)</" + tag + "\\s*>", Pattern.DOTALL );
-        Matcher m= p.matcher( xml );
-        if( m.find() )
-            return m.group(1).trim() + ( m.find(m.end()) ? " m.fl." : "" );
+    public static String getXmlElem(String xml, String tag, String attrName, String attrValue) {
+        Pattern p = Pattern.compile("<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']" + attrValue + "[\"'][^>]*>(.*?)</" + tag + "\\s*>", Pattern.DOTALL);
+        Matcher m = p.matcher(xml);
+        if (m.find())
+            return m.group(1).trim() + (m.find(m.end()) ? " m.fl." : "");
         else
             return "";
     }
 
     /**
      * Get the value of attrName in <tag> in xml
-     * 
+     *
      */
     /* KK 2015-10-08*/
-    static String getXmlAttrValue( String xml, String tag, String attrName ) {
-        Pattern p= Pattern.compile( "<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>" );
-        Matcher m= p.matcher( xml );
-        if( m.find() )
+    static String getXmlAttrValue(String xml, String tag, String attrName) {
+        Pattern p = Pattern.compile("<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>");
+        Matcher m = p.matcher(xml);
+        if (m.find())
             return m.group(1).trim();
         else
             return "";
@@ -407,58 +412,57 @@ public class Asset extends GenericModel {
 
     /**
      * Get the content of <term>s in <outerElem> in xml, delimited by "#"
-     * 
+     *
      */
     /* KK 2015-10-08 */
-    public static String getXmlTerms( String xml, String outerElem ) {
-        String firstTextClass= "";
-        int t1= xml.indexOf("<textClass>"), t2= xml.indexOf("</textClass>");
-        if( t1>=0 && t2>=0 ) {
-            firstTextClass= xml.substring( t1, t2 );
-             // the first textClass WITHOUT attributes
+    public static String getXmlTerms(String xml, String outerElem) {
+        String firstTextClass = "";
+        int t1 = xml.indexOf("<textClass>"), t2 = xml.indexOf("</textClass>");
+        if (t1 >= 0 && t2 >= 0) {
+            firstTextClass = xml.substring(t1, t2);
+            // the first textClass WITHOUT attributes
         }
         //else
         //    System.out.println( "No textClass, "+ t1 + "," + t2 );            
-        Pattern p= Pattern.compile( "<" + outerElem + "[^>]*>(.*)</" + outerElem + "\\s*>", Pattern.DOTALL );
-        Matcher m= p.matcher( firstTextClass );
-        if( m.find() ) {
+        Pattern p = Pattern.compile("<" + outerElem + "[^>]*>(.*)</" + outerElem + "\\s*>", Pattern.DOTALL);
+        Matcher m = p.matcher(firstTextClass);
+        if (m.find()) {
             //System.out.println( outerElem + " found: " + m.group(1) );
-            String result= "";
-            p= Pattern.compile( "<term[^>]*>([^<]*)</term\\s*>" );
-            m= p.matcher( m.group(1) );
-            while( m.find() )
-              result+= ( result.equals("")?"":"#" ) + m.group(1).trim();
-            if( result.equals("") )
+            String result = "";
+            p = Pattern.compile("<term[^>]*>([^<]*)</term\\s*>");
+            m = p.matcher(m.group(1));
+            while (m.find())
+                result += (result.equals("") ? "" : "#") + m.group(1).trim();
+            if (result.equals(""))
                 return "ingen";
             else
                 return result;
-        }
-        else {
+        } else {
             return "ingen";
         }
     }
-    
+
     /**
      * Convert xml hexadecimal char entities to unicode string
-     * 
+     *
      */
     /* KK 2014-03-05 xx */
-    private static String ent2str( String ent ) {
-        Pattern p= Pattern.compile( "&#x([0-9A-Fa-f]+);" );
-        Matcher m= p.matcher( ent );
-        while( m.find() ){
-            ent= ent.replaceFirst( m.group(0), String.format("%c",Integer.parseInt(m.group(1),16)) );
+    private static String ent2str(String ent) {
+        Pattern p = Pattern.compile("&#x([0-9A-Fa-f]+);");
+        Matcher m = p.matcher(ent);
+        while (m.find()) {
+            ent = ent.replaceFirst(m.group(0), String.format("%c", Integer.parseInt(m.group(1), 16)));
         }
         return ent;
     }
-    
+
     /**
-     * 
+     *
      * Handle upload of xml-file
      * Calculate asset-type based on file-name
      * Copy and keep xml-file
      * Calculate and keep html based on the right xslt
-     * 
+     * <p>
      * Note:
      * variant = 0 means it is the original
      *
@@ -470,8 +474,7 @@ public class Asset extends GenericModel {
         System.out.println("Epub name: " + epub.getName());
         if (epub.getName().contains("_bibl")) {
             type = Asset.bibliografi;
-        } else
-        if (epub.getName().equals("map_vej.xml")) {
+        } else if (epub.getName().equals("map_vej.xml")) {
             type = Asset.mapVej;
         } else if (epub.getName().startsWith("map_")) {
             type = Asset.mapXml;
@@ -529,27 +532,27 @@ public class Asset extends GenericModel {
         System.out.println("File-type: " + type);
         String copiedFile = copyXmlToXmlDirectory(epub);
         System.out.println("Copied file: " + copiedFile);
-        
+
         String html = "";
-        String preName= "";
-        
+        String preName = "";
+
         // consider a hash :-)
         if (type.equals(Asset.bibliografi)) {
-          html = Asset.xmlRefToHtml(epub.getAbsolutePath(), "biblDescXSLT.xsl"); 
+            html = Asset.xmlRefToHtml(epub.getAbsolutePath(), "biblDescXSLT.xsl");
         } else if (type.equals(Asset.mapVej) || type.equals(Asset.mapXml)) {
-          html =  Asset.xmlRefToHtml(epub.getAbsolutePath(), "vejXSLT.xsl"); 
+            html = Asset.xmlRefToHtml(epub.getAbsolutePath(), "vejXSLT.xsl");
         } else if (type.equals(Asset.veiledningType)) {
-          html = fixHtml(Asset.xmlRefToHtml(epub.getAbsolutePath(), "vejXSLT.xsl"));
+            html = fixHtml(Asset.xmlRefToHtml(epub.getAbsolutePath(), "vejXSLT.xsl"));
         } else if (type.equals(Asset.placeType)) {
             html = fixHtml(Asset.xmlRefToHtml(epub.getAbsolutePath(), "placeXSLT.xsl"));
         } else if (type.equals(Asset.personType)) {
             html = Asset.xmlRefToHtml(epub.getAbsolutePath(), "persXSLT.xsl");
         } else if (type.equals(Asset.commentType)) {
             html = fixHtml(Asset.xmlRefToHtml(copiedFile, "comXSLT.xsl"));
-            preName= "Punktkomm. til ";
+            preName = "Punktkomm. til ";
         } else if (type.equals(Asset.introType)) {
             html = fixHtml(Asset.xmlToHtmlIntro(copiedFile));
-            preName= "Indl. til ";
+            preName = "Indl. til ";
         } else if (type.equals(Asset.variantType)) {
             html = fixHtml(Asset.xmlToHtmlVariant(copiedFile));
             //preName= "Var. til "; use shortForm
@@ -568,7 +571,7 @@ public class Asset extends GenericModel {
             html = Asset.xmlRefToHtml(epub.getAbsolutePath(), "regListXSLT.xsl");
         } else if (type.equals(Asset.txrType)) {
             html = fixHtml(Asset.xmlRefToHtml(copiedFile, "txrXSLT.xsl"));
-            preName= "Tekstred. til ";
+            preName = "Tekstred. til ";
         } else if (type.equals(Asset.varListType)) {
             html = Asset.xmlRefToHtml(copiedFile, "varListXSLT.xsl");
         } else if (type.equals(Asset.bookinventory)) {
@@ -591,24 +594,25 @@ public class Asset extends GenericModel {
 
         // String refs = Helpers.getReferencesFromXml(xml, epub.getName().replaceFirst("", html));
         String references = "";
-        String prevQual= getXmlAttrValue( xml, "title", "prev" ),
-               nextQual= getXmlAttrValue( xml, "title", "next" );
-        String teiHeaderTitle= getXmlElem( xml, "title", "rend", "shortForm" );
-        if( prevQual!="" )
-            prevQual= "[" + prevQual + "] ";
-        if( nextQual!="" )
-            nextQual= " [" + nextQual + "]";
-        if( teiHeaderTitle!=null )
-            name= preName + prevQual + ent2str( teiHeaderTitle ) + nextQual;
+        String prevQual = getXmlAttrValue(xml, "title", "prev"),
+                nextQual = getXmlAttrValue(xml, "title", "next");
+        String teiHeaderTitle = getXmlElem(xml, "title", "rend", "shortForm");
+        if (prevQual != "")
+            prevQual = "[" + prevQual + "] ";
+        if (nextQual != "")
+            nextQual = " [" + nextQual + "]";
+        if (teiHeaderTitle != null)
+            name = preName + prevQual + ent2str(teiHeaderTitle) + nextQual;
         else
-            name= preName + epub.getName();
-        System.out.println( "hdrName: " + name );
+            name = preName + epub.getName();
+        System.out.println("hdrName: " + name);
 
-        Asset asset;
         System.out.println("Filename: " + epub.getName());
-        if (Asset.find("filename", epub.getName()).fetch().size() > 0) {
+
+        Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", epub.getName()).first();
+
+        if (asset != null) {
             System.out.println("--- Updating asset with name: " + epub.getName());
-            asset = Asset.find("filename", epub.getName()).first();
             if (!name.trim().equalsIgnoreCase(epub.getName().trim())) asset.name = name;
             asset.html = html;
             asset.comment = comment;
@@ -646,27 +650,40 @@ public class Asset extends GenericModel {
 
     /**
      * Get variants and manuses based on the root-asset
+     *
      * @return List of variants, manuses and varLists connected to this asset
-     * 
+     *
      */
     public static List<Asset> getVariants(long assetId) {
 
         Asset rootAsset = Asset.findById(assetId);
-        System.out.println("rootName: " + rootAsset.id);  
-        List<Asset> variants = Asset.find("rootName = ? and (type = ?  or type =  ? or type = ?) order by type, variant", rootAsset.rootName, Asset.variantType, Asset.manusType, Asset.varListType).fetch();
+        System.out.println("rootName: " + rootAsset.id);
+        List<Asset> variants = Asset.find("rootName = :rootName and (type = :variantType  or type =  :manusType or type = :varListType) order by type, variant")
+                .setParameter("rootName", rootAsset.rootName)
+                .setParameter("variantType", Asset.variantType)
+                .setParameter("manusType", Asset.manusType)
+                .setParameter("varListType", Asset.varListType)
+                .fetch();
         return variants;
     }
 
-    
+
     /**
      * Get correspondig manus to an asset
-     * @return List of manuses 
+     *
+     * @return List of manuses
      */
     public static List<Asset> getManus(long assetId) {
         Asset rootAsset = Asset.findById(assetId);
-        List<Asset> manus = Asset.find("rootName = ? and type = ? ", rootAsset.rootName, "manus").fetch();
+        List<Asset> manus = Asset.find("rootName = :rootName and type = :manusType")
+                .setParameter("rootName", rootAsset.rootName)
+                .setParameter("manusType", Asset.manusType)
+                .fetch();
         if (manus.isEmpty()) {
-            manus = Asset.find("rootName = ? and type = ? ", rootAsset.rootName.replaceFirst("_1", ""), "manus").fetch();
+            manus = Asset.find("rootName = :rootName and type = :manusType")
+                    .setParameter("rootName", rootAsset.rootName.replaceFirst("_1", ""))
+                    .setParameter("manusType", Asset.manusType)
+                    .fetch();
         }
         return manus;
     }
@@ -719,12 +736,13 @@ public class Asset extends GenericModel {
         return xmlToHtml(xmlFilePath, xlstFilePath);
     }
 
-    
+
     /**
      * Does the xslt-transformation of a XML-file and a XLST-file.
-     * @param xmlFilePath - name of xml-file
+     *
+     * @param xmlFilePath  - name of xml-file
      * @param xlstFilePath - name of xslt - file
-     * 
+     *
      */
     public static String xmlToHtml(String xmlFilePath, String xlstFilePath) {
         try {
@@ -754,7 +772,7 @@ public class Asset extends GenericModel {
         }
 
     }
-    
+
     public int getNumberOfPictures() {
         System.out.println("**** Looking for rootName: " + rootName);
         return Asset.find("rootName = :rootName and type = :type").setParameter("rootName", rootName).setParameter("type", Asset.imageType).fetch().size();
@@ -764,6 +782,5 @@ public class Asset extends GenericModel {
         return this.rootName;
     }
 
-    
-    
+
 }

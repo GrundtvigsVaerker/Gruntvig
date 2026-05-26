@@ -6,15 +6,18 @@ package models;
 
 import controllers.DoSearch;
 import helpers.Helpers;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import play.db.jpa.GenericModel;
 import play.data.validation.Required;
 import org.w3c.dom.*;
+
 import javax.xml.xpath.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
@@ -23,6 +26,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import play.db.jpa.JPABase;
@@ -37,7 +41,7 @@ import play.db.jpa.JPABase;
  */
 @Entity
 @Table(indexes = {
-    @Index(name = "idx_chapter_asset_num", columnList = "asset_id,num")
+        @Index(name = "idx_chapter_asset_num", columnList = "asset_id,num")
 })
 public class Chapter extends GenericModel {
 
@@ -79,9 +83,9 @@ public class Chapter extends GenericModel {
             server.commit();
         } catch (Exception e) {
             e.printStackTrace();
-        }        
+        }
     }
-    
+
     /**
      * Override of save function in JPA Currently all div-tags with empty
      * class-defs are deleted
@@ -96,7 +100,7 @@ public class Chapter extends GenericModel {
         index();
         return t;
     }
-    
+
     @Override
     public <T extends JPABase> T delete() {
         try {
@@ -108,9 +112,9 @@ public class Chapter extends GenericModel {
         }
         return super.delete();
     }
-  
+
     public String getNamePlain() {
-        if ((int)name.charAt(0) == 8195) {
+        if ((int) name.charAt(0) == 8195) {
             return name.substring(1);
         } else return name;
     }
@@ -134,8 +138,10 @@ public class Chapter extends GenericModel {
             Chapter c = (Chapter) o;
             // System.out.println("Chapter id: " + c.asset);
         }
-        List<Chapter> oldChapters = Chapter.find("asset = ?", asset).fetch();
-        for (Chapter c: oldChapters) {
+        List<Chapter> oldChapters = Chapter.find("asset = :asset")
+                .setParameter("asset", asset)
+                .fetch();
+        for (Chapter c : oldChapters) {
             c.delete();
         }
         System.out.println("Deleted " + oldChapters.size() + " old chapters" + " assetid: " + asset.id);
@@ -190,7 +196,9 @@ public class Chapter extends GenericModel {
                     // System.out.println("Chapter node: " + Helpers.nodeToString(node));
                     // System.out.println("---------------------------------------------------");
                     String name = "- afsnit mangler titel - " + (i + 0);
-                    if (i == nodes.getLength()-1 ) { name = "[Kolofon]"; }
+                    if (i == nodes.getLength() - 1) {
+                        name = "[Kolofon]";
+                    }
                     if (node.getAttributes().getNamedItem("name") != null) {
                         name = node.getAttributes().getNamedItem("name").getNodeValue();
                         System.out.println("Chapter id found: " + name);
