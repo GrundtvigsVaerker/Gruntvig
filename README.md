@@ -47,8 +47,7 @@ If Solr needs to be reindexed do the following:
 - JPA mappings er ændret til at resolve til text kolonner i stedet for LOB, dette skal formentlig transformeres i databasen ved migrationen. Dette burde
   forøge performance og muliggør indekses på kolonnerne.
 - Der er tilføjet indexes til JPA-mappings. Disse skal køres manuelt på database ved migration (efter LOB -> text transformation).
-
--
+- Fixet bibelregister så den ikke laver dobbelt kolonne, uden indhold, i visning (ændret bibleXSLT.xsl)
 
 # TODO ON SERVER FILES:
 
