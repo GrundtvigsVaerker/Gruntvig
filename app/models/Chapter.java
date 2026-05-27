@@ -50,9 +50,9 @@ public class Chapter extends GenericModel {
     @GeneratedValue(generator = "chapter_id_seq_gen")
     public long id;
     public String name;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String html;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String htmlAsText;
     @Required
     @ManyToOne

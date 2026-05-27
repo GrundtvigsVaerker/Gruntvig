@@ -57,13 +57,13 @@ public class Asset extends GenericModel {
     @GeneratedValue(generator = "asset_id_seq_gen")
     @SequenceGenerator(name = "asset_id_seq_gen", sequenceName = "asset_id_seq")
     public long id;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String xml;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String html;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String htmlAsText;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String comment;
     public String name;
     public String fileName;
@@ -74,7 +74,7 @@ public class Asset extends GenericModel {
     public java.util.Date importDate;
     public String rootName;
     public String type;
-    @Column(length = 1_000_000)
+    @Column(length = 10_000_000)
     public String refs;
 
     /* no enum-support in db, unfornately */
