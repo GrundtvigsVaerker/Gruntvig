@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet 
-    xmlns:TEI="http://www.tei-c.org/ns/1.0" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0">
-    
+<xsl:stylesheet
+        xmlns:TEI="http://www.tei-c.org/ns/1.0"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        version="1.0">
+
     <!--
         Kim Steen Ravn:
         2012.06.06: started
@@ -11,7 +11,7 @@
     -->
 
     <xsl:template match="TEI:TEI">
-        
+
         <html>
             <head>
                 <link rel="stylesheet" href="regListCSS.css" type="text/css"/>
@@ -20,10 +20,10 @@
                 </title>
             </head>
             <body>
-                
+
                 <!--<xsl:apply-templates select="TEI:text"/>-->
-                
-                
+
+
                 <xsl:for-each select="//TEI:list">
                     <xsl:sort select="TEI:head"/>
                     <div class="regList">
@@ -31,18 +31,18 @@
                     </div>
                     <ul>
                         <xsl:for-each select="TEI:item[(contains(@corresp, 'pdf'))]">
-                            <a href="img/{@corresp}" target="_blank" class="reg" onclick="return blank('vejledning',this.href)">
+                            <a href="pdf/{@corresp}" target="_blank" class="reg" onclick="return blank('vejledning',this.href)">
                                 <li class="simple">
                                     <xsl:apply-templates/>
                                 </li>
                             </a>
                         </xsl:for-each>
-                        <xsl:for-each select="TEI:item[@corresp='noPDF']">                            
+                        <xsl:for-each select="TEI:item[@corresp='noPDF']">
                             <li class="simple">
                                 <xsl:apply-templates/>
                             </li>
                         </xsl:for-each>
-                        <xsl:for-each select="TEI:item[(contains(@corresp, 'http'))]">                            
+                        <xsl:for-each select="TEI:item[(contains(@corresp, 'http'))]">
                             <li class="simple">
                                 <xsl:apply-templates/>
                             </li>
@@ -51,13 +51,13 @@
                 </xsl:for-each>
             </body>
         </html>
-        
+
     </xsl:template>
-    
+
     <xsl:template match="TEI:hi">
         <span class="{@rend}">
             <xsl:apply-templates/>
         </span>
     </xsl:template>
-    
+
 </xsl:stylesheet>

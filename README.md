@@ -62,6 +62,21 @@ Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der
 - Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
 - OBS: erstat IKKE public/images med det overleverede pulic/ dir, public/* skal komme fra git-hub, alt brugergenereret skal ligge eksternt.
 
+- i html kolonnen for chapter of asset, find alle referencer til `href="img/xxx.pdf"` og erstat med `href="pdf/xxx.pdf"`
+  TAG ET SNAPSHOT INDEN
+
+> ```
+>   UPDATE __TABLE_NAME__
+>   SET __COLUMN_NAME__ = regexp_replace(
+>       __COLUMN_NAME__,
+>       'href="img/([^"]+\.pdf)"',
+>       'href="pdf/\1"',
+>       'g'
+>    );
+> ```
+
+- Upload `regList.xml` og `bookInventory1805.xml` og `bookInventory1839.xml` igen, så de bliver parset korrekt...
+
 # TODO ON SERVER POSTGRES:
 
 Login to the db as grundtvig user:
