@@ -4,91 +4,97 @@
 
 <script>
 
-  $(document).ready(function() {
+    $(document).ready(function () {
 
-    // load vejledning content
+        // load vejledning content
 
-    var vejledning = "${vejledningSomSkalVises}",
-        crump_txt= $("a#" + vejledning).clone().contents();
+        var vejledning = "${vejledningSomSkalVises}",
+            crump_txt = $("a#" + vejledning).clone().contents();
 
-    // add selected to menu
-    $("a").removeClass('selected');
-    $("a#" + vejledning).addClass('selected');
-    $("span#actual").after(crump_txt);
-         
-         var veiledningUrl = "ajax/getVeiledning/" + vejledning;
-         $.ajax({
-             url: veiledningUrl,
-             success: function(data) {
-                 var veiledningContent = $("#veiledning_tekst");
-                 veiledningContent.html(data);
-                 addTooltip($('.persName, .placeName, .myth, .rs_bible'));
-             }
-         });
+        // add selected to menu
+        $("a").removeClass('selected');
+        $("a#" + vejledning).addClass('selected');
+        $("span#actual").after(crump_txt);
 
-          // tooltip
+        var veiledningUrl = "ajax/getVeiledning/" + vejledning;
+        $.ajax({
+            url: veiledningUrl,
+            success: function (data) {
+                var veiledningContent = $("#veiledning_tekst");
+                veiledningContent.html(data);
+                addTooltip($('.persName, .placeName, .myth, .rs_bible'));
+            }
+        });
 
-    var addTooltip = function (tags) {
-        tags.cluetip({cluetipClass: 'jtip', closeText : 'Luk', mouseOutClose: true, width: 375, dropShadow: false, sticky: true, ajaxCache: false, arrows: false});
-    }
+        // tooltip
 
-    var removeTooltip = function(tags) {
-        tags.cluetip('destroy');
-    }
+        var addTooltip = function (tags) {
+            tags.cluetip({
+                cluetipClass: 'jtip',
+                closeText: 'Luk',
+                mouseOutClose: true,
+                width: 375,
+                dropShadow: false,
+                sticky: true,
+                ajaxCache: false,
+                arrows: false
+            });
+        };
 
+        var removeTooltip = function (tags) {
+            tags.cluetip('destroy');
+        };
 
-    
-  });
+    });
 
-  </script>
+</script>
 
 <div id="main">
 
-	<div class="container" id="underside_innhold">
+    <div class="container" id="underside_innhold">
 
-		<div id="submenu">
-                    <div id="breadcrumbs"><a href="#">Forside</a> &raquo; <a href="/vejledning/om_udgaven_vej">Vejledning</a> &raquo; <span id="actual"></span></div>
+        <div id="submenu">
+            <div id="breadcrumbs"><a href="#">Forside</a> &raquo; <a href="/vejledning/om_udgaven_vej">Vejledning</a> &raquo; <span id="actual"></span></div>
 
-		</div>
+        </div>
+
+        <div class="kolonne1">
+
+            <ul id="kolonne1_meny">
+
+                <li class="header">Vejledning</li>
+                <li><a id="om_udgaven_vej" href="/vejledning/om_udgaven_vej">Om udgaven</a></li>
+                <li><a id="indhold_vej" href="/vejledning/indhold_vej">Udgavens indhold</a></li>
+                <li><a id="henvisning_vej" href="/vejledning/henvisning_vej">Vil du citere os?</a></li>
+                <li><a id="video_vej" href="/vejledning/video_vej">Videovejledninger</a></li>
+                <li><a id="tknoter_vej" href="/vejledning/tknoter_vej">Tekstkritiske noter</a></li>
+                <!--li><a id="varapp_vej" href="/vejledning/varapp_vej">Variantapparat</a></li>
+                <li><a id="ms_vej" href="/vejledning/ms_vej">Manuskriptvisning</a></li-->
+                <li><a id="timeline_vej" href="/vejledning/timeline_vej">Tidslinje</a></li>
+                <li><a id="reg_vej" href="/vejledning/reg_vej">Registranten<!--Om “Registrant over N.F.S. Grundtvigs Papirer”--></a></li>
+                <li><a id="pers_vej" href="/vejledning/pers_vej">Personregister</a></li>
+                <li><a id="bibel_vej" href="/vejledning/bibel_vej">Bibelstedsregister</a></li>
+                <li><a id="myth_vej" href="/vejledning/myth_vej">Mytologisk register</a></li>
+                <li><a id="salmer_vej" href="/vejledning/salmer_vej">Salmeregister</a></li>
+                <li><a id="sangvaerk_vej" href="/vejledning/sangvaerk_vej">Sangværk</a></li>
+                <li><a id="metrik_vej" href="/vejledning/metrik_vej">Metriske oplysninger</a></li>
+                <li><a id="1805_vej" href="/vejledning/1805_vej">Bogfortegnelse 1805</a></li>
+                <li><a id="1839_vej" href="/vejledning/1839_vej">Bogfortegnelse 1839</a></li>
+                <li><a id="transskription_vej" href="/vejledning/transskription_vej">Transskription</a></li>
+                <li><a id="search_vej" href="/vejledning/search_vej">Søgning</a></li>
+            </ul>
+
+        </div>
+
+        <div id="kolonne1_bred">
+
+            <div id="veiledning_tekst">
+
+            </div>
 
 
-<div class="kolonne1">
+        </div>
 
-		<ul id="kolonne1_meny">
-
-			<li class="header">Vejledning</li>
-		                <li><a id="om_udgaven_vej" href="/vejledning/om_udgaven_vej">Om udgaven</a></li>
-		                <li><a id="indhold_vej" href="/vejledning/indhold_vej">Udgavens indhold</a></li>
-		                <li><a id="henvisning_vej" href="/vejledning/henvisning_vej">Vil du citere os?</a></li>
-                        <li><a id="video_vej" href="/vejledning/video_vej">Videovejledninger</a></li>
-                        <li><a id="tknoter_vej" href="/vejledning/tknoter_vej">Tekstkritiske noter</a></li>
-                        <!--li><a id="varapp_vej" href="/vejledning/varapp_vej">Variantapparat</a></li>
-                        <li><a id="ms_vej" href="/vejledning/ms_vej">Manuskriptvisning</a></li-->
-                        <li><a id="timeline_vej" href="/vejledning/timeline_vej">Tidslinje</a></li>
-                        <li><a id="reg_vej" href="/vejledning/reg_vej">Registranten<!--Om “Registrant over N.F.S. Grundtvigs Papirer”--></a></li>
-                        <li><a id="pers_vej" href="/vejledning/pers_vej">Personregister</a></li>
-                        <li><a id="bibel_vej" href="/vejledning/bibel_vej">Bibelstedsregister</a></li>
-                        <li><a id="myth_vej" href="/vejledning/myth_vej">Mytologisk register</a></li>
-                        <li><a id="myth_vej" href="/vejledning/salmer_vej">Salmeregister</a></li>  
-		                <li><a id="myth_vej" href="/vejledning/sangvaerk_vej">Sangværk</a></li> 
-                        <li><a id="metrik_vej" href="/vejledning/metrik_vej">Metriske oplysninger</a></li>
-                        <li><a id="1805_vej" href="/vejledning/1805_vej">Bogfortegnelse 1805</a></li>        
-                        <li><a id="1805_vej" href="/vejledning/1839_vej">Bogfortegnelse 1839</a></li>
-                        <li><a id="transskription_vej" href="/vejledning/transskription_vej">Transskription</a></li>
-                        <li><a id="search_vej" href="/vejledning/search_vej">Søgning</a></li>
-		</ul>
-
-	</div>
-
-	<div id="kolonne1_bred">
-
-		<div id="veiledning_tekst">
-			
-		</div>
-
-
-	</div>
-
-	</div>
+    </div>
 </div>
 

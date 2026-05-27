@@ -1,136 +1,134 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "https://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
- <meta http-equiv="Pragma" content="no-cache">
-<!-- Pragma content set to no-cache tells the browser not to cache the page
-     This may or may not work in IE -->
- <meta http-equiv="expires" content="0">   
+    <meta http-equiv="Pragma" content="no-cache">
+    <!-- Pragma content set to no-cache tells the browser not to cache the page
+         This may or may not work in IE -->
+    <meta http-equiv="expires" content="0">
 
-<title>GV #{get 'subPageTitle'}Grundtvigs Værker #{/get}</title>
-<base href="${play.configuration.getProperty('play.baseurl')}"/>
-<!-- <link href="https://www.tei-c.org/release/xml/tei/stylesheet/tei.css" rel="stylesheet" type="text/css" /> -->
+    <title>GV #{get 'subPageTitle'}Grundtvigs Værker #{/get}</title>
+    <base href="${play.configuration.getProperty('play.baseurl')}"/>
+    <!-- <link href="https://www.tei-c.org/release/xml/tei/stylesheet/tei.css" rel="stylesheet" type="text/css" /> -->
 
-<link rel="stylesheet" media="print" type="text/css" href="https://www.tei-c.org/release/xml/tei/stylesheet/tei-print.css" />
+    <link rel="stylesheet" media="print" type="text/css" href="https://www.tei-c.org/release/xml/tei/stylesheet/tei-print.css"/>
 
-<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<link href="css/index.css" rel="stylesheet" type="text/css" />
-<link href="css/varListCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/msCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/txrCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/introCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/txtCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/comCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/mythCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/varCSS.css" rel="stylesheet" type="text/css" />
-<link href="css/biblDescCSS.css" rel="stylesheet" type="text/css" />
+    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <link href="css/index.css" rel="stylesheet" type="text/css"/>
+    <link href="css/varListCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/msCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/txrCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/introCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/txtCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/comCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mythCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/varCSS.css" rel="stylesheet" type="text/css"/>
+    <link href="css/biblDescCSS.css" rel="stylesheet" type="text/css"/>
 
-<link href="css/jquery.cluetip.css" rel="stylesheet" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <link href="css/jquery.cluetip.css" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js"></script> -->
-<script src="https://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
-<script type="text/javascript" src="js/jquery.mousewheel.min.js" ></script>
-<script type="text/javascript" src="js/jquery.iviewer.js" ></script>
-<script type="text/javascript" src="js/jquery.cluetip.js" ></script>
-<script type="text/javascript" src="js/jquery.hoverIntent.js" ></script>
-<script type="text/javascript" src="js/jquery.cookie.js" ></script>
-<script type="text/javascript" src="js/jquery.scrollTo-min.js" ></script>
-<script type="text/javascript" src="js/url_location.js" ></script>
-<script type="text/javascript" src="js/chapterHandling.js" ></script>
-<script type="text/javascript" src="js/mouseOvers.js" ></script>
-<script type="text/javascript" src="js/faksimile.js" ></script>
-<script type="text/javascript" src="js/newReader.js" ></script>
-<script type="text/javascript" src="js/tekstvisning.js" ></script>
-<script type="text/javascript" src="js/jquery-ui.js" ></script>
-<script type="text/javascript" src="js/gv.js" ></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js"></script> -->
+    <script src="https://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="js/jquery.iviewer.js"></script>
+    <script type="text/javascript" src="js/jquery.cluetip.js"></script>
+    <script type="text/javascript" src="js/jquery.hoverIntent.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.scrollTo-min.js"></script>
+    <script type="text/javascript" src="js/url_location.js"></script>
+    <script type="text/javascript" src="js/chapterHandling.js"></script>
+    <script type="text/javascript" src="js/mouseOvers.js"></script>
+    <script type="text/javascript" src="js/faksimile.js"></script>
+    <script type="text/javascript" src="js/newReader.js"></script>
+    <script type="text/javascript" src="js/tekstvisning.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/gv.js"></script>
 
-<link rel="stylesheet" href="css/jquery.iviewer.css" />
-<link rel="shortcut icon" href="/images/gv.ico" />
- 
-<script type="text/javascript">
+    <link rel="stylesheet" href="css/jquery.iviewer.css"/>
+    <link rel="shortcut icon" href="/images/gv.ico"/>
 
-		resize_window = function() {
+    <script type="text/javascript">
 
-			// finn høyde på nettleservinduet
-			var window_height = $(window).height();
-                        var window_width = $(window).width();
+        resize_window = function () {
 
-                     
-			hovedtekst_outer_offset = 140; // hvor mye mindre enn window_height de ytre boksene skal være
-			høyre_outer_offset = 137; // hvor mye mindre enn window_height de ytre boksene skal være
+            // finn høyde på nettleservinduet
+            var window_height = $(window).height();
+            var window_width = $(window).width();
 
-			$("#hovedtekst").height(window_height - hovedtekst_outer_offset);
-			$("#høyre").height(window_height - høyre_outer_offset);
-                        $(".tabReader").height(window_height - høyre_outer_offset - 0);
-			$("#ny_kolonne_bar").height(window_height - høyre_outer_offset - 3);
+            hovedtekst_outer_offset = 140; // hvor mye mindre enn window_height de ytre boksene skal være
+            høyre_outer_offset = 137; // hvor mye mindre enn window_height de ytre boksene skal være
 
-			hovedtekst_inner_offset = 257; // hvor mye mindre enn window_height de indre boksene skal være
-			høyre_inner_offset = 198; // hvor mye mindre enn window_height de indre boksene skal være
+            $("#hovedtekst").height(window_height - hovedtekst_outer_offset);
+            $("#høyre").height(window_height - høyre_outer_offset);
+            $(".tabReader").height(window_height - høyre_outer_offset - 0);
+            $("#ny_kolonne_bar").height(window_height - høyre_outer_offset - 3);
 
-                        if ($("#hovedtekst_select").css('display') == 'none') {
-                            
-                            $("#tekst_innhold").height(window_height - hovedtekst_inner_offset);
-                            
-                        } else {
-                            
-                          $("#tekst_innhold").height(window_height - hovedtekst_inner_offset - 41);
-                        }
+            hovedtekst_inner_offset = 257; // hvor mye mindre enn window_height de indre boksene skal være
+            høyre_inner_offset = 198; // hvor mye mindre enn window_height de indre boksene skal være
 
-			$("#høyre_innhold").height(window_height - høyre_inner_offset);
-                        $(".ui-tabs-panel").height(window_height - høyre_inner_offset - 8 );
-                        $(".variantContent").height(window_height - høyre_inner_offset - 39 );
-                        $(".innledningContent").parent().height(window_height - høyre_inner_offset - 8 );
-                        $(".manusContent").height(window_height - høyre_inner_offset - 61 );
-                        $(".faksimileContent").height(window_height - høyre_inner_offset - 15 );
-                        $(".faksimile_frame").height(window_height - høyre_inner_offset + 24 );
-                        
+            if ($("#hovedtekst_select").css('display') == 'none') {
 
-                       //resize html element so it fills the entire width
-                       
-                       var test =  $('#main .container').width();
-                     
-                       if(test > window_width) {$('html').width(test + 50);} // if we need to make the html bigger
-                         else {$('html').css('width', '100%');} // or if it needs to be smaller or stay the same 
-                  };
+                $("#tekst_innhold").height(window_height - hovedtekst_inner_offset);
 
+            } else {
 
-		$(document).ready(function() {
+                $("#tekst_innhold").height(window_height - hovedtekst_inner_offset - 41);
+            }
 
-			// resize layout når siden laster
-			resize_window();
+            $("#høyre_innhold").height(window_height - høyre_inner_offset);
+            $(".ui-tabs-panel").height(window_height - høyre_inner_offset - 8);
+            $(".variantContent").height(window_height - høyre_inner_offset - 39);
+            $(".innledningContent").parent().height(window_height - høyre_inner_offset - 8);
+            $(".manusContent").height(window_height - høyre_inner_offset - 61);
+            $(".faksimileContent").height(window_height - høyre_inner_offset - 15);
+            $(".faksimile_frame").height(window_height - høyre_inner_offset + 24);
 
-                        
-                        $('.clearSearch').bind('focus', function(){
-                            if( this.value == this.defaultValue ) {
-                                this.value = "";
-                            }
-                            $(this).css('color', '#222');
-                        });
-                        $('.clearSearch').bind('blur', function(){
-                            if( !this.value.length ) {
-                                this.value = this.defaultValue;
-                            }
-                            $(this).css('color', '#aaa');
-                        });
-                        
+            //resize html element so it fills the entire width
 
+            var test = $('#main .container').width();
 
-                  });
+            if (test > window_width) {
+                $('html').width(test + 50);
+            } // if we need to make the html bigger
+            else {
+                $('html').css('width', '100%');
+            } // or if it needs to be smaller or stay the same
+        };
 
-        $(window).resize(function() {
+        $(document).ready(function () {
 
-                // resize layout når nettleserens vindu endrer størrelse
-                resize_window();
+            // resize layout når siden laster
+            resize_window();
+
+            $('.clearSearch').bind('focus', function () {
+                if (this.value == this.defaultValue) {
+                    this.value = "";
+                }
+                $(this).css('color', '#222');
+            });
+            $('.clearSearch').bind('blur', function () {
+                if (!this.value.length) {
+                    this.value = this.defaultValue;
+                }
+                $(this).css('color', '#aaa');
+            });
 
         });
 
-	</script>
-        <link rel="shortcut icon" href="/images/gv.ico" />
+        $(window).resize(function () {
+
+            // resize layout når nettleserens vindu endrer størrelse
+            resize_window();
+
+        });
+
+    </script>
+    <link rel="shortcut icon" href="/images/gv.ico"/>
 
 </head>
 <body>
-    <script type='text/javascript' src='js/wz_tooltip_auto.js'></script>
-    #{doLayout /}
-    
+<script type='text/javascript' src='js/wz_tooltip_auto.js'></script>
+#{doLayout /}
+
 </body>
 </html>

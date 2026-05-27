@@ -3,33 +3,33 @@
      KK 2013.12.04 -->
 
 <script>
-    
-    $(function() {
-        $(".toc").click(function() {
+
+    $(function () {
+        $(".toc").click(function () {
             var id = $(this).attr("href").substring(1);
             var scrollTo = $("[id='" + id + "']");
-            $.scrollTo(scrollTo, {duration:'slow', offsetTop : '50'});
+            $.scrollTo(scrollTo, { duration: 'slow', offsetTop: '50' });
             return false;
         });
 
     });
-    
-</script>    
 
-<div id="main" style="background:#f0f0f0" >
+</script>
 
-	<div class="container" id="underside_innhold">
+<div id="main" style="background:#f0f0f0">
 
-            <div id="kolonne1_bred">
+    <div class="container" id="underside_innhold">
 
-                <div id="biblDesc" class="biblio">
+        <div id="kolonne1_bred">
 
-                    ${asset.html.raw()}                
+            <div id="biblDesc" class="biblio">
 
-		</div>
+                ${asset.html.raw()}
 
             </div>
 
-	</div>
+        </div>
+
+    </div>
 </div>
 

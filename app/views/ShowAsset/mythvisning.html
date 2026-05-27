@@ -2,150 +2,145 @@
 #{set subPageTitle:'Mytologisk register' /}
 #{ header /}
 <script type="text/javascript">
-	
-	$(document).ready(function() {
-	
-	$('div.myth').hide();
-	$('div.root').hide();
-	alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','æ','ø','å'];
-	function normAlfa( a ) { // normalise names to lower case without diacritical marks etc., KK 2021-09-15
-	                      if( a.search(/[\u0080-\uffff]/) >= 0 ) {
-	                          return a.toLowerCase().replace(/[áàâ]/g,"a").replace(/ç/g,"c").replace(/ð/g,"d").replace(/[éèëê]/g,"e").replace(/þ/g,"th").replace(/[íìïî]/g,"i").replace(/[óòô]/g,"o").replace(/œ/g,"oe").replace(/[úùû]/g,"u").replace(/[ýỳÿŷü]/g,"y").replace(/[æä]/g,"{").replace(/[øö]/g,"|").replace(/å/g,"}");
-	                      }
-	                      else { 
-	                          return a.toLowerCase().replace(/aa/g,"}");
-	                          }
-	                }
-                
-                $.each(alphabet, function(index, value) { 
-                      
-                      // alert(index + ': ' + value);  
-                       
-                        nodes = [];
-                        $('div.myth').each(function(index2) {
-                    
-                            name = $(this).find('div.normForm').text();
-                                firstLetter = normAlfa( name.charAt(0) );
-                                if(firstLetter == normAlfa(value)){ 
-                                $(this).hide();
-                                 content = $(this).html();
-                                 internal_anchor = $(this).attr("id");
-                                 node = "<!-- " + normAlfa(name) + "-->"; // hack to keep nodes sorted :-)
-                                 node += '<tr><td class="navn"><span class="myth" id="X' + internal_anchor + '">' + name + '</span></td><td class="definisjon">' + content + '</td></tr>';
-                                 nodes.push(node);
 
+    $(document).ready(function () {
 
-                                }
-                            $(this).children('.epithet').each( function(index3) {
-                                content = $(this).next('.popUp').text();
-                                name = $(this).text();
+        $('div.myth').hide();
+        $('div.root').hide();
+        alphabet = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'æ', 'ø', 'å'
+        ];
 
-                                //popUpContent = $(this).('.popUp').text();
-                                
-                                internal_link = $(this).find("a").attr("href").substr(6);
-                                firstLetter2 = normAlfa( name.charAt(0) );
-                                if(firstLetter2 == normAlfa(value)){ 
-                                node = '<!-- ' + normAlfa(name) + "-->";
-	                        node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">'+ name + '</a></td><td class="definisjon">' + content + '</td></tr>';
-	                        nodes.push(node);
-        
+        function normAlfa(a) { // normalise names to lower case without diacritical marks etc., KK 2021-09-15
+            if (a.search(/[\u0080-\uffff]/) >= 0) {
+                return a.toLowerCase().replace(/[áàâ]/g, "a").replace(/ç/g, "c").replace(/ð/g, "d").replace(/[éèëê]/g, "e").replace(/þ/g, "th").replace(/[íìïî]/g, "i").replace(/[óòô]/g, "o").replace(/œ/g, "oe").replace(/[úùû]/g, "u").replace(/[ýỳÿŷü]/g, "y").replace(/[æä]/g, "{").replace(/[øö]/g, "|").replace(/å/g, "}");
+            } else {
+                return a.toLowerCase().replace(/aa/g, "}");
+            }
+        }
 
-//                                content = '';
-//                                internal_link = $(this).find("a").attr("href").substr(6);
-//                                firstLetter2 = normAlfa( name.charAt(0) );
-//                                if(firstLetter2 == normAlfa(value)){ 
-//                                    node = '<!-- ' + normAlfa(name) + "-->";
-//	                            node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">'+ name + '</a></td><td class="definisjon">' + content + '</td></tr>';
-//	                            nodes.push(node);
-	                         } 
-	                            });
-	                            $(this).children('.latin').each( function(index4) {
-	                                content = $(this).text();
-	                                name = $(this).text();
-	                                content = '';
-	                                internal_link = $(this).find("a").attr("href").substr(6);
-	                                firstLetter2 = normAlfa( name.charAt(0) );
-	                                if(firstLetter2 == normAlfa(value)){ 
-	                                    node = '<!-- ' + normAlfa(name) + "-->";
-	                                    node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">'+ name + '</a></td><td class="definisjon">' + content + '</td></tr>';
-	                                    nodes.push(node);
-	                                } 
-	                            });
-	                            $(this).children('.pseudoEpithet').each( function(index6) {
-	                                content = $(this).next('.popUp').text();
-	                                name = $(this).text();
-	                                content = '';
-	                                internal_link = $(this).find("a").attr("href").substr(6);
-	                                firstLetter2 = normAlfa( name.charAt(0) );
-	                                if(firstLetter2 == normAlfa(value)){ 
-	                                    node = '<!-- ' + normAlfa(name) + "-->";
-	                                    node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">'+ name + '</a></td><td class="definisjon">' + content + '</td></tr>';
-	                                    nodes.push(node);
-	                                } 
-	                            });
-	                            $(this).children('.saxo').each( function(index6) {
-	                                content = $(this).next('.popUp').text();
-	                                name = $(this).text();
-	                                content = '';
-	                                internal_link = $(this).find("a").attr("href").substr(6);
-	                                firstLetter2 = normAlfa( name.charAt(0) );
-	                                if(firstLetter2 == normAlfa(value)){ 
-	                                    node = '<!-- ' + normAlfa(name) + "-->";
-	                                    node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">'+ name + '</a></td><td class="definisjon">' + content + '</td></tr>';
-	                                    nodes.push(node);
-	                                } 
-	                            });
-                        });
-                        
-                        
-                        
-                        nodes = nodes.sort().reverse();
-                        //alert(nodes);
-                        
-                        $(nodes).each( function(index, value2) {
-                            //alert(value);
-                            $('#' + value.toUpperCase()).after(value2);                        
-                        });
-                        
-                }); // end alphabet loop 
-                
-               
-               // hide names in desc 
-               $('.definisjon .normForm').hide();
-               
-               $("a[name]").click(function(e) {
-                    e.preventDefault();
-                    // alert("Name: " + $(this).attr("name"));
-                    var scrolltarget = $("#X" + $(this).attr("name"));
-                    // alert("Scrolling to: " + scrolltarget.html());
-                    $.scrollTo(scrolltarget, 500);
-               }); 
-               
-                // get current location and scrolldown to this if exists
-                var loc = String(document.location);
-                var idx = loc.indexOf('#');
-                var href = (idx > 0) ? loc.substring(idx + 1) : "";
-                if (href) $.scrollTo("#X" + href, 500);
-                     
-               
-        }); // onloaded
-               
-                // make sameas-links scroll
+        $.each(alphabet, function (index, value) {
 
+            // alert(index + ': ' + value);
 
-               
+            nodes = [];
+            $('div.myth').each(function (index2) {
 
-	</script>
-        
+                name = $(this).find('div.normForm').text();
+                firstLetter = normAlfa(name.charAt(0));
+                if (firstLetter == normAlfa(value)) {
+                    $(this).hide();
+                    content = $(this).html();
+                    internal_anchor = $(this).attr("id");
+                    node = "<!-- " + normAlfa(name) + "-->"; // hack to keep nodes sorted :-)
+                    node += '<tr><td class="navn"><span class="myth" id="X' + internal_anchor + '">' + name + '</span></td><td class="definisjon">' + content + '</td></tr>';
+                    nodes.push(node);
+
+                }
+                $(this).children('.epithet').each(function (index3) {
+                    content = $(this).next('.popUp').text();
+                    name = $(this).text();
+
+                    //popUpContent = $(this).('.popUp').text();
+
+                    internal_link = $(this).find("a").attr("href").substr(6);
+                    firstLetter2 = normAlfa(name.charAt(0));
+                    if (firstLetter2 == normAlfa(value)) {
+                        node = '<!-- ' + normAlfa(name) + "-->";
+                        node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+                        nodes.push(node);
+
+//                                content = '';
+//                                internal_link = $(this).find("a").attr("href").substr(6);
+//                                firstLetter2 = normAlfa( name.charAt(0) );
+//                                if(firstLetter2 == normAlfa(value)){ 
+//                                    node = '<!-- ' + normAlfa(name) + "-->";
+//	                            node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">'+ name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+//	                            nodes.push(node);
+                    }
+                });
+                $(this).children('.latin').each(function (index4) {
+                    content = $(this).text();
+                    name = $(this).text();
+                    content = '';
+                    internal_link = $(this).find("a").attr("href").substr(6);
+                    firstLetter2 = normAlfa(name.charAt(0));
+                    if (firstLetter2 == normAlfa(value)) {
+                        node = '<!-- ' + normAlfa(name) + "-->";
+                        node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+                        nodes.push(node);
+                    }
+                });
+                $(this).children('.pseudoEpithet').each(function (index6) {
+                    content = $(this).next('.popUp').text();
+                    name = $(this).text();
+                    content = '';
+                    internal_link = $(this).find("a").attr("href").substr(6);
+                    firstLetter2 = normAlfa(name.charAt(0));
+                    if (firstLetter2 == normAlfa(value)) {
+                        node = '<!-- ' + normAlfa(name) + "-->";
+                        node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+                        nodes.push(node);
+                    }
+                });
+                $(this).children('.saxo').each(function (index6) {
+                    content = $(this).next('.popUp').text();
+                    name = $(this).text();
+                    content = '';
+                    internal_link = $(this).find("a").attr("href").substr(6);
+                    firstLetter2 = normAlfa(name.charAt(0));
+                    if (firstLetter2 == normAlfa(value)) {
+                        node = '<!-- ' + normAlfa(name) + "-->";
+                        node += '<tr><td class="navn"><a href="../myter#" name="' + internal_link + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+                        nodes.push(node);
+                    }
+                });
+            });
+
+            nodes = nodes.sort().reverse();
+            //alert(nodes);
+
+            $(nodes).each(function (index, value2) {
+                //alert(value);
+                $('#' + value.toUpperCase()).after(value2);
+            });
+
+        }); // end alphabet loop
+
+        // hide names in desc
+        $('.definisjon .normForm').hide();
+
+        $("a[name]").click(function (e) {
+            e.preventDefault();
+            // alert("Name: " + $(this).attr("name"));
+            var scrolltarget = $("#X" + $(this).attr("name"));
+            // alert("Scrolling to: " + scrolltarget.html());
+            $.scrollTo(scrolltarget, 500);
+        });
+
+        // get current location and scrolldown to this if exists
+        var loc = String(document.location);
+        var idx = loc.indexOf('#');
+        var href = (idx > 0) ? loc.substring(idx + 1) : "";
+        if (href) {
+            $.scrollTo("#X" + href, 500);
+        }
+
+    }); // onloaded
+
+    // make sameas-links scroll
+
+</script>
+
 
 <div id="main">
-    
+
     <div class="container" id="underside_innhold">
         <div id="submenu">
-            <div id="breadcrumbs"><a href="#" >Forside</a> &raquo; Registre &raquo;  Mytologisk register</div>
+            <div id="breadcrumbs"><a href="#">Forside</a> &raquo; Registre &raquo; Mytologisk register</div>
             <a id="mytologi_vejledning" href="../vejledning/myth_vej">Vejledning til mytologisk register</a>
         </div>
-        
+
         <div class="kolonne1">
             <ul id="kolonne1_meny">
                 <li class="header">Registre</li>
@@ -153,238 +148,240 @@
                 <li><a class="selected" href="../myter">Mytologisk register</a></li>
                 <li><a href="../personer">Personregister</a></li>
                 <!--li><a href="../steder">Stedregister</a></li-->
-            	<li><a href="/salmer">Salmeregister</a></li>
+                <li><a href="/salmer">Salmeregister</a></li>
                 <li><a href="../bibel">Bibelstedsregister</a></li>
                 <li><a class="" href="../bookinvent">Bogfortegnelse 1805</a></li>
                 <li class="last"><a class="" href="../bookinvent1839">Bogfortegnelse 1839</a></li>
             </ul>
         </div>
 
-	<div id="kolonne1_bred">
+        <div id="kolonne1_bred">
 
-		<h1>Mytologisk register</h1>
-                
-		<h3>En oversigt over mytologiske og sagnhistoriske figurer, begreber m.v. i Grundtvigs værker.</h3>
+            <h1>Mytologisk register</h1>
 
-		<div id="innholdsfortegnelse">
-			
-			<a href="../myter#A">a</a>
-			<a href="../myter#B">b</a>
-			<a href="../myter#C">c</a>
-			<a href="../myter#D">d</a>
-			<a href="../myter#E">e</a>
-			<a href="../myter#F">f</a>
-			<a href="../myter#G">g</a>
-			<a href="../myter#H">h</a>
-			<a href="../myter#I">i</a>
-			<a href="../myter#J">j</a>
-			<a href="../myter#K">k</a>
-			<a href="../myter#L">l</a>
-			<a href="../myter#M">m</a>
-			<a href="../myter#N">n</a>
-			<a href="../myter#O">o</a>
-			<a href="../myter#P">p</a>
-			<a href="../myter#Q">q</a>
-			<a href="../myter#R">r</a>
-			<a href="../myter#S">s</a>
-			<a href="../myter#T">t</a>
-			<a href="../myter#U">u</a>
-			<a href="../myter#V">v</a>
-			<a href="../myter#W">w</a>
-			<a href="../myter#X">x</a>
-			<a href="../myter#Y">y</a>
-			<a href="../myter#Z">z</a>
-			<a href="../myter#Æ">Æ</a>
-			<a href="../myter#Ø">Ø</a>
-			<a href="../myter#Å">Å</a>
-		</div>
+            <h3>En oversigt over mytologiske og sagnhistoriske figurer, begreber m.v. i Grundtvigs værker.</h3>
 
-		<div id="liste" class="hideroot">
+            <div id="innholdsfortegnelse">
+
+                <a href="../myter#A">a</a>
+                <a href="../myter#B">b</a>
+                <a href="../myter#C">c</a>
+                <a href="../myter#D">d</a>
+                <a href="../myter#E">e</a>
+                <a href="../myter#F">f</a>
+                <a href="../myter#G">g</a>
+                <a href="../myter#H">h</a>
+                <a href="../myter#I">i</a>
+                <a href="../myter#J">j</a>
+                <a href="../myter#K">k</a>
+                <a href="../myter#L">l</a>
+                <a href="../myter#M">m</a>
+                <a href="../myter#N">n</a>
+                <a href="../myter#O">o</a>
+                <a href="../myter#P">p</a>
+                <a href="../myter#Q">q</a>
+                <a href="../myter#R">r</a>
+                <a href="../myter#S">s</a>
+                <a href="../myter#T">t</a>
+                <a href="../myter#U">u</a>
+                <a href="../myter#V">v</a>
+                <a href="../myter#W">w</a>
+                <a href="../myter#X">x</a>
+                <a href="../myter#Y">y</a>
+                <a href="../myter#Z">z</a>
+                <a href="../myter#Æ">Æ</a>
+                <a href="../myter#Ø">Ø</a>
+                <a href="../myter#Å">Å</a>
+            </div>
+
+            <div id="liste" class="hideroot">
 
                 ${asset.html.raw()}
 
                 <table>
-                	<tr class="bottom_border" id="A">
-                		<td class="navn"><h4>A</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	
-                	<tr class="bottom_border" id="B">
-                		<td class="navn"><h4>B</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	
-                	<tr class="bottom_border" id="C">
-                		<td class="navn"><h4>C</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	
-                	<tr class="bottom_border" id="D">
-                		<td class="navn"><h4>D</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="E">
-                		<td class="navn"><h4>E</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="F">
-                		<td class="navn"><h4>F</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="G">
-                		<td class="navn"><h4>G</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="H">
-                		<td class="navn"><h4>H</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="I">
-                		<td class="navn"><h4>I</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="J">
-                		<td class="navn"><h4>J</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="K">
-                		<td class="navn"><h4>K</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="L">
-                		<td class="navn"><h4>L</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="M">
-                		<td class="navn"><h4>M</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="N">
-                		<td class="navn"><h4>N</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="O">
-                		<td class="navn"><h4>O</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="P">
-                		<td class="navn"><h4>P</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Q">
-                		<td class="navn"><h4>Q</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="R">
-                		<td class="navn"><h4>R</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="S">
-                		<td class="navn"><h4>S</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="T">
-                		<td class="navn"><h4>T</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="U">
-                		<td class="navn"><h4>U</h4></td>
-                		<td></td><td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="V">
-                		<td class="navn"><h4>V</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="W">
-                		<td class="navn"><h4>W</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="X">
-                		<td class="navn"><h4>X</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Y">
-                		<td class="navn"><h4>Y</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Z">
-                		<td class="navn"><h4>Z</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Æ">
-                		<td class="navn"><h4>Æ</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Ø">
-                		<td class="navn"><h4>Ø</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Å">
-                		<td class="navn"><h4>Å</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
+                    <tr class="bottom_border" id="A">
+                        <td class="navn"><h4>A</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-			</table>
+                    <tr class="bottom_border" id="B">
+                        <td class="navn"><h4>B</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-		</div>
+                    <tr class="bottom_border" id="C">
+                        <td class="navn"><h4>C</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-	</div>
+                    <tr class="bottom_border" id="D">
+                        <td class="navn"><h4>D</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="E">
+                        <td class="navn"><h4>E</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="F">
+                        <td class="navn"><h4>F</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="G">
+                        <td class="navn"><h4>G</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="H">
+                        <td class="navn"><h4>H</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="I">
+                        <td class="navn"><h4>I</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="J">
+                        <td class="navn"><h4>J</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="K">
+                        <td class="navn"><h4>K</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="L">
+                        <td class="navn"><h4>L</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="M">
+                        <td class="navn"><h4>M</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="N">
+                        <td class="navn"><h4>N</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="O">
+                        <td class="navn"><h4>O</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="P">
+                        <td class="navn"><h4>P</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Q">
+                        <td class="navn"><h4>Q</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="R">
+                        <td class="navn"><h4>R</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="S">
+                        <td class="navn"><h4>S</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="T">
+                        <td class="navn"><h4>T</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="U">
+                        <td class="navn"><h4>U</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="V">
+                        <td class="navn"><h4>V</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="W">
+                        <td class="navn"><h4>W</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="X">
+                        <td class="navn"><h4>X</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Y">
+                        <td class="navn"><h4>Y</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Z">
+                        <td class="navn"><h4>Z</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Æ">
+                        <td class="navn"><h4>Æ</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Ø">
+                        <td class="navn"><h4>Ø</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Å">
+                        <td class="navn"><h4>Å</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../myter#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 </div>

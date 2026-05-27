@@ -5,8 +5,6 @@
 
 <script>
 
- 
-
 currentTextId = ${asset.id};
 numOfPictures = ${asset.numberOfPictures};
 var txrUrl = "ajax/getTxr/" + ${asset.id};
@@ -14,7 +12,6 @@ var kommentarUrl = "ajax/getComment/" + ${asset.id};
 var introUrl = "ajax/getIntro/" + ${asset.id};
 rootFile = "${asset.fileNameWithoutXml}";
 var hovedtekstSelect = 'Vis variant: #{variantsAsDropDown variants:variants /}';
-
 
 </script>
 
@@ -182,23 +179,21 @@ var hovedtekstSelect = 'Vis variant: #{variantsAsDropDown variants:variants /}';
               </span>
             </div>
 
-
 			<div id="hovedtekst">
                             
-                            <script type="text/javascript">
+            <script type="text/javascript">
                                 
-                                function showhidePb( id ) { 
-  var elem= document.getElementById( id );
-  if ( !elem ) { alert( 'no block to split' ); }
-  if ( elem.style.display=='inline' ) {
-    elem.style.display= 'none';
-    }
-  else {
-    elem.style.display= 'inline';
-    }
-  }
+                function showhidePb( id ) {
+                    var elem= document.getElementById( id );
+                    if ( !elem ) { alert( 'no block to split' ); }
+                    if ( elem.style.display === 'inline' ) {
+                        elem.style.display= 'none';
+                    } else {
+                        elem.style.display= 'inline';
+                    }
+                }
                                 
-                            </script>
+            </script>
 				<div id="toppmeny" class="nav_meny">
 					<span class="previous" title="Forrige kapitel"></span>
 					<span class="chapter">

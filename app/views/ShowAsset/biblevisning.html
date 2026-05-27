@@ -3,56 +3,51 @@
 #{ header /}
 
 <script>
-    
-    $(function() {
-        $(".plusBook").each(function(index) {
+
+    $(function () {
+        $(".plusBook").each(function (index) {
             if ($(this).next().text() == "") {
                 $(this).hide();
             }
         });
     });
-    
-</script>    
+
+</script>
 <div id="main">
 
-	<div class="container" id="underside_innhold">
+    <div class="container" id="underside_innhold">
 
-		<div id="submenu">
-                    <div id="breadcrumbs"> <a href="#" >Forside</a> &raquo; <a href="#">Registre</a> &raquo;  Bibelstedsregister</div>
-                    <a id="person_vejledning" href="../vejledning/bibel_vej">Vejledning til bibelstedsregister</a>
-		</div>
+        <div id="submenu">
+            <div id="breadcrumbs"><a href="#">Forside</a> &raquo; <a href="#">Registre</a> &raquo; Bibelstedsregister</div>
+            <a id="person_vejledning" href="../vejledning/bibel_vej">Vejledning til bibelstedsregister</a>
+        </div>
 
+        <div class="kolonne1">
 
-<div class="kolonne1">
+            <ul id="kolonne1_meny">
+                <li class="header">Registre</li>
+                <li><a href="../reg">Registranten</a></li>
+                <li><a href="../myter">Mytologisk register</a></li>
+                <li><a href="../personer">Personregister</a></li>
+                <!--li><a href="../steder">Stedregister</a></li-->
+                <li><a href="/salmer">Salmeregister</a></li>
+                <li><a class="selected" href="../bibel">Bibelstedsregister</a></li>
+                <li><a class="" href="../bookinvent">Bogfortegnelse 1805</a></li>
+                <li class="last"><a class="" href="../bookinvent1839">Bogfortegnelse 1839</a></li>
+            </ul>
 
-		<ul id="kolonne1_meny">
+        </div>
 
-			<li class="header">Registre</li>
-		    
-		    <li><a href="../reg">Registranten</a></li>
-		    <li><a href="../myter">Mytologisk register</a></li>
-		    <li><a href="../personer">Personregister</a></li>
-		    <!--li><a href="../steder">Stedregister</a></li-->
-			<li><a href="/salmer">Salmeregister</a></li>
-		    <li><a class="selected" href="../bibel">Bibelstedsregister</a></li>
-		    <li><a class="" href="../bookinvent">Bogfortegnelse 1805</a></li>
-		    <li class="last"><a class="" href="../bookinvent1839">Bogfortegnelse 1839</a></li>
-
-
-		</ul>
-
-	</div>
-
-	<div id="kolonne1_bred">
+        <div id="kolonne1_bred">
 
             <div id="liste">
 
-                ${asset.html.raw()}                
+                ${asset.html.raw()}
 
-		</div>
+            </div>
 
-	</div>
+        </div>
 
-	</div>
+    </div>
 </div>
 

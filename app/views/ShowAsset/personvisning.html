@@ -2,94 +2,100 @@
 #{set subPageTitle:'Personregister' /}
 #{ header /}
 
-
-
 <script type="text/javascript">
+    
+    $(document).ready(function () {
 
-	
+        $('div.person').hide();
+        $('div.root').hide();
 
-		$(document).ready(function() {
-                           
-                $('div.person').hide();
-                $('div.root').hide();
-                
-                alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','æ','ø','å'];
-                function normAlfa( a ) { // normalise names to lower case without diacritical marks etc., KK 2021-09-15
-                      if( a.search(/[\u0080-\uffff]/) >= 0 ) {
-                          return a.toLowerCase().replace(/[áàâ]/g,"a").replace(/ç/g,"c").replace(/ð/g,"d").replace(/[éèëê]/g,"e").replace(/þ/g,"th").replace(/[íìïî]/g,"i").replace(/[óòô]/g,"o").replace(/œ/g,"oe").replace(/[úùû]/g,"u").replace(/[ýỳÿŷü]/g,"y").replace(/[æä]/g,"{").replace(/[øö]/g,"|").replace(/å/g,"}");
-                      }
-                      else { 
-                          return a.toLowerCase().replace(/aa/g,"}");
-                          }
-                }
-                
-                $.each(alphabet, function(index, value) { 
-                        var nodes = [];
-                        $('div.person').each(function(index2) {
-                            //name = $(this).find('span.name').text();
-                            htmlName=  $(this).find('span.name').html();
-                            pre= $(this).find('span.pre').text();
-                            if( pre ) pre= pre.replace(/(^| )/g,'-');
-                            name = htmlName.replace(/^\s*/,'').replace(/\x3cspan class="pre">[^\x3c]*\x3c\/span> */,'').replace(/\x3c[^>]*>/g,'');
-                            // (\x3c=venstrehak) skip leading spaces, remove prepositions, remove all tags
-                            if( pre ) name= name.replace(/(^[^,]+)/,'$1'+pre);
-                            // alert("Adding: " + value + " " + name);
-                            firstLetter = normAlfa(name).charAt(0);
-                            if(firstLetter == normAlfa(value)){ 
-                                $(this).hide();
-                                year = $(this).find('.row span.year').text() + ', '; 
-                                if( year == ', ') { year = '';};
-                                var addName = $(this).find('.row span.addName').not($('span span')).text();
-                                nation = $(this).find('.row span.nation').text();
-                                about = $(this).find('.row span.encyk').html();
-                                if ($(this).find(".altName").length > 0) {
-                                    var gotoName = $(this).find(".gotoName").html();
-                                    node = '<!--' + normAlfa(name) + ' --><tr><td class="navn"><a class="persNameRef" href="../personer#">' + name + ' ' + gotoName + '</a></td><!--td class="gotoName"></td--></tr>';
-                                } else { 
-                                    var id = $(this).attr("id");
-                                    node = '<!--' + normAlfa(name) + ' --><tr><td class="navn"><a class="persNameRef" ' + 'id="' + id + '"href="../personer#">' + htmlName + '</a></td><td class="definisjon">' + year + addName + nation + ' ' + about + '<span>.</span></td></tr>';
-                                } // OBS space after normAlfa(name), sorts before hyphen, KK 2021-10-13
-                                $(this).remove(); // Letter found, don't test for this person again
-                                nodes.push(node);
-                            }
-                        });
-                        nodes = nodes.sort().reverse();
-                        $(nodes).each( function(index, value2) {
-                        $('#' + value.toUpperCase()).after(value2);
-                        });
-                });
+        alphabet = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'æ', 'ø', 'å'
+        ];
 
-// later: remove duplicate code with mythvisning.html
-                $("tbody").find("a[href]").click(function(e) {
-                    e.preventDefault();
-                    // alert("Scrolling to: " + $(this).attr("href"));
-                    var scrolltarget = $($(this).attr("href"));
-                    $.scrollTo(scrolltarget, 500);
-                    
-               }); 
-               
-                // get current location and scrolldown to this if exists
-                var loc = String(document.location);
-                var idx = loc.indexOf('#');
-                var href = (idx > 0) ? loc.substring(idx + 1) : "";
-                if (href) $.scrollTo("#" + href, 500);
+        function normAlfa(a) { // normalise names to lower case without diacritical marks etc., KK 2021-09-15
+            if (a.search(/[\u0080-\uffff]/) >= 0) {
+                return a.toLowerCase().replace(/[áàâ]/g, "a").replace(/ç/g, "c").replace(/ð/g, "d").replace(/[éèëê]/g, "e").replace(/þ/g, "th").replace(/[íìïî]/g, "i").replace(/[óòô]/g, "o").replace(/œ/g, "oe").replace(/[úùû]/g, "u").replace(/[ýỳÿŷü]/g, "y").replace(/[æä]/g, "{").replace(/[øö]/g, "|").replace(/å/g, "}");
+            } else {
+                return a.toLowerCase().replace(/aa/g, "}");
+            }
+        }
 
-		});
+        $.each(alphabet, function (index, value) {
+            var nodes = [];
+            $('div.person').each(function (index2) {
+                //name = $(this).find('span.name').text();
+                htmlName = $(this).find('span.name').html();
+                pre = $(this).find('span.pre').text();
+                if (pre) {
+                    pre = pre.replace(/(^| )/g, '-');
+                }
+                name = htmlName.replace(/^\s*/, '').replace(/\x3cspan class="pre">[^\x3c]*\x3c\/span> */, '').replace(/\x3c[^>]*>/g, '');
+                // (\x3c=venstrehak) skip leading spaces, remove prepositions, remove all tags
+                if (pre) {
+                    name = name.replace(/(^[^,]+)/, '$1' + pre);
+                }
+                // alert("Adding: " + value + " " + name);
+                firstLetter = normAlfa(name).charAt(0);
+                if (firstLetter == normAlfa(value)) {
+                    $(this).hide();
+                    year = $(this).find('.row span.year').text() + ', ';
+                    if (year == ', ') {
+                        year = '';
+                    }
+                    ;
+                    var addName = $(this).find('.row span.addName').not($('span span')).text();
+                    nation = $(this).find('.row span.nation').text();
+                    about = $(this).find('.row span.encyk').html();
+                    if ($(this).find(".altName").length > 0) {
+                        var gotoName = $(this).find(".gotoName").html();
+                        node = '<!--' + normAlfa(name) + ' --><tr><td class="navn"><a class="persNameRef" href="../personer#">' + name + ' ' + gotoName + '</a></td><!--td class="gotoName"></td--></tr>';
+                    } else {
+                        var id = $(this).attr("id");
+                        node = '<!--' + normAlfa(name) + ' --><tr><td class="navn"><a class="persNameRef" ' + 'id="' + id + '"href="../personer#">' + htmlName + '</a></td><td class="definisjon">' + year + addName + nation + ' ' + about + '<span>.</span></td></tr>';
+                    } // OBS space after normAlfa(name), sorts before hyphen, KK 2021-10-13
+                    $(this).remove(); // Letter found, don't test for this person again
+                    nodes.push(node);
+                }
+            });
+            nodes = nodes.sort().reverse();
+            $(nodes).each(function (index, value2) {
+                $('#' + value.toUpperCase()).after(value2);
+            });
+        });
 
+        // later: remove duplicate code with mythvisning.html
+        $("tbody").find("a[href]").click(function (e) {
+            e.preventDefault();
+            // alert("Scrolling to: " + $(this).attr("href"));
+            var scrolltarget = $($(this).attr("href"));
+            $.scrollTo(scrolltarget, 500);
 
-	</script>
-        
+        });
+
+        // get current location and scrolldown to this if exists
+        var loc = String(document.location);
+        var idx = loc.indexOf('#');
+        var href = (idx > 0) ? loc.substring(idx + 1) : "";
+        if (href) {
+            $.scrollTo("#" + href, 500);
+        }
+
+    });
+
+</script>
+
 
 <div id="main">
     <div class="container" id="underside_innhold">
-        
+
         <div id="submenu">
             <div id="breadcrumbs">
-                <a href="#">Forside</a> &raquo; Registre &raquo;  Personregister
+                <a href="#">Forside</a> &raquo; Registre &raquo; Personregister
             </div>
             <a id="person_vejledning" href="../vejledning/pers_vej">Vejledning til personregister</a>
         </div>
-        
+
         <div class="kolonne1">
             <ul id="kolonne1_meny">
                 <li class="header">Registre</li>
@@ -97,22 +103,22 @@
                 <li><a href="../myter">Mytologisk register</a></li>
                 <li><a class="selected" href="../personer">Personregister</a></li>
                 <!--li><a href="../steder">Stedregister</a></li-->
-            	<li><a href="/salmer">Salmeregister</a></li>
+                <li><a href="/salmer">Salmeregister</a></li>
                 <li><a href="../bibel">Bibelstedsregister</a></li>
                 <li><a class="" href="../bookinvent">Bogfortegnelse 1805</a></li>
                 <li class="last"><a class="" href="../bookinvent">Bogfortegnelse 1805</a></li>
             </ul>
         </div>
 
-	<div id="kolonne1_bred">
-            
+        <div id="kolonne1_bred">
+
             <h1>Personregister</h1>
-            
+
             <h3>En oversigt over historiske, bibelske og fiktive personer i Grundtvigs værker.</h3>
-            
+
             <div id="innholdsfortegnelse">
-                
-                <a href="../personer#A">a</a>                
+
+                <a href="../personer#A">a</a>
                 <a href="../personer#B">b</a>
                 <a href="../personer#C">c</a>
                 <a href="../personer#D">d</a>
@@ -143,194 +149,194 @@
                 <a href="../personer#Å">Å</a>
             </div>
 
-		<div id="liste" class="hideroot">
+            <div id="liste" class="hideroot">
 
                 ${asset.html.raw()}
 
                 <table class="pers">
-                	<tr class="bottom_border" id="A">
-                		<td class="navn"><h4>A</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	
-                	<tr class="bottom_border" id="B">
-                		<td class="navn"><h4>B</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	
-                	<tr class="bottom_border" id="C">
-                		<td class="navn"><h4>C</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	
-                	<tr class="bottom_border" id="D">
-                		<td class="navn"><h4>D</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="E">
-                		<td class="navn"><h4>E</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="F">
-                		<td class="navn"><h4>F</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="G">
-                		<td class="navn"><h4>G</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="H">
-                		<td class="navn"><h4>H</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="I">
-                		<td class="navn"><h4>I</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="J">
-                		<td class="navn"><h4>J</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="K">
-                		<td class="navn"><h4>K</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="L">
-                		<td class="navn"><h4>L</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="M">
-                		<td class="navn"><h4>M</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="N">
-                		<td class="navn"><h4>N</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="O">
-                		<td class="navn"><h4>O</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="P">
-                		<td class="navn"><h4>P</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Q">
-                		<td class="navn"><h4>Q</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="R">
-                		<td class="navn"><h4>R</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="S">
-                		<td class="navn"><h4>S</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="T">
-                		<td class="navn"><h4>T</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="U">
-                		<td class="navn"><h4>U</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="V">
-                		<td class="navn"><h4>V</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="W">
-                		<td class="navn"><h4>W</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="X">
-                		<td class="navn"><h4>X</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Y">
-                		<td class="navn"><h4>Y</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Z">
-                		<td class="navn"><h4>Z</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Æ">
-                		<td class="navn"><h4>Æ</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Ø">
-                		<td class="navn"><h4>Ø</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
-                	<tr class="bottom_border" id="Å">
-                		<td class="navn"><h4>Å</h4></td>
-                		<td></td>
-                		<td></td>
-                		<td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
-                	</tr>
+                    <tr class="bottom_border" id="A">
+                        <td class="navn"><h4>A</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-			</table>
+                    <tr class="bottom_border" id="B">
+                        <td class="navn"><h4>B</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-		</div>
+                    <tr class="bottom_border" id="C">
+                        <td class="navn"><h4>C</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-	</div>
+                    <tr class="bottom_border" id="D">
+                        <td class="navn"><h4>D</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="E">
+                        <td class="navn"><h4>E</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="F">
+                        <td class="navn"><h4>F</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="G">
+                        <td class="navn"><h4>G</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="H">
+                        <td class="navn"><h4>H</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="I">
+                        <td class="navn"><h4>I</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="J">
+                        <td class="navn"><h4>J</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="K">
+                        <td class="navn"><h4>K</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="L">
+                        <td class="navn"><h4>L</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="M">
+                        <td class="navn"><h4>M</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="N">
+                        <td class="navn"><h4>N</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="O">
+                        <td class="navn"><h4>O</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="P">
+                        <td class="navn"><h4>P</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Q">
+                        <td class="navn"><h4>Q</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="R">
+                        <td class="navn"><h4>R</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="S">
+                        <td class="navn"><h4>S</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="T">
+                        <td class="navn"><h4>T</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="U">
+                        <td class="navn"><h4>U</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="V">
+                        <td class="navn"><h4>V</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="W">
+                        <td class="navn"><h4>W</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="X">
+                        <td class="navn"><h4>X</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Y">
+                        <td class="navn"><h4>Y</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Z">
+                        <td class="navn"><h4>Z</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Æ">
+                        <td class="navn"><h4>Æ</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Ø">
+                        <td class="navn"><h4>Ø</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
+                    <tr class="bottom_border" id="Å">
+                        <td class="navn"><h4>Å</h4></td>
+                        <td></td>
+                        <td></td>
+                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                    </tr>
 
-	</div>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 </div>
