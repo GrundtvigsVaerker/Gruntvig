@@ -10,9 +10,11 @@ package controllers;
 
 import java.util.List;
 
+import helpers.Helpers;
 import models.Asset;
 import models.Chapter;
 import models.TextReference;
+import org.apache.solr.client.solrj.SolrServer;
 import play.mvc.Controller;
 
 /**
@@ -52,10 +54,27 @@ public class Admin extends Application {
     }
 
     public static void indexAll() {
-        List<Asset> all = Asset.findAll();
-        for (Asset asset : all) {
-            asset.index();
-            System.out.println(asset);
+        try {
+            SolrServer server = Helpers.getSolrServer();
+            server.deleteByQuery("id:*");
+            server.commit();
+
+            List<Asset> assets = Asset.findAll();
+            for (Asset asset : assets) {
+                asset.index();
+                System.out.println(asset);
+            }
+
+            List<Chapter> chapters = Chapter.findAll();
+            for (Chapter chapter : chapters) {
+                chapter.index();
+                System.out.println(chapter);
+            }
+
+            Application.renderText("Solr-data cleared and reindexed: " + server);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Application.renderText("Problems with solr, look in log");
         }
     }
 }
