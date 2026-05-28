@@ -61,18 +61,29 @@ Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der
 - lav sanity tjek om der er andre fil-formater (som ikke er de png og gif der hører til i public/images), hvis der er, så kopier til DATA-DIR/img
 - Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
 - OBS: erstat IKKE public/images med det overleverede pulic/ dir, public/* skal komme fra git-hub, alt brugergenereret skal ligge eksternt.
-
+- Der er referencer til `href="public/images/` erstat disse med `href="img/`
 - i html kolonnen for chapter of asset, find alle referencer til `href="img/xxx.pdf"` og erstat med `href="pdf/xxx.pdf"`
-  TAG ET SNAPSHOT INDEN
+  TAG ET SNAPSHOT INDEN, GØR DET I NEDENSTÅENDE RÆKKEFØLGE...
 
-> ```
->   UPDATE __TABLE_NAME__
->   SET __COLUMN_NAME__ = regexp_replace(
->       __COLUMN_NAME__,
->       'href="img/([^"]+\.pdf)"',
->       'href="pdf/\1"',
->       'g'
->    );
+> ``` 
+>  UPDATE __TABLE_NAME__
+>  SET __COLUMN_NAME__ = replace(
+>    __COLUMN_NAME__,
+>    'href="public/images/',
+>    'href="img/'
+>  )
+>  WHERE __COLUMN_NAME__ LIKE '%href="public/images/%'
+>  ;
+> 
+>  UPDATE __TABLE_NAME__
+>  SET __COLUMN_NAME__ = regexp_replace(
+>    __COLUMN_NAME__,
+>    'href="img/([^"]+\.pdf)"',
+>    'href="pdf/\1"',
+>    'g'
+>  )
+>  WHERE __COLUMN_NAME__ ~ 'href="img/[^"]+\.pdf"';
+>  ;
 > ```
 
 - Upload `regList.xml` og `bookInventory1805.xml` og `bookInventory1839.xml` igen, så de bliver parset korrekt...
