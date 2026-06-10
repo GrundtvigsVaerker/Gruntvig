@@ -38,6 +38,17 @@ If Solr needs to be reindexed do the following:
 - machine with the Solr server running.
 - Go to `https://xxx/admin/reindex` in a browser and wait one hour or so.
 
+## Releases
+
+Use git tag following semantic versioning for releases. Make sure to make an annotated release and
+push the tag to the remote repository to be able to use the deployment script in
+https://github.com/centre-for-humanities-computing/production-servers/tree/master/servers/grundtvigsv%C3%A6rker.dk.
+
+Example:
+
+- Tag: `v1.2.3`
+- Comment: `Release v1.2.3`
+
 # ÆNDRINGER
 
 - Opgradering til Play 1.11 og JDK 21
