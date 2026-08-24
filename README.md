@@ -56,9 +56,10 @@ Example:
 - Alle automatiske stier er disablet, så hvis der er en sti der mangler skal den enables i `routes` filen
 - Alle uploadede (bruger-filer) er flyttet uden for kode-repositoriet, så det er nemmere og sikrere at vedligeholde (kræver migration af data ved overgang)
 - JPA mappings er ændret til at resolve til text kolonner i stedet for LOB, dette skal formentlig transformeres i databasen ved migrationen. Dette burde
-  forøge performance og muliggør indekses på kolonnerne.
+  forøge performance og muliggør indekses på kolonnerne. -> Alle kolonner fra KB dump, var allerede TEXT
 - Der er tilføjet indexes til JPA-mappings. Disse skal køres manuelt på database ved migration (efter LOB -> text transformation).
 - Fixet bibelregister så den ikke laver dobbelt kolonne, uden indhold, i visning (ændret bibleXSLT.xsl)
+- Droppet tabellen `assetshadow` fra databasen, den var tom og så aldrig ud til at have været i brug.
 
 # TODO ON SERVER FILES:
 
@@ -71,7 +72,7 @@ Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der
 - alle html til DATA-DIR/html
 - lav sanity tjek om der er andre fil-formater (som ikke er de png og gif der hører til i public/images), hvis der er, så kopier til DATA-DIR/img
 - Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
-- OBS: erstat IKKE public/images med det overleverede pulic/ dir, public/* skal komme fra git-hub, alt brugergenereret skal ligge eksternt.
+- OBS: erstat IKKE public/images med det overleverede public/ dir, public/* skal komme fra git-hub, alt brugergenereret skal ligge eksternt.
 - Der er referencer til `href="public/images/` erstat disse med `href="img/`
 - i html kolonnen for chapter of asset, find alle referencer til `href="img/xxx.pdf"` og erstat med `href="pdf/xxx.pdf"`
   TAG ET SNAPSHOT INDEN, GØR DET I NEDENSTÅENDE RÆKKEFØLGE...
