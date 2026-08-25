@@ -8,6 +8,7 @@ import java.io.File;
 public class PublicFiles extends Controller {
 
     private static final File BASE_DIR;
+
     static {
         String dataDirPath = Play.configuration.getProperty("data.dir");
         if (dataDirPath == null || dataDirPath.trim().isEmpty()) {
@@ -29,6 +30,10 @@ public class PublicFiles extends Controller {
 
     public static void getPdfFile(String filePath) {
         getFile("pdf/" + filePath);
+    }
+
+    public static void getHtmlFile(String filePath) {
+        getFile("html/" + filePath);
     }
 
     private static void getFile(String filePath) {
