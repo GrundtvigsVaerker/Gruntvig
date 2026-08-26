@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
 public class TextReference extends GenericModel {
 
     @Id
-    @SequenceGenerator(name = "reference_id_seq_gen", sequenceName = "reference_id_seq")
+    @SequenceGenerator(name = "reference_id_seq_gen", sequenceName = "reference_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "reference_id_seq_gen")
     public long id;
     @Column(length = 10_000)

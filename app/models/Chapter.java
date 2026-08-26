@@ -46,7 +46,7 @@ import play.db.jpa.JPABase;
 public class Chapter extends GenericModel {
 
     @Id
-    @SequenceGenerator(name = "chapter_id_seq_gen", sequenceName = "chapter_id_seq")
+    @SequenceGenerator(name = "chapter_id_seq_gen", sequenceName = "chapter_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "chapter_id_seq_gen")
     public long id;
     public String name;

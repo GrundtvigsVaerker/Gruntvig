@@ -55,7 +55,7 @@ public class Asset extends GenericModel {
 
     @Id
     @GeneratedValue(generator = "asset_id_seq_gen")
-    @SequenceGenerator(name = "asset_id_seq_gen", sequenceName = "asset_id_seq")
+    @SequenceGenerator(name = "asset_id_seq_gen", sequenceName = "asset_id_seq", allocationSize = 1)
     public long id;
     @Column(length = 10_000_000)
     public String xml;
