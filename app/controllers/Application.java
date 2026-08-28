@@ -1,15 +1,6 @@
 package controllers;
 
-import helpers.Helpers;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import models.Asset;
-import models.Chapter;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.common.SolrInputDocument;
 import play.mvc.*;
 
 public class Application extends Controller {
@@ -98,55 +89,4 @@ public class Application extends Controller {
             return getYearFromFileName(t.fileName).compareTo(getYearFromFileName(t1.fileName));
         }
     }*/
-    public static void testSolr() {
-        try {
-            SolrServer server = Helpers.getSolrServer();
-            SolrInputDocument doc1 = new SolrInputDocument();
-            doc1.addField("id", "idx");
-            doc1.addField("text", "Petters hemmelige tekst");
-            doc1.addField("comment", "Petters hemmelige comment");
-            doc1.addField("type", "testtype");
-            server.add(doc1);
-            server.commit();
-            Application.renderText("Document added: server: " + server);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Application.renderText("Problems with solr, look in log");
-        }
-    }
-
-
-    // deletes all from solr: run http://localhost:9000/Application/clearSolr
-    public static void clearSolr() {
-        try {
-            SolrServer server = Helpers.getSolrServer();
-            server.deleteByQuery("id:*");
-            server.commit();
-            Application.renderText("Solr-data cleared: " + server);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Application.renderText("Problems with solr, look in log");
-        }
-    }
-
-
-    public static void solrAll() {
-        try {
-            SolrServer server = Helpers.getSolrServer();
-            server.deleteByQuery("id:*");
-            server.commit();
-            List<Asset> all = Asset.findAll();
-            for (Asset a : all) {
-                a.index();
-            }
-            List<Chapter> allChapters = Chapter.findAll();
-            for (Chapter c : allChapters) {
-                c.index();
-            }
-            Application.renderText("Done with reindex: " + server);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Application.renderText("Problems with solr, look in log");
-        }
-    }
 }
