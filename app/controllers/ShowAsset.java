@@ -26,13 +26,8 @@ public class ShowAsset extends Controller {
         Asset asset = Asset.findById(assetId);
         List<Asset> variants = Asset.getVariants(asset.id);
         List<Asset> manus = Asset.getManus(assetId);
-        System.out.println("--- Number of variants: " + variants.size());
         List<Chapter> chapters = Chapter.find("byAsset", asset).fetch();
         Chapter chapter = Chapter.find("byAssetAndNum", asset, chapterNum).first();
-        System.out.println("All chapters: " + Chapter.findAll().size());
-        System.out.println("Chapters: " + chapters.size());
-        System.out.println("Found chapter: " + chapter.num);
-        System.out.println("Number of pictures: " + asset.getNumberOfPictures());
         render(asset, chapter, chapters, variants, manus);
     }
 
@@ -52,7 +47,6 @@ public class ShowAsset extends Controller {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", fileName).first();
         if (asset != null) {
             Asset rootAsset = Asset.findById(asset.getCorrespondingRootId());
-            System.out.println("Showing asset: " + rootAsset.id);
             tekstvisning(rootAsset.id, 0);
         } else ShowAsset.renderHtml("Filen er ikke funnet - den er antagelig ikke ferdigbehandlet!");
     }

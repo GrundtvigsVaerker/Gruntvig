@@ -35,7 +35,6 @@ public class Admin extends Controller {
 
     public static void listXmlFiles() {
         List<Asset> assets = Asset.find("SELECT a FROM Asset a ORDER BY a.name").fetch();
-        System.out.println("Assets: " + assets.size());
         render(assets);
     }
 
@@ -62,13 +61,11 @@ public class Admin extends Controller {
             List<Asset> assets = Asset.findAll();
             for (Asset asset : assets) {
                 asset.index();
-                System.out.println(asset);
             }
 
             List<Chapter> chapters = Chapter.findAll();
             for (Chapter chapter : chapters) {
                 chapter.index();
-                System.out.println(chapter);
             }
 
             Application.renderText("Solr-data cleared and reindexed: " + server);

@@ -53,7 +53,6 @@ public class DoSearch extends Controller {
      */
     /* KK 2014-02-13, 2014-03-06 */
     public static void avanceret() {
-        System.out.println("----------- Advanced search");
         String lucene = params.get("lucene");
         String grundtvig = params.get("grundtvig");
         String kommentar = params.get("kommentar");
@@ -80,7 +79,6 @@ public class DoSearch extends Controller {
             if (lucene.contains("OR")) {
                 lucene = "(" + lucene + ")";
             }
-            System.out.println("Searching for qps: " + lucene);
             List<Chapter> chapters = new ArrayList<Chapter>();
             ArrayList<Asset> renderGrundtvigAssets = new ArrayList<Asset>();
             ArrayList<Asset> renderCommentAssets = new ArrayList<Asset>();
@@ -98,9 +96,7 @@ public class DoSearch extends Controller {
                 types = new String[]{Asset.introType, Asset.txrType, Asset.commentType, Asset.veiledningType, Asset.variantType, Asset.manusType, "chapter"};
             }
             query.setQuery(q + " AND " + composeOr(types));
-            System.out.println("Query: " + query.getQuery());
             int start = (page - 1) * pageSize;
-            System.out.println("Setting start-pos to: " + start);
             query.setStart(start);
             query.setRows(pageSize);
             query.setSort(new SortClause("sj", SolrQuery.ORDER.asc));
@@ -109,7 +105,6 @@ public class DoSearch extends Controller {
                 SolrDocumentList docs = rsp.getResults();
                 totalAll = docs.getNumFound();
                 for (SolrDocument doc : docs) {
-                    System.out.println("Found type: " + doc.getFirstValue("type"));
                     long id = Long.parseLong(doc.getFieldValue("pgid").toString());
                     String type = doc.getFieldValue("type").toString();
                     if (grundtvig != null && type.equals("chapter")) {
@@ -144,8 +139,6 @@ public class DoSearch extends Controller {
             if (grundtvig != null) cat += "grundtvig";
             if (kommentar != null) cat += "kommentar";
             int totalHits = renderGrundtvigAssets.size() + renderCommentAssets.size() + chapters.size();
-            System.out.println("Total hits: " + totalHits);
-            System.out.println("Total all: " + totalAll);
             String lookfor = lucene;
             int totalPages = (int) Math.ceil((double) totalAll / (double) pageSize);
             boolean first = false;
@@ -227,8 +220,6 @@ public class DoSearch extends Controller {
         } else {
             lookfor = lookfor.replace(" ", "|");
         }
-        System.out.println("Teaser for: " + lookfor);
-        System.out.println("prox= " + prox);
         int lookforStart;
         //Pattern findWordsPattern = Pattern.compile("(\\s" + lookfor + "|^" + lookfor +")" +"[ ,;!.]", Pattern.CASE_INSENSITIVE);
         String match = "\\b(" + lookfor + ")\\b";
@@ -351,7 +342,6 @@ public class DoSearch extends Controller {
             Pattern pattern = Pattern.compile("\\d+_(\\d+)");
             Matcher matcher = pattern.matcher(str);
             if (matcher.find()) {
-                System.out.println("Js is: " + matcher.group(1));
                 res = matcher.group(1);
             } else {
                 res = "";

@@ -46,7 +46,6 @@ public class Ajax extends Controller {
         } else {
             content = TextReference.getReference(fileName + "_" + textId);
         }
-        System.out.println("Serving popup: " + content);
         Controller.renderHtml(content);
     }
 
@@ -74,9 +73,7 @@ public class Ajax extends Controller {
     }
 
     public static void getTxr(long id) {
-        System.out.println("Looking for asset: " + id);
         Asset asset = Asset.findById(id);
-        System.out.println("Asset found is: " + asset);
         Controller.renderHtml(asset.getCorrespondingTxr());
     }
 
