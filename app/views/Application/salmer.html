@@ -8,116 +8,121 @@
 #{ header /}
 
 <script type="text/javascript">
-    
-    $(document).ready(function() {
-    
-    $('div.root').hide();
-    
-    alphabet = ['0','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','æ','ø','å']
-    
-    $.each(alphabet, function(index, value) { 
-    var nodes = [];
-    $('div.work').each(function(index2) {
-    var
-    uri= $(this).find('span.uri').text(),
-    rootName= $(this).find('span.rootName').text(),
-    partName= $(this).find('span.partName'),
-    splitName= rootName.split( "_" ),
-    year= splitName[0],
-    sj= splitName[1];
-    //##########################
-    //console.log(partName.text());
-    if( partName.text().indexOf("\u003c") >= 0 )
-    partName.html( partName.text() );
-    partName.find('desc').each( function() {
-    var partLabel= $(this).find('label').text();
-    
-    if( startsWith(partLabel,value) ){
-    var partUrl= uri + '#\u007b\"0\":0,\"k\":' + ($(this).find('ident').text() -1) + '\u007d',
-    partYear= $(this).find('date').text(),
-    partSj= $(this).find('idno').text(),
-    partNode= '\<!--' + alphabetize( partLabel ) + rootName +'--><tr><td class="shortForm"><a href=\'' + partUrl + '\'>' + partLabel + '</a></td><td class="definisjon">' + (partYear?partYear:year) + '</td><td class="sjNummer">' + (partSj?partSj:sj) + '</td></tr>';
-        
-    nodes.push(partNode);
-    }
-    })
+
+    $(document).ready(function () {
+
+        $('div.root').hide();
+
+        alphabet = [
+            '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'æ', 'ø', 'å'
+        ];
+
+        $.each(alphabet, function (index, value) {
+            var nodes = [];
+            $('div.work').each(function (index2) {
+                var
+                    uri = $(this).find('span.uri').text(),
+                    rootName = $(this).find('span.rootName').text(),
+                    partName = $(this).find('span.partName'),
+                    splitName = rootName.split("_"),
+                    year = splitName[0],
+                    sj = splitName[1];
+                //##########################
+                //console.log(partName.text());
+                if (partName.text().indexOf("\u003c") >= 0) {
+                    partName.html(partName.text());
+                }
+                partName.find('desc').each(function () {
+                    var partLabel = $(this).find('label').text();
+
+                    if (startsWith(partLabel, value)) {
+                        var partUrl = uri + '#\u007b\"0\":0,\"k\":' + ($(this).find('ident').text() - 1) + '\u007d',
+                            partYear = $(this).find('date').text(),
+                            partSj = $(this).find('idno').text(),
+                            partNode = '\<!--' + alphabetize(partLabel) + rootName + '--><tr><td class="shortForm"><a href=\'' + partUrl + '\'>' + partLabel + '</a></td><td class="definisjon">' + (partYear ? partYear : year) + '</td><td class="sjNummer">' + (partSj ? partSj : sj) + '</td></tr>';
+
+                        nodes.push(partNode);
+                    }
+                });
+            });
+            nodes = nodes.sort().reverse();
+            $(nodes).each(function (index, value2) {
+                $('#' + alphabetize(value)).after(value2);
+            });
+        });
+
+        var loc = String(document.location);
+        var idx = loc.indexOf('#');
+        var href = (idx > 0) ? loc.substring(idx + 1) : "";
+        if (href) {
+            $.scrollTo("#" + href, 500);
+        }
     });
-    nodes = nodes.sort().reverse();
-    $(nodes).each( function(index, value2) {
-    $('#' + alphabetize(value)).after(value2);
-    });
-    }); 
-    
-    var loc = String(document.location);
-    var idx = loc.indexOf('#');
-    var href = (idx > 0) ? loc.substring(idx + 1) : "";
-    if (href) $.scrollTo("#" + href, 500);              
-    });
-    
-    function alphabetize( s ) {
-    var zeros= "00000000", //max leading zeros for numbers
-    a= s.replace(/\s*\[[^\]]*\]\s*/g,"").toLowerCase(), a1, num= [];
-    //remove anything in brackets
-    if( /[0-9]/.test(a) ) {//numbers
-    a1= a.replace( /\d+/g, "¤" );
-    num= a.match( /\d+/g )
-    $(num).each( function(i,v) {
-    a1= a1.replace( "¤", zeros.substr(0,zeros.length-v.length)+v )
-    })
-    a= a1;
+
+    function alphabetize(s) {
+        var zeros = "00000000", //max leading zeros for numbers
+            a = s.replace(/\s*\[[^\]]*\]\s*/g, "").toLowerCase(), a1, num = [];
+        //remove anything in brackets
+        if (/[0-9]/.test(a)) {//numbers
+            a1 = a.replace(/\d+/g, "¤");
+            num = a.match(/\d+/g);
+            $(num).each(function (i, v) {
+                a1 = a1.replace("¤", zeros.substr(0, zeros.length - v.length) + v);
+            });
+            a = a1;
+        }
+        if (/[z-\uffff]/.test(a)) {//diacritics, Danish national letters
+            a = a.replace(/z/g, "z0");
+            a = a.replace(/æ/g, "z1");
+            a = a.replace(/ø/g, "z2");
+            a = a.replace(/å/g, "z3");
+            a = a.replace(/ä/g, "z1");
+            a = a.replace(/ö/g, "z2");
+            a = a.replace(/ü/g, "y");
+            a = a.replace(/é/g, "e");
+            a = a.replace(/è/g, "e");
+            a = a.replace(/ê/g, "e");
+            a = a.replace(/á/g, "a");
+            a = a.replace(/à/g, "a");
+            a = a.replace(/œ/g, "oe");
+            a = a.replace(/ç/g, "c");
+            a = a.replace(/ð/g, "d");
+            a = a.replace(/d'/g, "d");
+            a = a.replace(/þ/g, "th");
+        }
+        a = a.replace(/aa/g, "z3");
+        return a + ' ';
     }
-    if( /[z-\uffff]/.test(a) ) {//diacritics, Danish national letters
-    a= a.replace(/z/g,"z0");
-    a= a.replace(/æ/g,"z1");
-    a= a.replace(/ø/g,"z2");
-    a= a.replace(/å/g,"z3");
-    a= a.replace(/ä/g,"z1");
-    a= a.replace(/ö/g,"z2");
-    a= a.replace(/ü/g,"y");
-    a= a.replace(/é/g,"e");
-    a= a.replace(/è/g,"e");
-    a= a.replace(/ê/g,"e");
-    a= a.replace(/á/g,"a");
-    a= a.replace(/à/g,"a");
-    a= a.replace(/œ/g,"oe");
-    a= a.replace(/ç/g,"c");
-    a= a.replace(/ð/g,"d");
-    a= a.replace(/d'/g,"d");
-    a= a.replace(/þ/g,"th"); 
+
+    function startsWith(a, b) { // first letter of a starts with letter b with respect to alphabetization
+        var aa = alphabetize(a).charAt(0), ba = alphabetize(b).charAt(0);
+        if (aa == "z") {
+            aa = alphabetize(a).substr(0, 2);
+            if (ba == "z") {
+                ba = alphabetize(b).substr(0, 2);
+            }
+        }
+        return aa == ba;
     }
-    a= a.replace(/aa/g,"z3");
-    return a + ' ';
-    }
-    
-    function startsWith( a, b ){ // first letter of a starts with letter b with respect to alphabetization
-    var aa= alphabetize(a).charAt(0), ba= alphabetize(b).charAt(0); 
-    if( aa=="z" ) {
-    aa= alphabetize(a).substr(0,2);
-    if( ba=="z" ) {
-    ba= alphabetize(b).substr(0,2);
-    }
-    }
-    return aa==ba;
-    }
-    
-    
+
+
 </script>
 
 
 <div id="main">
-    
+
     <div class="container" id="underside_innhold">
-        
+
         <div id="submenu">
-            <div id="breadcrumbs"><a href="#">Forside</a> &raquo;  Salmeregister</div>
+            <div id="breadcrumbs"><a href="#">Forside</a> &raquo; Salmeregister</div>
             <a id="slamer_vejledning" href="../vejledning/salmer_vej">Vejledning til salmeregister</a>
         </div>
-        
+
         <div class="kolonne1">
             <ul id="kolonne1_meny">
-                
+
                 <li class="header">Registre</li>
-                
+
                 <li><a href="../reg">Registranten</a></li>
                 <li><a href="../myter">Mytologisk register</a></li>
                 <li><a href="../personer">Personregister</a></li>
@@ -128,17 +133,18 @@
                 <li class="last"><a class="" href="../bookinvent1839">Bogfortegnelse 1839</a></li>
             </ul>
         </div>
-        
+
         <div id="kolonne1_bred">
-            
+
             <h1>Salmeregister</h1>
-            
+
             <h2>Fortegnelse over salmers førstelinje</h2>
-            
-            <p class="kronoText">Registeret indeholder de salmer, der er udgivet i Grundtvigs Værker. De fleste har Grundtvig skrevet, men nogle er salmer af andre forfattere, som Grundtvig har bearbejdet i forskellig grad.</p>
-            
+
+            <p class="kronoText">Registeret indeholder de salmer, der er udgivet i Grundtvigs Værker. De fleste har Grundtvig skrevet, men nogle er salmer af
+                andre forfattere, som Grundtvig har bearbejdet i forskellig grad.</p>
+
             <div id="innholdsfortegnelse">
-                
+
                 <a href="../salmer#a">a</a>
                 <a href="../salmer#b">b</a>
                 <a href="../salmer#c">c</a>
@@ -169,13 +175,13 @@
                 <a href="../salmer#z2">ø</a>
                 <a href="../salmer#z3" style="text-transform: none">Aa</a>
             </div>
-            
+
             <div id="liste" class="hideroot">
-                
+
                 <!--div>Her bygges en kronologisk oversigt!</div-->
-                
+
                 <div class="root">
-                    #{list play.mvc.Scope.RenderArgs.current().sortedAssets, as:'asset'}
+                    #{list play.mvc.Scope.RenderArgs.current().rootAssets, as:'asset'}
                     <div class="work">
                         <span class="uri">@{ShowAsset.tekstvisning(asset.id, 0)}</span>
                         <span class="rootName">${asset.rootName}</span>
@@ -183,14 +189,14 @@
                     </div>
                     #{/list}
                 </div>
-                
+
                 <table class="alfa">
                     <tr>
                         <td class="shortForm">Førstelinje</td>
                         <td class="definisjon">År</td>
                         <td class="sjNummer" title="Steen Johansen">SJ</td>
                     </tr>
-                    
+
                     <tr class="bottom_border" id="a">
                         <td class="shortForm"><h4>A</h4></td>
                         <td class="returnTop"><a class="returnTop" href="../salmer#" title="til toppen">&#x25B2;</a></td>
@@ -202,7 +208,7 @@
                     <tr class="bottom_border" id="c">
                         <td class="shortForm"><h4>C</h4></td>
                         <td class="returnTop"><a class="returnTop" href="../salmer#" title="til toppen">&#x25B2;</a></td>
-                    </tr>    
+                    </tr>
                     <tr class="bottom_border" id="d">
                         <td class="shortForm"><h4>D</h4></td>
                         <td class="returnTop"><a class="returnTop" href="../salmer#" title="til toppen">&#x25B2;</a></td>
@@ -308,10 +314,10 @@
                         <td class="returnTop"><a class="returnTop" href="../salmer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                 </table>
-                
+
             </div>
-            
+
         </div>
-        
+
     </div>
 </div>
