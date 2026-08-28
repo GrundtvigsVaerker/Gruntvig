@@ -6,10 +6,12 @@
 package controllers;
 
 import helpers.Helpers;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import models.Asset;
 import models.Chapter;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -19,6 +21,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import play.mvc.Controller;
 
 /**
  *
@@ -28,15 +31,15 @@ import org.apache.solr.common.SolrInputDocument;
  *
  *
  */
-public class DoSearch extends Application {
-    
-    
+public class DoSearch extends Controller {
+
+
     public static int PAGESIZE = 5;
-    
+
     private static String composeOr(String[] str) {
-        String akk="(";
+        String akk = "(";
         int i = 0;
-        for (String s: str) {
+        for (String s : str) {
             i++;
             akk += " type:" + s;
             if (i < str.length) akk += " OR ";
@@ -76,7 +79,7 @@ public class DoSearch extends Application {
             lucene = lucene.replaceAll("[!()+,.;:]", "");
             if (lucene.contains("OR")) {
                 lucene = "(" + lucene + ")";
-            }            
+            }
             System.out.println("Searching for qps: " + lucene);
             List<Chapter> chapters = new ArrayList<Chapter>();
             ArrayList<Asset> renderGrundtvigAssets = new ArrayList<Asset>();
@@ -86,13 +89,13 @@ public class DoSearch extends Application {
             String q = "text:" + lucene;
             String types[] = {};
             if (grundtvig != null && kommentar == null) {
-                types = new String[] {Asset.variantType, Asset.manusType, "chapter"};
+                types = new String[]{Asset.variantType, Asset.manusType, "chapter"};
             }
             if (grundtvig == null && kommentar != null) {
-                types = new String[] {Asset.introType, Asset.txrType, Asset.commentType, Asset.veiledningType};                
+                types = new String[]{Asset.introType, Asset.txrType, Asset.commentType, Asset.veiledningType};
             }
             if (grundtvig != null && kommentar != null) {
-                types = new String[] {Asset.introType, Asset.txrType, Asset.commentType, Asset.veiledningType, Asset.variantType, Asset.manusType, "chapter"}; 
+                types = new String[]{Asset.introType, Asset.txrType, Asset.commentType, Asset.veiledningType, Asset.variantType, Asset.manusType, "chapter"};
             }
             query.setQuery(q + " AND " + composeOr(types));
             System.out.println("Query: " + query.getQuery());
@@ -112,7 +115,7 @@ public class DoSearch extends Application {
                     if (grundtvig != null && type.equals("chapter")) {
                         Chapter c = Chapter.findById(id);
                         chapters.add(c);
-                    } else {                   
+                    } else {
                         Asset asset = Asset.findById(id);
                         /*if (grundtvig != null && (asset.type.equals(Asset.variantType) || asset.type.equals(Asset.manusType))) {
                             renderGrundtvigAssets.add(asset);
@@ -120,17 +123,16 @@ public class DoSearch extends Application {
                         if (kommentar != null && (asset.type.equals(Asset.introType) || asset.type.equals(Asset.txrType) || asset.type.equals(Asset.commentType) || asset.type.equals(Asset.veiledningType))) {
                             renderCommentAssets.add(asset);
                         }*/
-			if (grundtvig != null && (Asset.variantType.equals(asset.type) || Asset.manusType.equals(asset.type))) {
+                        if (grundtvig != null && (Asset.variantType.equals(asset.type) || Asset.manusType.equals(asset.type))) {
                             renderGrundtvigAssets.add(asset);
-                        } else
-                        if (kommentar != null && (
-                                Asset.introType.equals(asset.type) || 
-                                Asset.txrType.equals(asset.type) || 
-                                Asset.commentType.equals(asset.type) || 
-                                Asset.veiledningType.equals(asset.type))) {
+                        } else if (kommentar != null && (
+                                Asset.introType.equals(asset.type) ||
+                                        Asset.txrType.equals(asset.type) ||
+                                        Asset.commentType.equals(asset.type) ||
+                                        Asset.veiledningType.equals(asset.type))) {
                             renderCommentAssets.add(asset);
                         }
-                        
+
                     }
                 }
             } catch (Exception e) {
@@ -140,12 +142,12 @@ public class DoSearch extends Application {
             }
 
             if (grundtvig != null) cat += "grundtvig";
-            if (kommentar != null) cat += "kommentar";              
+            if (kommentar != null) cat += "kommentar";
             int totalHits = renderGrundtvigAssets.size() + renderCommentAssets.size() + chapters.size();
             System.out.println("Total hits: " + totalHits);
             System.out.println("Total all: " + totalAll);
             String lookfor = lucene;
-            int totalPages = (int) Math.ceil((double)totalAll / (double)pageSize);
+            int totalPages = (int) Math.ceil((double) totalAll / (double) pageSize);
             boolean first = false;
             render(renderGrundtvigAssets, chapters, lookfor, totalHits, renderCommentAssets, cat, totalAll, pageSize, totalPages, page, first);
         } else {
@@ -342,7 +344,7 @@ public class DoSearch extends Application {
         string = myPattern.matcher(string).replaceAll(replaceWith);
         return string;
     }
-    
+
     static public Long extractSj(String str) {
         String res = "";
         try {
@@ -351,14 +353,14 @@ public class DoSearch extends Application {
             if (matcher.find()) {
                 System.out.println("Js is: " + matcher.group(1));
                 res = matcher.group(1);
-            } else  {
-               res = "";
-            }       
+            } else {
+                res = "";
+            }
             return Long.parseLong(res);
         } catch (Exception e) {
             return 0L;
         }
     }
-    
-    
+
+
 }

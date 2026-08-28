@@ -26,7 +26,7 @@ import play.mvc.Controller;
  *
  *
  */
-public class Admin extends Application {
+public class Admin extends Controller {
 
 
     public static void uploadXmlFile() {

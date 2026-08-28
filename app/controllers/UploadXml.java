@@ -14,11 +14,11 @@ import play.mvc.Controller;
 
 /**
  *
- * 
+ *
  * Starting point for uploading of xml-files
- * 
+ *
  */
-public class UploadXml extends Application {
+public class UploadXml extends Controller {
 
     public static void testXsltTransformation() throws Exception {
         // inline to test xslt of simple file
@@ -33,7 +33,7 @@ public class UploadXml extends Application {
     /**
      * Handle upload of xml-theFile
      * Check for theFile-type and create assets in database
-     * 
+     *
      */
     public static void uploadFile(String filesname, String comment, File epub) {
         File theFile = epub;
@@ -45,16 +45,16 @@ public class UploadXml extends Application {
                 fileName.equals("life.xml") ||
                 fileName.equals("pub.xml") ||
                 fileName.equals("unpub.xml")
-                ) {
-            Path tidslinjeDir = Helpers.getXmlDataDirPath( "tidslinje");
+        ) {
+            Path tidslinjeDir = Helpers.getXmlDataDirPath("tidslinje");
             Path filePath = tidslinjeDir.resolve(fileName);
             File theDir = tidslinjeDir.toFile();
             if (!theDir.exists()) {
-              System.out.println("creating directory: " + tidslinjeDir);
-              boolean result = theDir.mkdir();  
-              if(result){    
-                 System.out.println("DIR created");  
-               }
+                System.out.println("creating directory: " + tidslinjeDir);
+                boolean result = theDir.mkdir();
+                if (result) {
+                    System.out.println("DIR created");
+                }
             }
             try {
                 helpers.Helpers.copyfile(theFile.getAbsolutePath(), filePath.toString());
@@ -63,7 +63,7 @@ public class UploadXml extends Application {
             }
             Controller.renderHtml("Upload of file done: ");
         }
-        
+
         if (fileName.endsWith(".jpg")) {
             if (fileName.contains("_medium") || fileName.contains("_low")) {
                 Asset.uploadCountryImage(fileName, comment, theFile);
@@ -90,14 +90,14 @@ public class UploadXml extends Application {
         } else if (fileName.equals("myth.xml")
                 || fileName.equals("pers.xml")
                 || fileName.equals("title.xml")
-                ) {
+        ) {
             // System.out.println("--- Upload ref-file: " + asset.fileName);
             TextReference.uploadReferenceFile(asset);
         } else if (fileName.replace(".xml", "").endsWith("_com")) {
             TextReference.uploadComments(asset);
-        }       
-        
-        
+        }
+
+
         if (asset == null) {
             Controller.renderHtml("Upload of file done: ");
         } else {

@@ -5,20 +5,22 @@
 package controllers;
 
 import java.util.List;
+
 import models.Asset;
 import models.Chapter;
+import play.mvc.Controller;
 
 /**
  *
- * 
+ *
  * Handles showing of asset assets
- * 
+ *
  */
-public class ShowAsset extends Application {
+public class ShowAsset extends Controller {
 
     /**
      * Man function to show all tabs
-     * 
+     *
      */
     public static void tekstvisning(long assetId, int chapterNum) {
         Asset asset = Asset.findById(assetId);
@@ -38,32 +40,31 @@ public class ShowAsset extends Application {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", fileName).first();
         if (asset != null) {
             render(asset);
-        } else ShowAsset.renderHtml("Filen er ikke funnet - den er antagelig ikke ferdigbehandlet!");        
+        } else ShowAsset.renderHtml("Filen er ikke funnet - den er antagelig ikke ferdigbehandlet!");
     }
-    
+
     /**
-     * 
+     *
      * Used by ajax-calls from javascript
-     * 
+     *
      */
     public static void findAsset(String fileName) {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", fileName).first();
         if (asset != null) {
             Asset rootAsset = Asset.findById(asset.getCorrespondingRootId());
             System.out.println("Showing asset: " + rootAsset.id);
-            tekstvisning(rootAsset.id,0);
+            tekstvisning(rootAsset.id, 0);
         } else ShowAsset.renderHtml("Filen er ikke funnet - den er antagelig ikke ferdigbehandlet!");
-    }   
-    
-    /** 
+    }
+
+    /**
      * TODO: rewrite to one path
-     * 
+     * <p>
      * Currently called from javascript
-     * 
+     *
      */
-    
-    
-    
+
+
     public static void vejledning(String fileName) {
         String vejledningSomSkalVises = fileName;
         render(vejledningSomSkalVises);
@@ -88,7 +89,7 @@ public class ShowAsset extends Application {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", "myth.xml").first();
         render(asset);
     }
-    
+
     public static void biblevisning() {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", "bible.xml").first();
         render(asset);
@@ -99,17 +100,17 @@ public class ShowAsset extends Application {
         render(asset);
     }
 
-    
+
     public static void bookinventoryvisning() {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", "bookInventory1805.xml").first();
         render(asset);
     }
 
-    
+
     public static void bookinventoryvisning1839() {
         Asset asset = Asset.find("fileName = :fileName").setParameter("fileName", "bookInventory1839.xml").first();
         render(asset);
     }
 
-     
+
 }
