@@ -6,6 +6,7 @@
  */
 package models;
 
+import cache.LruCache;
 import controllers.DoSearch;
 import helpers.Helpers;
 
@@ -99,6 +100,9 @@ public class Asset extends GenericModel {
     public static String bibliografi = "bibliografi";
     public static String titleType = "titleRef"; /*added 2016-03-17 by KK*/
 
+    private static final LruCache<String, Pattern> regexCache = new LruCache<>(100);
+    private static final String REGEX_KEY_XX = "dfdf";
+
     public Asset() {
 
     }
@@ -133,7 +137,7 @@ public class Asset extends GenericModel {
 
 
     private static boolean nonEmpty(Asset var) {
-        Pattern p = Pattern.compile("type\\s*=\\s*[\"'](minusVar|unknownVar)[\"']");
+        Pattern p = regexCache.computeIfAbsent("type\\s*=\\s*[\"'](minusVar|unknownVar)[\"']", Pattern::compile);
         Matcher m = p.matcher(var.xml);
         if (m.find()) {
             return false;
@@ -237,11 +241,11 @@ public class Asset extends GenericModel {
      */
     public String getCorrespondingIntro() { //<note type="intro" target="1804_28_intro.xml">
         String rN = rootName;
-        Pattern p = Pattern.compile("<note [^>]*type=[\"'](intro|noIntro)[\"'][^>]*>");
+        Pattern p = regexCache.computeIfAbsent("<note [^>]*type=[\"'](intro|noIntro)[\"'][^>]*>", Pattern::compile);
         Matcher m = p.matcher(xml);
         if (m.find()) {
-            p = Pattern.compile("target=[\"']([^\"]*)[\"']");
-            m = p.matcher(m.group(0));
+            Pattern p2 = regexCache.computeIfAbsent("target=[\"']([^\"]*)[\"']", Pattern::compile);
+            m = p2.matcher(m.group(0));
             if (m.find())
                 rN = getRootName(m.group(1).trim(), Asset.introType);
         }
@@ -299,7 +303,7 @@ public class Asset extends GenericModel {
                 assetType.equals(Asset.veiledningType) ||
                 assetType.equals(Asset.varListType)) return fileName;
 
-        Pattern pattern = Pattern.compile("(.*)_.*\\d+$");
+        Pattern pattern = regexCache.computeIfAbsent("(.*)_.*\\d+$", Pattern::compile);
         Matcher matcher = pattern.matcher(fileName);
         if (!matcher.matches()) {
             System.out.println("Setting root name to: " + fileName);
@@ -388,7 +392,8 @@ public class Asset extends GenericModel {
      */
     /* KK 2014-03-05, 2015-10-08, 2017-03-29 */
     public static String getXmlElem(String xml, String tag, String attrName, String attrValue) {
-        Pattern p = Pattern.compile("<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']" + attrValue + "[\"'][^>]*>(.*?)</" + tag + "\\s*>", Pattern.DOTALL);
+        var regexStr = "<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']" + attrValue + "[\"'][^>]*>(.*?)</" + tag + "\\s*>";
+        Pattern p = regexCache.computeIfAbsent(regexStr, regex -> Pattern.compile(regexStr, Pattern.DOTALL));
         Matcher m = p.matcher(xml);
         if (m.find())
             return m.group(1).trim() + (m.find(m.end()) ? " m.fl." : "");
@@ -402,7 +407,8 @@ public class Asset extends GenericModel {
      */
     /* KK 2015-10-08*/
     static String getXmlAttrValue(String xml, String tag, String attrName) {
-        Pattern p = Pattern.compile("<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>");
+        var regexStr = "<" + tag + "\\s+[^>]*" + attrName + "\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>";
+        Pattern p = regexCache.computeIfAbsent(regexStr, Pattern::compile);
         Matcher m = p.matcher(xml);
         if (m.find())
             return m.group(1).trim();
@@ -423,14 +429,15 @@ public class Asset extends GenericModel {
             // the first textClass WITHOUT attributes
         }
         //else
-        //    System.out.println( "No textClass, "+ t1 + "," + t2 );            
-        Pattern p = Pattern.compile("<" + outerElem + "[^>]*>(.*)</" + outerElem + "\\s*>", Pattern.DOTALL);
+        //    System.out.println( "No textClass, "+ t1 + "," + t2 );
+        var regexStr = "<" + outerElem + "[^>]*>(.*)</" + outerElem + "\\s*>";
+        Pattern p = regexCache.computeIfAbsent(regexStr, regex -> Pattern.compile(regex, Pattern.DOTALL));
         Matcher m = p.matcher(firstTextClass);
         if (m.find()) {
             //System.out.println( outerElem + " found: " + m.group(1) );
             String result = "";
-            p = Pattern.compile("<term[^>]*>([^<]*)</term\\s*>");
-            m = p.matcher(m.group(1));
+            Pattern p2 = regexCache.computeIfAbsent("<term[^>]*>([^<]*)</term\\s*>", Pattern::compile);
+            m = p2.matcher(m.group(1));
             while (m.find())
                 result += (result.equals("") ? "" : "#") + m.group(1).trim();
             if (result.equals(""))
@@ -448,7 +455,7 @@ public class Asset extends GenericModel {
      */
     /* KK 2014-03-05 xx */
     private static String ent2str(String ent) {
-        Pattern p = Pattern.compile("&#x([0-9A-Fa-f]+);");
+        Pattern p = regexCache.computeIfAbsent("&#x([0-9A-Fa-f]+);", Pattern::compile);
         Matcher m = p.matcher(ent);
         while (m.find()) {
             ent = ent.replaceFirst(m.group(0), String.format("%c", Integer.parseInt(m.group(1), 16)));
@@ -500,7 +507,7 @@ public class Asset extends GenericModel {
             type = Asset.bookinventory;
         } else if (epub.getAbsolutePath().matches(".*_ms[1-9]*.xml")) {
             System.out.println("Type is manustype!");
-            Pattern pattern = Pattern.compile("ms(\\d+)");
+            Pattern pattern = regexCache.computeIfAbsent("ms(\\d+)", Pattern::compile);
             Matcher matcher = pattern.matcher(epub.getAbsolutePath());
             String found = "no match";
             if (matcher.find()) {
@@ -515,7 +522,7 @@ public class Asset extends GenericModel {
             System.out.println("Type is varList");
             type = Asset.varListType;
         } else {
-            Pattern pattern = Pattern.compile("v(\\d+)");
+            Pattern pattern = regexCache.computeIfAbsent("v(\\d+)", Pattern::compile);
             Matcher matcher = pattern.matcher(epub.getAbsolutePath());
             String found = "no match";
             if (matcher.find()) {

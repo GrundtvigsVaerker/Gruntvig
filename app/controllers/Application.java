@@ -1,7 +1,12 @@
 package controllers;
 
+import cache.CacheManager;
 import models.Asset;
 import play.mvc.*;
+import viewmodels.AssetMetaViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application extends Controller {
 
@@ -51,7 +56,23 @@ public class Application extends Controller {
     }
 
     static void addAssetToTemplate() {
-        renderArgs.put("rootAssets", Asset.find("type = :type order by name").setParameter("type", "root").fetch());
+        List<AssetMetaViewModel> assetMetaViewModels = CacheManager.getAssetMetaViewModels();
+
+        if (assetMetaViewModels == null) {
+            assetMetaViewModels = new ArrayList<>();
+            List<Asset> rootAssets = Asset.find("type = :type order by name").setParameter("type", "root").fetch();
+            for (Asset asset : rootAssets) {
+                var altForm = Asset.getXmlElem(asset.xml, "title", "rend", "altForm");
+                var partForm = Asset.getXmlElem(asset.xml, "title", "rend", "partForm");
+                var hymnForm = Asset.getXmlElem(asset.xml, "title", "rend", "hymnForm");
+                var classCode = Asset.getXmlTerms(asset.xml, "classCode");
+                var keywords = Asset.getXmlTerms(asset.xml, "keywords");
+                assetMetaViewModels.add(new AssetMetaViewModel(asset.id, asset.name, asset.rootName, altForm, partForm, hymnForm, classCode, keywords));
+            }
+            CacheManager.setAssetMetaViewModels(assetMetaViewModels);
+
+        }
+        renderArgs.put("rootAssets", assetMetaViewModels);
         /*
         try {
             List<Asset> sillySortedAssets = Asset.find("type = :type order by name").setParameter("type", "root").fetch();

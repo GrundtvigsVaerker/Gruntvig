@@ -121,8 +121,8 @@
                     <span class="url">@{ShowAsset.tekstvisning(asset.id, 0)}</span>
                     <span class="name">${asset.name}</span>
                     <span class="rootName">${asset.rootName}</span>
-                    <span class="altName">${asset.getXmlElem( asset.xml, "title", "rend", "altForm" )}</span>
-                    <span class="partName">${asset.getXmlElem( asset.xml, "title", "rend", "partForm" )}</span>
+                    <span class="altName">${asset.altForm}</span>
+                    <span class="partName">${asset.partForm}</span>
                 </div>
                 #{/list}
             </div>
