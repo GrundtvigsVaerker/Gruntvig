@@ -6,6 +6,7 @@
  */
 package models;
 
+import cache.CacheManager;
 import cache.LruCache;
 import controllers.DoSearch;
 import helpers.Helpers;
@@ -186,6 +187,9 @@ public class Asset extends GenericModel {
         htmlAsText = Helpers.stripHtml(html);
         T t = super.save();
         index();
+        if (type.equals(Asset.rootType)) {
+            CacheManager.removeAssetRootTypeMetaViewModels();
+        }
         return t;
     }
 
@@ -198,6 +202,9 @@ public class Asset extends GenericModel {
             server.commit();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (type.equals(Asset.rootType)) {
+            CacheManager.removeAssetRootTypeMetaViewModels();
         }
         return super.delete();
     }

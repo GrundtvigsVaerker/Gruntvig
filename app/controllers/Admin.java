@@ -10,6 +10,7 @@ package controllers;
 
 import java.util.List;
 
+import cache.CacheManager;
 import helpers.Helpers;
 import models.Asset;
 import models.Chapter;
@@ -49,6 +50,7 @@ public class Admin extends Controller {
         Chapter.deleteAll();
         TextReference.deleteAll();
         Asset.deleteAll();
+        CacheManager.removeAll();
         Controller.renderHtml("All data removed");
     }
 

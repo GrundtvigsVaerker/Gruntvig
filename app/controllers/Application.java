@@ -56,7 +56,7 @@ public class Application extends Controller {
     }
 
     static void addAssetToTemplate() {
-        List<AssetMetaViewModel> assetMetaViewModels = CacheManager.getAssetMetaViewModels();
+        List<AssetMetaViewModel> assetMetaViewModels = CacheManager.getAssetRootTypeMetaViewModels();
 
         if (assetMetaViewModels == null) {
             assetMetaViewModels = new ArrayList<>();
@@ -69,7 +69,7 @@ public class Application extends Controller {
                 var keywords = Asset.getXmlTerms(asset.xml, "keywords");
                 assetMetaViewModels.add(new AssetMetaViewModel(asset.id, asset.name, asset.rootName, altForm, partForm, hymnForm, classCode, keywords));
             }
-            CacheManager.setAssetMetaViewModels(assetMetaViewModels);
+            CacheManager.setAssetRootTypeMetaViewModels(assetMetaViewModels);
 
         }
         renderArgs.put("rootAssets", assetMetaViewModels);
