@@ -13,61 +13,83 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(() => {
 
         $('div.root').hide();
 
-        interval = ['180', '181', '182', '183', '184', '185', '186', '187', '188', '189'];
+        const decades = ['1800', '1810', '1820', '1830', '1840', '1850', '1860', '1870', '1880', '1890'];
+        const nodesByDecade = new Map(decades.map(decade => [decade, []]));
 
-        $.each(interval, function (index, value) {
-            var nodes = [];
-            $('div.work').each(function (index2) {
-                var rootName = $(this).find('span.rootName').text(),
-                    splitName = rootName.split("_"),
-                    year = splitName[0],
-                    sj = splitName[1],
-                    // *******************************************************************************
-                    sjA = sj.substr(-1), // subnumbering of SJ, KK 2019-03-01
-                    sjSub = (splitName.length > 2 ? splitName[2] : '');
-                if (/\d/.test(sjA)) // hvis sjA er et ciffer
-                {
-                    sjA = "";
-                } else {
-                    sj = sj.substr(0, sj.length - 1);
-                } // fjern evt. A (virker også med B)
-                sj = "     ".concat(sj).substr(-5, 5); // forlæng med blanke til 4 tegn
-                if (sjSub) {
-                    sjSub = "  ".concat(sjSub).substr(-2, 2);
-                } // forlæng med blanke til 2 tegn
-                sj = sj + (sjA ? sjA : "") + (sjSub ? "<!--" + sjSub + "-->" : " ");
-                // ***********************************************************************************
-                if (year.substr(0, 3) != value) {
-                    return true;
-                }
-                var name = $(this).find('span.name').text(),
-                    altName = $(this).find('span.altName').text(),
-                    partName = $(this).find('span.partName'),
-                    url = $(this).find('span.url').text(),
-                    altNameForm = altName ? '<tr><td class="shortForm"><a href="' + url + '">' + altName + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>' : '',
-                    node = '<tr><td class="shortForm"><a href="' + url + '">' + name + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>' + altNameForm;
-                nodes.push(node);
-                partName.html(partName.text());
-                partName.find('desc').each(function () {
-                    var partUrl = url + '#\u007b\"0\":0,\"k\":' + ($(this).find('ident').text() - 1) + '\u007d',
-                        partLabel = $(this).find('label').text(),
-                        partYear = $(this).find('date').text(),
-                        partSj = $(this).find('idno').text(),
-                        partNode = '<tr><td class="shortForm"><a href=\'' + partUrl + '\'>' + partLabel + '</a></td><td class="definisjon">' + (partYear ? partYear : year) + '</td><td class="sjNummer">' + (partSj ? partSj : sj) + '</td></tr>';
-                    nodes.push(partNode);
-                });
+        const addNode = (nodes, html, year, sj) => {
+            nodes.push({
+                html,
+                sortYear: year,
+                sortSj: sj
             });
-            nodes = nodes.sort(function (a, b) {
-                var aSort = a.replace(/^.*<td class="definisjon">/, ''),
-                    bSort = b.replace(/^.*<td class="definisjon">/, '');
-                return (aSort < bSort) ? -1 : 1;
-            }); // nodes sorted by rootname, repeat for part titles
-            $(nodes).each(function (index) {
-                $('#' + value).after(nodes.pop());
+        };
+
+        $('div.work').each((workIndex, work) => {
+            const $work = $(work);
+            const rootName = $work.find('span.rootName').text();
+            const splitName = rootName.split('_');
+            const year = splitName[0];
+            const decade = year.slice(0, 3) + '0';
+            const nodes = nodesByDecade.get(decade);
+
+            if (!nodes) {
+                return;
+            }
+
+            let sj = splitName[1];
+            let sjSuffix = sj.slice(-1);
+            let sjSub = splitName.length > 2 ? splitName[2] : '';
+
+            if (sjSuffix >= '0' && sjSuffix <= '9') {
+                sjSuffix = '';
+            } else {
+                sj = sj.slice(0, -1);
+            }
+
+            sj = sj.padStart(5, ' ').slice(-5);
+            if (sjSub) {
+                sjSub = sjSub.padStart(2, ' ').slice(-2);
+            }
+            sj += sjSuffix || '';
+            sj += sjSub ? '<!--' + sjSub + '-->' : ' ';
+
+            const name = $work.find('span.name').text();
+            const altName = $work.find('span.altName').text();
+            const $partName = $work.find('span.partName');
+            const url = $work.find('span.url').text();
+            const altNameForm = altName ? '<tr><td class="shortForm"><a href="' + url + '">' + altName + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>' : '';
+            const node = '<tr><td class="shortForm"><a href="' + url + '">' + name + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>' + altNameForm;
+
+            addNode(nodes, node, year, sj);
+
+            $partName.html($partName.text());
+            $partName.find('desc').each((partIndex, part) => {
+                const $part = $(part);
+                const partUrl = url + '#\u007b\"0\":0,\"k\":' + ($part.find('ident').text() - 1) + '\u007d';
+                const partLabel = $part.find('label').text();
+                const partYear = $part.find('date').text() || year;
+                const partSj = $part.find('idno').text() || sj;
+                const partNode = '<tr><td class="shortForm"><a href=\'' + partUrl + '\'>' + partLabel + '</a></td><td class="definisjon">' + partYear + '</td><td class="sjNummer">' + partSj + '</td></tr>';
+
+                addNode(nodes, partNode, partYear, partSj);
+            });
+        });
+
+        decades.forEach(decade => {
+            const nodes = nodesByDecade.get(decade);
+            const $heading = $('#' + decade.slice(0, 3));
+
+            nodes.sort((a, b) => {
+                if (a.sortYear !== b.sortYear) {
+                    return a.sortYear < b.sortYear ? -1 : 1;
+                }
+                return a.sortSj < b.sortSj ? -1 : 1;
+            }).reverse().forEach(node => {
+                $heading.after(node.html);
             });
         });
     });
