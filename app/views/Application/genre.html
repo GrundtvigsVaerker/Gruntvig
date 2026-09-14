@@ -10,89 +10,70 @@
 #{ header /}
 
 <script type="text/javascript">
-    var works = [],
-        keyRefCnt = [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        ]; // max 50 emneord
-    $(document).ready(function () {
-            $('div.root').hide();
-            $('div.work').each(function () {
-                var genresTxt = $(this).find('span.genre').text(),
-                    keywordsTxt = $(this).find('span.keywords').text(),
-                    rootName = $(this).find('span.rootName').text(),
-                    splitName = rootName.split("_"),
-                    year = splitName[0],
-                    sj = splitName[1],
-                    name = $(this).find('span.name').text(),
-                    altName = $(this).find('span.altName').text(),
-                    partName = $(this).find('span.partName'),
-                    url = $(this).find('span.url').text(),
-                    preHtml = '<tr class="workOnList"><td class="shortForm"><a href="' + url + '">',
-                    postHtml = '</a> <div class="genKeyPopUp">Genre: ' + genresTxt.replace(/#/g, ", ") + '<br/>Emneord: ' + keywordsTxt.replace(/#/g, ", ") + '</div></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>',
-                    node = preHtml + name + postHtml,
-                    altNameForm = altName ? preHtml + altName + postHtml : '',
-                    curWork = {
-                        genres: "#" + genresTxt + "#",
-                        keywords: "#" + keywordsTxt + "#",
-                        genresSelected: "#",
-                        keywordsSelected: "#" + keywordsTxt + "#"
-                    };
-                $('#listTail').before(node);
-                curWork.row = document.getElementById("listTail").previousElementSibling;
-                works.push(curWork);
-                if (altName) {
-                    var altCurWork = {
-                        genres: curWork.genres,
-                        keywords: curWork.keywords,
-                        genresSelected: curWork.genresSelected,
-                        keywordsSelected: curWork.keywordsSelected
-                    };
-                    $('#listTail').before(altNameForm);
-                    altCurWork.row = document.getElementById("listTail").previousElementSibling;
-                    works.push(altCurWork);
-                }
-                //####################
-                partName.html(partName.text());
-                partName.find('desc').each(function () {
-                    var partUrl = url + '#\u007b\"0\":0,\"k\":' + $(this).find('ident').text() + '\u007d',
-                        partLabel = $(this).find('label').text(),
-                        partYear = $(this).find('date').text(),
-                        partSj = $(this).find('idno').text(),
-                        partGenresTxt = "", partKeywordsTxt = "";
-                    $(this).find('term[type="classCode"]').each(function (i, val) {
-                        partGenresTxt += (partGenresTxt ? "#" : "") + $(this).text();
-                    });
-                    if (!partGenresTxt) {
-                        partGenresTxt = genresTxt;
-                    }
-                    $(this).find('term[type="keywords"]').each(function (i, val) {
-                        partKeywordsTxt += (partKeywordsTxt ? "#" : "") + $(this).text();
-                    });
-                    if (!partKeywordsTxt) {
-                        partKeywordsTxt = keywordsTxt;
-                    }
-                    var partPreHtml = '<tr class="workOnList"><td class="shortForm"><a href=\'' + partUrl + '\'>',
-                        partPostHtml = '</a> <div class="genKeyPopUp">Genre: ' + partGenresTxt.replace(/#/g, ", ") + '<br/>Emneord: ' + partKeywordsTxt.replace(/#/g, ", ") + '</div></td><td class="definisjon">' + (partYear ? partYear : year) + '</td><td class="sjNummer">' + (partSj ? partSj : sj) + '</td></tr>',
-                        partNameForm = partPreHtml + partLabel + partPostHtml,
-                        partCurWork = {
-                            genres: "#" + partGenresTxt + "#",
-                            keywords: "#" + partKeywordsTxt + "#",
-                            genresSelected: "#",
-                            keywordsSelected: "#" + partKeywordsTxt + "#"
-                        };
-                    $('#listTail').before(partNameForm);
-                    partCurWork.row = document.getElementById("listTail").previousElementSibling;
-                    works.push(partCurWork);
-                });
-                //####################
+    const works = [];
+    const keyRefCnt = Array(50).fill(0); // max 50 emneord
+
+    $(() => {
+        $('div.root').hide();
+        const listTail = document.getElementById('listTail');
+
+        const addWork = (html, work) => {
+            listTail.insertAdjacentHTML('beforebegin', html);
+            work.row = listTail.previousElementSibling;
+            works.push(work);
+        };
+
+        $('div.work').each((workIndex, workElement) => {
+            const $work = $(workElement);
+            const genresTxt = $work.find('span.genre').text();
+            const keywordsTxt = $work.find('span.keywords').text();
+            const [year, sj] = $work.find('span.rootName').text().split('_');
+            const name = $work.find('span.name').text();
+            const altName = $work.find('span.altName').text();
+            const $partName = $work.find('span.partName');
+            const url = $work.find('span.url').text();
+            const preHtml = '<tr class="workOnList"><td class="shortForm"><a href="' + url + '">';
+            const postHtml = '</a> <div class="genKeyPopUp">Genre: ' + genresTxt.split('#').join(', ') + '<br/>Emneord: ' + keywordsTxt.split('#').join(', ') + '</div></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>';
+            const curWork = {
+                genres: "#" + genresTxt + "#",
+                keywords: "#" + keywordsTxt + "#",
+                genresSelected: "#",
+                keywordsSelected: "#" + keywordsTxt + "#"
+            };
+
+            addWork(preHtml + name + postHtml, curWork);
+            if (altName) {
+                const altCurWork = {
+                    genres: curWork.genres,
+                    keywords: curWork.keywords,
+                    genresSelected: curWork.genresSelected,
+                    keywordsSelected: curWork.keywordsSelected
+                };
+                addWork(preHtml + altName + postHtml, altCurWork);
+            }
+
+            $partName.html($partName.text());
+            $partName.find('desc').each((partIndex, partElement) => {
+                const $part = $(partElement);
+                const partUrl = url + '#\u007b\"0\":0,\"k\":' + $part.find('ident').text() + '\u007d';
+                const partLabel = $part.find('label').text();
+                const partYear = $part.find('date').text() || year;
+                const partSj = $part.find('idno').text() || sj;
+                const partGenresTxt = $part.find('term[type="classCode"]').map((i, term) => $(term).text()).get().join('#') || genresTxt;
+                const partKeywordsTxt = $part.find('term[type="keywords"]').map((i, term) => $(term).text()).get().join('#') || keywordsTxt;
+                const partPreHtml = '<tr class="workOnList"><td class="shortForm"><a href=\'' + partUrl + '\'>';
+                const partPostHtml = '</a> <div class="genKeyPopUp">Genre: ' + partGenresTxt.split('#').join(', ') + '<br/>Emneord: ' + partKeywordsTxt.split('#').join(', ') + '</div></td><td class="definisjon">' + partYear + '</td><td class="sjNummer">' + partSj + '</td></tr>';
+                const partCurWork = {
+                    genres: "#" + partGenresTxt + "#",
+                    keywords: "#" + partKeywordsTxt + "#",
+                    genresSelected: "#",
+                    keywordsSelected: "#" + partKeywordsTxt + "#"
+                };
+
+                addWork(partPreHtml + partLabel + partPostHtml, partCurWork);
             });
-        }
-    );
-    // -->
+        });
+    });
 </script>
 
 <div id="main">
@@ -159,158 +140,151 @@
             }
         </style>
         <script type="text/javascript"> // <!--
+        const BRACKETED_TEXT_PATTERN = /\s*\[[^\]]*\]\s*/g;
+        const NUMBER_PATTERN = /\d+/g;
+        const alphabetReplacements = new Map([
+            ['z', 'z0'], ['æ', 'z1'], ['ä', 'z1'], ['ø', 'z2'], ['ö', 'z2'],
+            ['å', 'z3'], ['ü', 'y'], ['é', 'e'], ['è', 'e'], ['ê', 'e'],
+            ['á', 'a'], ['à', 'a'], ['œ', 'oe'], ['ç', 'c'], ['ð', 'd'], ['þ', 'th']
+        ]);
+
         function chk(thisInput, genOrKey) {
             conseq(thisInput, genOrKey);
         }
 
         function conseq(thisInput, genOrKey) { // konsekvenstjekker særlige formers input
-            var childInputs = thisInput.parentNode.getElementsByTagName("input");
-            for (i = 0; i < childInputs.length; i++) { // check child nodes consequently
-                childInputs[i].checked = thisInput.checked;
+            const childInputs = thisInput.parentNode.getElementsByTagName('input');
+            for (const childInput of childInputs) { // check child nodes consequently
+                childInput.checked = thisInput.checked;
                 if (thisInput.checked) {
-                    addList(childInputs[i].name, genOrKey);
+                    addList(childInput.name, genOrKey);
                 } else {
-                    remList(thisInput, childInputs[i].name, genOrKey);
+                    remList(thisInput, childInput.name, genOrKey);
                 }
             }
         }
 
         function addList(val, genOrKey) { // add all items with genres or keywords containing val to list
-            for (var i = 0; i < works.length; i++) {
-                if (works[i][genOrKey].indexOf("#" + val + "#") >= 0 && works[i][genOrKey + "Selected"].indexOf("#" + val + "#") < 0) {
-                    var noGenresSelected = works[i].genresSelected.length == 1;
-                    works[i][genOrKey + "Selected"] += val + "#";
+            const selectedProperty = genOrKey + 'Selected';
+            const value = '#' + val + '#';
+            const keyInputs = genOrKey === 'genres' ? document.getElementById('emneValg').getElementsByTagName('input') : [];
+
+            for (const work of works) {
+                if (work[genOrKey].includes(value) && !work[selectedProperty].includes(value)) {
+                    const noGenresSelected = work.genresSelected.length === 1;
+                    work[selectedProperty] += val + '#';
                     if (noGenresSelected) {
                         // turn on keywords in list
-                        if (genOrKey == "genres") { // for genres selected
-                            var keywordsList = document.getElementById("emneValg"),
-                                keyInputs = keywordsList.getElementsByTagName("input");
-                            for (var j = 0; j < keyInputs.length; j++) {
-                                if (works[i].keywords.indexOf("#" + keyInputs[j].name + "#") >= 0) {
-                                    keyInputs[j].parentNode.style.display = "block";
-                                    keyInputs[j].parentNode.style.color = "black";
-                                    keyRefCnt[j]++;
+                        if (genOrKey === 'genres') { // for genres selected
+                            Array.from(keyInputs).forEach((keyInput, index) => {
+                                if (work.keywords.includes('#' + keyInput.name + '#')) {
+                                    keyInput.parentNode.style.display = 'block';
+                                    keyInput.parentNode.style.color = 'black';
+                                    keyRefCnt[index]++;
                                 }
-                            }
+                            });
                         }
                     }
-                    if (works[i].genresSelected.length > 1 && works[i].keywordsSelected.length > 1 && works[i].row.style.color != "black") { //
-                        works[i].row.style.display = "block";
-                        works[i].row.style.color = "black";
+                    if (work.genresSelected.length > 1 && work.keywordsSelected.length > 1 && work.row.style.color !== 'black') {
+                        work.row.style.display = 'block';
+                        work.row.style.color = 'black';
                     }
                 }
             }
         }
 
         function remList(thisInput, val, genOrKey) { // remove all items with genres or keywords containing val from list
-            for (var i = 0; i < works.length; i++) {
-                if (works[i][genOrKey + "Selected"].indexOf("#" + val + "#") >= 0) {
-                    var selected = works[i][genOrKey + "Selected"];
-                    selected = selected.replace(RegExp("#" + val + "#", "g"), "#");
-                    if (genOrKey == "genres" && thisInput.parentNode.className != "genreBox") {
-                        var p = thisInput.parentNode.parentNode;
+            const selectedProperty = genOrKey + 'Selected';
+            const value = '#' + val + '#';
+            const keyInputs = genOrKey === 'genres' ? document.getElementById('emneValg').getElementsByTagName('input') : [];
+
+            for (const work of works) {
+                if (work[selectedProperty].includes(value)) {
+                    let selected = work[selectedProperty].split(value).join('#');
+                    if (genOrKey === 'genres' && thisInput.parentNode.className !== 'genreBox') {
+                        let p = thisInput.parentNode.parentNode;
                         while (p) { // remove any higher order genres as well
-                            var hiOrdName = p.getElementsByTagName("input")[0].name;
-                            if (works[i][genOrKey + "Selected"].indexOf("#" + hiOrdName + "#") >= 0) {
-                                selected = selected.replace("#" + hiOrdName + "#", "#");
+                            const hiOrdName = p.getElementsByTagName('input')[0].name;
+                            if (work[selectedProperty].includes('#' + hiOrdName + '#')) {
+                                selected = selected.replace('#' + hiOrdName + '#', '#');
                             }
-                            if (p.className == "genreBox") {
+                            if (p.className === 'genreBox') {
                                 break;
                             }
                             p = p.parentNode;
                         }
                     }
-                    works[i][genOrKey + "Selected"] = selected;
-                    var noGenresSelected = works[i].genresSelected.length == 1;
+                    work[selectedProperty] = selected;
+                    const noGenresSelected = work.genresSelected.length === 1;
                     if (noGenresSelected) {
                         // turn off keywords in list
-                        if (genOrKey == "genres") { // for genres not selected
-                            var keywordsList = document.getElementById("emneValg"),
-                                keyInputs = keywordsList.getElementsByTagName("input");
-                            for (var j = 0; j < keyInputs.length; j++) {
-                                if (works[i].keywords.indexOf("#" + keyInputs[j].name + "#") >= 0) {
-                                    keyRefCnt[j]--;
-                                    if (keyRefCnt[j] == 0) {
-                                        keyInputs[j].parentNode.style.color = "yellow";
-                                        keyInputs[j].parentNode.style.display = "none";
+                        if (genOrKey === 'genres') { // for genres not selected
+                            Array.from(keyInputs).forEach((keyInput, index) => {
+                                if (work.keywords.includes('#' + keyInput.name + '#')) {
+                                    keyRefCnt[index]--;
+                                    if (keyRefCnt[index] === 0) {
+                                        keyInput.parentNode.style.color = 'yellow';
+                                        keyInput.parentNode.style.display = 'none';
                                     }
                                 }
-                            }
+                            });
                         }
                     }
-                    if ((noGenresSelected || works[i].keywordsSelected.length == 1) && works[i].row.style.color != "yellow") {
-                        works[i].row.style.display = "none";
-                        works[i].row.style.color = "yellow";
+                    if ((noGenresSelected || work.keywordsSelected.length === 1) && work.row.style.color !== 'yellow') {
+                        work.row.style.display = 'none';
+                        work.row.style.color = 'yellow';
                     }
                 }
             }
         }
 
         function sortList(thisSort, col) {
-            var sortArray = [];
-            $('#listHead').children('td').each(function () {
-                this.innerHTML = this.innerHTML.replace("^", "");
+            $('#listHead').children('td').each((index, heading) => {
+                heading.innerHTML = heading.innerHTML.replace('^', '');
             });
-            $('.workOnList').each(function () {
-                var item = new Object,
-                    sj = $(this).find('td.sjNummer').text(); // SJ is always secondary sort criteria
-                if ("0" <= sj.substr(-1, 1) && sj.substr(-1, 1) <= "9") {
-                    sj += " ";
+
+            const sortArray = $('.workOnList').map((index, row) => {
+                const $row = $(row);
+                let sj = $row.find('td.sjNummer').text(); // SJ is always secondary sort criteria
+                const lastCharacter = sj.slice(-1);
+
+                if (lastCharacter >= '0' && lastCharacter <= '9') {
+                    sj += ' ';
                 }
-                for (var i = sj.length; i < 5; i++) {
-                    sj = "0" + sj;
-                }
-                item.sortKey = alphabetize($(this).find('td.' + col).text()) + sj;
-                item.row = $(this);
-                sortArray.push(item);
-            });
-            sortArray.sort(function (a, b) {
-                if (a.sortKey.toLowerCase() < b.sortKey.toLowerCase()) {
+                sj = sj.padStart(5, '0');
+
+                return {
+                    sortKey: alphabetize($row.find('td.' + col).text()) + sj,
+                    row
+                };
+            }).get();
+
+            sortArray.sort((a, b) => {
+                if (a.sortKey < b.sortKey) {
                     return -1;
                 }
-                if (a.sortKey.toLowerCase() > b.sortKey.toLowerCase()) {
+                if (a.sortKey > b.sortKey) {
                     return 1;
                 }
                 return 0;
             });
-            for (var i = 0; i < sortArray.length; i++) {
-                $('#listTail').before(sortArray[i].row);
-            }
-            thisSort.innerHTML += "^"; // = &#x25B2;
+
+            const fragment = document.createDocumentFragment();
+            sortArray.forEach(item => fragment.appendChild(item.row));
+            document.getElementById('listTail').before(fragment);
+            thisSort.innerHTML += '^'; // = &#x25B2;
         }
 
         function alphabetize(s) {
-            var zeros = "00000000", //max leading zeros for numbers
-                a = s.replace(/\s*\[[^\]]*\]\s*/g, "").toLowerCase(), a1, num = [];
-            //remove anything in brackets
-            if (/[0-9]/.test(a)) {//numbers
-                a1 = a.replace(/\d+/g, "¤");
-                num = a.match(/\d+/g);
-                $(num).each(function (i, v) {
-                    a1 = a1.replace("¤", zeros.substr(0, zeros.length - v.length) + v);
-                });
-                a = a1;
+            let value = s.replace(BRACKETED_TEXT_PATTERN, '').toLowerCase();
+            value = value.replace(NUMBER_PATTERN, number => number.padStart(8, '0'));
+
+            let normalised = '';
+            for (const character of value) {
+                normalised += alphabetReplacements.get(character) || character;
             }
-            if (/[z-\uffff]/.test(a)) {//diacritics, Danish national letters
-                a = a.replace(/z/g, "z0");
-                a = a.replace(/æ/g, "z1");
-                a = a.replace(/ø/g, "z2");
-                a = a.replace(/å/g, "z3");
-                a = a.replace(/ä/g, "z1");
-                a = a.replace(/ö/g, "z2");
-                a = a.replace(/ü/g, "y");
-                a = a.replace(/é/g, "e");
-                a = a.replace(/è/g, "e");
-                a = a.replace(/ê/g, "e");
-                a = a.replace(/á/g, "a");
-                a = a.replace(/à/g, "a");
-                a = a.replace(/œ/g, "oe");
-                a = a.replace(/ç/g, "c");
-                a = a.replace(/ð/g, "d");
-                a = a.replace(/þ/g, "th");
-            }
-            a = a.replace(/aa/g, "z3");
-            return a + ' ';
+
+            return normalised.split('aa').join('z3') + ' ';
         }
 
         // -->
