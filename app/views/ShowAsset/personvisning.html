@@ -90,21 +90,14 @@
             });
         });
 
-        document.querySelector('tbody')?.addEventListener('click', e => {
-            const link = e.target.closest('a[href^="#"]');
-            if (!link) return;
-
-            const target = document.querySelector(link.hash);
-            if (!target) return;
-
+        $('tbody').on('click', 'a[href^="#"]', function (e) {
             e.preventDefault();
 
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            const target = $(this.getAttribute('href'));
 
-            history.replaceState(null, '', link.hash);
+            if (target.length) {
+                $.scrollTo(target, 500);
+            }
         });
 
         // get current location and scroll down to this if exists
