@@ -90,18 +90,24 @@
             });
         });
 
-        // later: remove duplicate code with mythvisning.html
-        $('tbody').on('click', 'a[href^="#"]', function (e) {
+        document.querySelector('tbody')?.addEventListener('click', e => {
+            const link = e.target.closest('a[href^="#"]');
+            if (!link) return;
+
+            const target = document.querySelector(link.hash);
+            if (!target) return;
+
             e.preventDefault();
 
-            const target = $(this.hash);
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
 
-            if (target.length) {
-                $.scrollTo(target, 500);
-            }
+            history.replaceState(null, '', link.hash);
         });
 
-        // get current location and scrolldown to this if exists
+        // get current location and scroll down to this if exists
         const loc = String(document.location);
         const idx = loc.indexOf('#');
         const href = idx > 0 ? loc.substring(idx + 1) : '';
