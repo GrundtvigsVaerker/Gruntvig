@@ -91,12 +91,14 @@
         });
 
         // later: remove duplicate code with mythvisning.html
-        $('tbody').find('a[href]').click(e => {
+        $('tbody').on('click', 'a[href^="#"]', function (e) {
             e.preventDefault();
-            // alert("Scrolling to: " + $(this).attr("href"));
-            const scrollTarget = $($(e.currentTarget).attr('href'));
-            $.scrollTo(scrollTarget, 500);
 
+            const target = $(this.hash);
+
+            if (target.length) {
+                $.scrollTo(target, 500);
+            }
         });
 
         // get current location and scrolldown to this if exists
