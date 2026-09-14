@@ -6,81 +6,84 @@
 <script type="text/javascript">
 
 
-    $(document).ready(function () {
+    $(() => {
 
         //$('div.person').hide();
         $('div.root').hide();
 
-        alphabet = [
+        const alphabet = [
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'æ', 'ø', 'å'
         ];
 
+        const replacements = new Map([
+            ['á', 'a'], ['à', 'a'], ['â', 'a'], ['ç', 'c'], ['ð', 'd'],
+            ['é', 'e'], ['è', 'e'], ['ë', 'e'], ['ê', 'e'],
+            ['í', 'i'], ['ì', 'i'], ['ï', 'i'], ['î', 'i'],
+            ['ó', 'o'], ['ò', 'o'], ['ô', 'o'], ['ş', 's'], ['ś', 's'],
+            ['ț', 't'], ['þ', 't'], ['ú', 'u'], ['ù', 'u'], ['û', 'u'],
+            ['ý', 'y'], ['ỳ', 'y'], ['ÿ', 'y'], ['ŷ', 'y'], ['ü', 'y'],
+            ['æ', '{'], ['ä', '{'], ['ø', '|'], ['ö', '|'], ['å', '}']
+        ]);
+
         function normAlfa(a) { // normalise names to lower case without diacritical marks etc., KK 2014.10.07, 2020-11-11
-            if (a.search(/[\u0080-\uffff]/) >= 0) {
-                return a.toLowerCase().replace(/[áàâ]/g, "a").replace(/ç/g, "c").replace(/ð/g, "d").replace(/[éèëê]/g, "e").replace(/[íìïî]/g, "i").replace(/[óòô]/g, "o").replace(/[ş]/g, "s").replace(/[ś]/g, "s").replace(/[Țț]/g, "t").replace(/[Þþ]/g, "t").replace(/[úùû]/g, "u").replace(/[ýỳÿŷü]/g, "y").replace(/[æä]/g, "{").replace(/[øö]/g, "|").replace(/(å|aa)/g, "}");
-            } else {
-                return a.toLowerCase().replace(/aa/g, "}");
+            let normalised = '';
+
+            for (const character of a.toLowerCase()) {
+                normalised += replacements.get(character) || character;
             }
+
+            return normalised.split('aa').join('}');
         }
 
-        $.each(alphabet, function (index, value) {
+        const nodesByLetter = new Map(alphabet.map(value => [normAlfa(value), []]));
 
-            // alert(index + ': ' + value);
+        $('div.row').not('div.row > div.row').each((index, place) => {
+            const $place = $(place);
+            const name = $place.find('span.placeAltName, span.placeName').first().text().trim();
+            const nodes = nodesByLetter.get(normAlfa(name).charAt(0));
 
-            nodes = [];
-            $('div.row').not("div.row > div.row").each(function (index2) {
-                name = $.trim($(this).find('span.placeAltName,span.placeName').first().text());
-                firstLetter = normAlfa(name).charAt(0);
-                //alert(firstLetter);
-                //if( name.search(/me/) > 0 ) alert( firstLetter + firstLetter.toLowerCase() + normAlfa(firstLetter) + firstLetter.charCodeAt(0) + " " + name );
+            if (!nodes) {
+                return;
+            }
 
-                if (firstLetter == normAlfa(value)) {
+            const $header = $place.find('span.placeHeader');
+            const header = $header.html();
+            const id = $header.parent().attr('id');
+            const description = $place.find('.placeContent').html() || '';
+            let node = '<tr id="' + id + '"><td class="navn">' + header + '</td><td class="definisjon">' + description + '</td></tr>';
 
-                    $(this).hide();
-
-                    desc = $(this).find('.placeContent').html() || "";
-
-                    var header = $(this).find('span.placeHeader').html();
-                    var id = $(this).find('span.placeHeader').parent().attr("id");
-
-                    node = '<tr id="' + id + '"><td class="navn">' + header + '</td><td class="definisjon">' + desc + '</td></tr>';
-
-                    $(this).find("div.row").each(function (index3) {
-                        var header = $(this).find('span.placeHeader').html();
-                        // var id = $(this).find('span.placeHeader').attr("id");
-                        desc = $(this).find('.placeContent').html() || "";
-                        node += '<tr><td class="navn">' + '<span class="placeInnrykk">' + header + '</span></td><td class="definisjon">' + desc + '</td></tr>';
-                    });
-
-                    nodes.push(node);
-                    $(this).remove();
-
-                }
-
+            $place.find('div.row').each((childIndex, childPlace) => {
+                const $childPlace = $(childPlace);
+                const childHeader = $childPlace.find('span.placeHeader').html();
+                const childDescription = $childPlace.find('.placeContent').html() || '';
+                node += '<tr><td class="navn"><span class="placeInnrykk">' + childHeader + '</span></td><td class="definisjon">' + childDescription + '</td></tr>';
             });
 
-            nodes = nodes.reverse();
-            //alert(nodes);
+            nodes.push(node);
+            $place.remove();
+        });
 
-            $(nodes).each(function (index, value2) {
-                //alert(value);
-                $('#' + value.toUpperCase()).after(value2);
+        alphabet.forEach(value => {
+            const nodes = nodesByLetter.get(normAlfa(value)).reverse();
+            const $heading = $('#' + value.toUpperCase());
 
+            nodes.forEach(node => {
+                $heading.after(node);
             });
         });
 
-        $("a[name]").click(function (e) {
+        $('a[name]').click(e => {
             e.preventDefault();
-            var scrolltarget = $("#" + $(this).attr("name"));
-            $.scrollTo(scrolltarget, 500);
+            const scrollTarget = $('#' + $(e.currentTarget).attr('name'));
+            $.scrollTo(scrollTarget, 500);
         });
 
         // get current location and scrolldown to this if exists
-        var loc = String(document.location);
-        var idx = loc.indexOf('#');
-        var href = (idx > 0) ? loc.substring(idx + 1) : "";
+        const loc = String(document.location);
+        const idx = loc.indexOf('#');
+        const href = idx > 0 ? loc.substring(idx + 1) : '';
         if (href) {
-            $.scrollTo("#" + href, 500);
+            $.scrollTo('#' + href, 500);
         }
 
     });
@@ -96,7 +99,7 @@
             <div id="breadcrumbs"><a href="#">Forside</a> &raquo; <a href="#">Registre</a> &raquo; Stedregister</div>
             <a id="place_vejledning" href="../vejledning/place_vej">Vejledning til stedregister</a>
         </div>
-        
+
         <div class="kolonne1">
 
             <ul id="kolonne1_meny">
