@@ -14,110 +14,100 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    const BRACKETED_TEXT_PATTERN = /\s*\[[^\]]*\]\s*/g;
+    const NUMBER_PATTERN = /\d+/g;
+    const alphabetReplacements = new Map([
+        ['z', 'z0'], ['æ', 'z1'], ['ä', 'z1'], ['ø', 'z2'], ['ö', 'z2'],
+        ['å', 'z3'], ['ü', 'y'], ['é', 'e'], ['è', 'e'], ['ê', 'e'],
+        ['á', 'a'], ['à', 'a'], ['œ', 'oe'], ['ç', 'c'], ['ð', 'd'], ['þ', 'th']
+    ]);
+
+    $(() => {
 
         $('div.root').hide();
 
-        alphabet = [
+        const alphabet = [
             '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'æ', 'ø', 'å'
         ];
 
-        $.each(alphabet, function (index, value) {
-            var nodes = [];
-            $('div.work').each(function (index2) {
-                var name = $(this).find('span.name').text(),
-                    uri = $(this).find('span.uri').text(),
-                    rootName = $(this).find('span.rootName').text(),
-                    altName = $(this).find('span.altName').text(),
-                    partName = $(this).find('span.partName'),
-                    splitName = rootName.split("_"),
-                    year = splitName[0],
-                    sj = splitName[1];
-                if (startsWith(name, value)) {
-                    $(this).hide();
-                    node = '\<!--' + alphabetize(name) + '--><tr><td class="shortForm"><a href="' + uri + '">' + name + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>';
-                    nodes.push(node);
-                }
-                if (altName) {
-                    if (startsWith(altName, value)) {
-                        node = '\<!--' + alphabetize(altName) + '--><tr><td class="shortForm"><a href="' + uri + '">' + altName + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>';
-                        nodes.push(node);
-                    }
-                }
-                //##########################
-                //console.log(partName.text());
-                if (partName.text().indexOf("<") >= 0) {
-                    partName.html(partName.text());
-                }
-                partName.find('desc').each(function () {
-                    var partLabel = $(this).find('label').text();
+        const nodesByLetter = new Map(alphabet.map(value => [alphabetGroup(value), []]));
 
-                    if (startsWith(partLabel, value)) {
-                        var partUrl = uri + '#\u007b\"0\":0,\"k\":' + ($(this).find('ident').text() - 1) + '\u007d',
-                            partYear = $(this).find('date').text(),
-                            partSj = $(this).find('idno').text(),
-                            partNode = '\<!--' + alphabetize(partLabel) + '--><tr><td class="shortForm"><a href=\'' + partUrl + '\'>' + partLabel + '</a></td><td class="definisjon">' + (partYear ? partYear : year) + '</td><td class="sjNummer">' + (partSj ? partSj : sj) + '</td></tr>';
-                        nodes.push(partNode);
-                    }
-                });
-            });
-            nodes = nodes.sort().reverse();
-            $(nodes).each(function (index, value2) {
-                $('#' + alphabetize(value)).after(value2);
+        const addNode = (label, uri, year, sj, isPart = false) => {
+            const sortKey = alphabetize(label);
+            const nodes = nodesByLetter.get(alphabetGroupFromKey(sortKey));
+
+            if (!nodes) {
+                return;
+            }
+
+            const link = isPart ? '<a href=\'' + uri + '\'>' : '<a href="' + uri + '">';
+            const node = '\<!--' + sortKey + '--><tr><td class="shortForm">' + link + label + '</a></td><td class="definisjon">' + year + '</td><td class="sjNummer">' + sj + '</td></tr>';
+            nodes.push(node);
+        };
+
+        $('div.work').each((workIndex, work) => {
+            const $work = $(work);
+            const name = $work.find('span.name').text();
+            const uri = $work.find('span.uri').text();
+            const [year, sj] = $work.find('span.rootName').text().split('_');
+            const altName = $work.find('span.altName').text();
+            const $partName = $work.find('span.partName');
+
+            addNode(name, uri, year, sj);
+            if (altName) {
+                addNode(altName, uri, year, sj);
+            }
+
+            if ($partName.text().includes('<')) {
+                $partName.html($partName.text());
+            }
+
+            $partName.find('desc').each((partIndex, part) => {
+                const $part = $(part);
+                const partLabel = $part.find('label').text();
+                const partUrl = uri + '#\u007b\"0\":0,\"k\":' + ($part.find('ident').text() - 1) + '\u007d';
+                const partYear = $part.find('date').text() || year;
+                const partSj = $part.find('idno').text() || sj;
+
+                addNode(partLabel, partUrl, partYear, partSj, true);
             });
         });
 
-        var loc = String(document.location);
-        var idx = loc.indexOf('#');
-        var href = (idx > 0) ? loc.substring(idx + 1) : "";
+        alphabet.forEach(value => {
+            const nodes = nodesByLetter.get(alphabetGroup(value)).sort().reverse();
+            const $heading = $('#' + alphabetize(value).trim());
+
+            nodes.forEach(node => {
+                $heading.after(node);
+            });
+        });
+
+        const loc = String(document.location);
+        const idx = loc.indexOf('#');
+        const href = idx > 0 ? loc.substring(idx + 1) : '';
         if (href) {
-            $.scrollTo("#" + href, 500);
+            $.scrollTo('#' + href, 500);
         }
     });
 
     function alphabetize(s) {
-        var zeros = "00000000", //max leading zeros for numbers
-            a = s.replace(/\s*\[[^\]]*\]\s*/g, "").toLowerCase(), a1, num = [];
-        //remove anything in brackets
-        if (/[0-9]/.test(a)) {//numbers
-            a1 = a.replace(/\d+/g, "¤");
-            num = a.match(/\d+/g);
-            $(num).each(function (i, v) {
-                a1 = a1.replace("¤", zeros.substr(0, zeros.length - v.length) + v);
-            });
-            a = a1;
+        let value = s.replace(BRACKETED_TEXT_PATTERN, '').toLowerCase();
+        value = value.replace(NUMBER_PATTERN, number => number.padStart(8, '0'));
+
+        let normalised = '';
+        for (const character of value) {
+            normalised += alphabetReplacements.get(character) || character;
         }
-        if (/[z-\uffff]/.test(a)) {//diacritics, Danish national letters
-            a = a.replace(/z/g, "z0");
-            a = a.replace(/æ/g, "z1");
-            a = a.replace(/ø/g, "z2");
-            a = a.replace(/å/g, "z3");
-            a = a.replace(/ä/g, "z1");
-            a = a.replace(/ö/g, "z2");
-            a = a.replace(/ü/g, "y");
-            a = a.replace(/é/g, "e");
-            a = a.replace(/è/g, "e");
-            a = a.replace(/ê/g, "e");
-            a = a.replace(/á/g, "a");
-            a = a.replace(/à/g, "a");
-            a = a.replace(/œ/g, "oe");
-            a = a.replace(/ç/g, "c");
-            a = a.replace(/ð/g, "d");
-            a = a.replace(/þ/g, "th");
-        }
-        a = a.replace(/aa/g, "z3");
-        return a + ' ';
+
+        return normalised.split('aa').join('z3') + ' ';
     }
 
-    function startsWith(a, b) { // first letter of a starts with letter b with respect to alphabetization
-        var aa = alphabetize(a).charAt(0), ba = alphabetize(b).charAt(0);
-        if (aa == "z") {
-            aa = alphabetize(a).substr(0, 2);
-            if (ba == "z") {
-                ba = alphabetize(b).substr(0, 2);
-            }
-        }
-        return aa == ba;
+    function alphabetGroup(value) {
+        return alphabetGroupFromKey(alphabetize(value));
+    }
+
+    function alphabetGroupFromKey(alphabetized) {
+        return alphabetized.charAt(0) === 'z' ? alphabetized.slice(0, 2) : alphabetized.charAt(0);
     }
 
 
