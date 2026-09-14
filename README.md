@@ -73,10 +73,51 @@ Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der
 - lav sanity tjek om der er andre fil-formater (som ikke er de png og gif der hører til i public/images), hvis der er, så kopier til DATA-DIR/img
 - Og så fra DATA-DIR/img slet alle dem der er i public/images i repository.
 - OBS: erstat IKKE public/images med det overleverede public/ dir, public/* skal komme fra git-hub, alt brugergenereret skal ligge eksternt.
-- Der er referencer til `href="public/images/` erstat disse med `href="img/`
-- i html kolonnen for chapter of asset, find alle referencer til `href="img/xxx.pdf"` og erstat med `href="pdf/xxx.pdf"`
+- [V] Der er referencer til `href="public/images/` erstat disse med `href="img/` - DONE
+- [V] i html kolonnen for chapter of asset, find alle referencer til `href="img/xxx.pdf"` og erstat med `href="pdf/xxx.pdf"` - DONE
   TAG ET SNAPSHOT INDEN, GØR DET I NEDENSTÅENDE RÆKKEFØLGE...
 
+----
+Grundtvig værker...
+
+- [V] tag snapshop
+- [V] lav søg og erstat af stier til images, se noter
+- [V] lav release tag. v0.1 og commit
+- lav deploy på serveren (se noter)
+- start server, se noter, har scripts til det
+- tjek at den virker
+- reindex lucene, der er endpoint til det...
+- se noter om filer der skal uploades igen.
+
+
+- Tjek hvorfor vi får heap memory exceptions, og hvorfor den stadig er langsom...
+- Se log-filen og spørg LLM, vi kan godt hæve Memory, men det virker weird...
+- Den er stadig langsom!!!!
+
+Test at søgninger virker...
+
+Test performance...
+
+Lav script til sortere alle filer fra gv, se mails fra Kim. Så hent alle filer.
+De skal fordeles i den mappe struktur jeg har defineret (undlad noPub stier)
+
+Upload filer, tjek det virker med alle faksimile, pdf etc..
+
+OBS: hvor mange filer er der per mappe????. Hvis det er 100.000 skal vi måske overveje at splitte dem op på årstal?
+Så når vi uploader tager den og kigger på om fil starter med XXXX_ og hvis den gør lav dir under img/ hvis ikke findes og gem.
+Hvis ikke starter med XXX_ så bare gem i roden...
+i mappe. Ved lookup på /img/fileName, hvis fileName starter med XXXX_ tilføj XXXX som sti, ellers bare kig i roden af /img dir
+
+Læs alle migrate noter igennem, er der noget der mangler?
+
+Tqg snapshot INDEN vi giver mulighed for at Kim etc. kan teste upload, og rul tilbage til snapshot efter de har testet...
+----
+
+// TODO mangler denne
+
+- Upload `regList.xml` og `bookInventory1805.xml` og `bookInventory1839.xml` igen, så de bliver parset korrekt...
+
+// SQL MIGRATION DONE
 > ``` 
 >  UPDATE __TABLE_NAME__
 >  SET __COLUMN_NAME__ = replace(
@@ -97,8 +138,6 @@ Når vi får data fra KB, tag hele public mappens indhold og lav bash filter der
 >  WHERE __COLUMN_NAME__ ~ 'href="img/[^"]+\.pdf"';
 >  ;
 > ```
-
-- Upload `regList.xml` og `bookInventory1805.xml` og `bookInventory1839.xml` igen, så de bliver parset korrekt...
 
 # TODO ON SERVER POSTGRES:
 

@@ -73,6 +73,9 @@
                 addWork(partPreHtml + partLabel + partPostHtml, partCurWork);
             });
         });
+
+        // Start chronologically, with SJ as the secondary sort key.
+        sortList(document.getElementById('initSort'), 'definisjon');
     });
 </script>
 
@@ -504,8 +507,8 @@
             <div id="liste" class="hideroot">
                 <table>
                     <tr id="listHead">
-                        <td class="shortForm" id="initSort" onclick="sortList(this,'shortForm')" title="Sorter alfabetisk">Titel</td>
-                        <td class="definisjon" onclick="sortList(this,'definisjon')" title="Sorter kronologisk">År</td>
+                        <td class="shortForm" onclick="sortList(this,'shortForm')" title="Sorter alfabetisk">Titel</td>
+                        <td class="definisjon" id="initSort" onclick="sortList(this,'definisjon')" title="Sorter kronologisk">År</td>
                         <td class="sjNummer" onclick="sortList(this)" title="Sorter efter nummer">SJ</td>
                     </tr>
                     <tr id="listTail">
