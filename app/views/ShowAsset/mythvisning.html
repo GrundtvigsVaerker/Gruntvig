@@ -50,9 +50,9 @@
 
             let node = '<!-- ' + normalisedName + '-->';
             if (isMainEntry) {
-                node += '<tr><td class="navn"><span class="myth" id="' + id + '">' + name + '</span></td><td class="definisjon"> ' + content + '</td></tr>';
+                node += '<tr><td class="navn"><span class="myth" id="_' + id + '">' + name + '</span></td><td class="definisjon"> ' + content + '</td></tr>';
             } else {
-                node += '<tr><td class="navn"><a href="/myter#' + id + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+                node += '<tr><td class="navn"><a href="/myter#_' + id + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
             }
             nodes.push(node);
         }
