@@ -40,7 +40,7 @@
             nodesByLetter.set(normAlfa(value), []);
         });
 
-        function addNode(name, content, link, isMainEntry) {
+        function addNode(name, content, id, isMainEntry) {
             const normalisedName = normAlfa(name);
             const nodes = nodesByLetter.get(normAlfa(name.charAt(0)));
 
@@ -50,9 +50,9 @@
 
             let node = '<!-- ' + normalisedName + '-->';
             if (isMainEntry) {
-                node += '<tr><td class="navn"><span class="myth" id="X' + link + '">' + name + '</span></td><td class="definisjon">' + content + '</td></tr>';
+                node += `<tr><td class="navn"><span class="myth" id="_${id}">${name}</span></td><td class="definisjon">${content}</td></tr>`;
             } else {
-                node += '<tr><td class="navn"><a href="../myter#" name="' + link + '">' + name + '</a></td><td class="definisjon">' + content + '</td></tr>';
+                node += `<tr><td class="navn"><a href="/myter#_${id}">${name}</a></td><td class="definisjon">${content}</td></tr>`;
             }
             nodes.push(node);
         }
@@ -85,26 +85,8 @@
         // hide names in desc
         $('.definisjon .normForm').hide();
 
-        $('a[name]').click(e => {
-            e.preventDefault();
-            // alert("Name: " + $(this).attr("name"));
-            const scrollTarget = $('#X' + $(e.currentTarget).attr('name'));
-            // alert("Scrolling to: " + scrolltarget.html());
-            $.scrollTo(scrollTarget, 500);
-        });
-
-        // get current location and scroll down to this if exists
-        const loc = String(document.location);
-        const idx = loc.indexOf('#');
-        const href = idx > 0 ? loc.substring(idx + 1) : '';
-        if (href) {
-            $.scrollTo('#X' + href, 500);
-        }
-
     }); // onloaded
-
-    // make sameas-links scroll
-
+    
 </script>
 
 
