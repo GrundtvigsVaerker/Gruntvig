@@ -70,11 +70,12 @@
             let node = '<!--' + normalisedName + ' -->';
 
             if ($person.find('.altName').length > 0) {
-                const gotoName = $person.find('.gotoName').html();
-                node += '<tr><td class="navn"><a class="persNameRef" href="../personer#">' + name + ' ' + gotoName + '</a></td><!--td class="gotoName"></td--></tr>';
+                let gotoName = $person.find('.gotoName').html();
+                gotoName = gotoName.replace('href="#', 'href="/personer#');
+                node += '<tr><td class="navn">' + name + ' ' + gotoName + '</td></tr>';
             } else {
                 const id = $person.attr('id');
-                node += '<tr><td class="navn"><a class="persNameRef" id="' + id + '"href="../personer#">' + htmlName + '</a></td><td class="definisjon">' + year + addName + nation + ' ' + about + '<span>.</span></td></tr>';
+                node += '<tr><td class="navn" id="' + id + '">' + htmlName + '</td><td class="definisjon">' + year + addName + nation + ' ' + about + '<span>.</span></td></tr>';
             } // OBS space after normAlfa(name), sorts before hyphen, KK 2021-10-13
 
             $person.remove();
@@ -89,25 +90,7 @@
                 $heading.after(node);
             });
         });
-
-        $('tbody').on('click', 'a[href^="#"]', function (e) {
-            e.preventDefault();
-
-            const target = $(this.getAttribute('href'));
-
-            if (target.length) {
-                $.scrollTo(target, 500);
-            }
-        });
-
-        // get current location and scroll down to this if exists
-        const loc = String(document.location);
-        const idx = loc.indexOf('#');
-        const href = idx > 0 ? loc.substring(idx + 1) : '';
-        if (href) {
-            $.scrollTo('#' + href, 500);
-        }
-
+        
     });
 
 </script>
@@ -145,35 +128,35 @@
 
             <div id="innholdsfortegnelse">
 
-                <a href="../personer#A">a</a>
-                <a href="../personer#B">b</a>
-                <a href="../personer#C">c</a>
-                <a href="../personer#D">d</a>
-                <a href="../personer#E">e</a>
-                <a href="../personer#F">f</a>
-                <a href="../personer#G">g</a>
-                <a href="../personer#H">h</a>
-                <a href="../personer#I">i</a>
-                <a href="../personer#J">j</a>
-                <a href="../personer#K">k</a>
-                <a href="../personer#L">l</a>
-                <a href="../personer#M">m</a>
-                <a href="../personer#N">n</a>
-                <a href="../personer#O">o</a>
-                <a href="../personer#P">p</a>
-                <a href="../personer#Q">q</a>
-                <a href="../personer#R">r</a>
-                <a href="../personer#S">s</a>
-                <a href="../personer#T">t</a>
-                <a href="../personer#U">u</a>
-                <a href="../personer#V">v</a>
-                <a href="../personer#W">w</a>
-                <a href="../personer#X">x</a>
-                <a href="../personer#Y">y</a>
-                <a href="../personer#Z">z</a>
-                <a href="../personer#Æ">Æ</a>
-                <a href="../personer#Ø">Ø</a>
-                <a href="../personer#Å">Å</a>
+                <a href="/personer#A">a</a>
+                <a href="/personer#B">b</a>
+                <a href="/personer#C">c</a>
+                <a href="/personer#D">d</a>
+                <a href="/personer#E">e</a>
+                <a href="/personer#F">f</a>
+                <a href="/personer#G">g</a>
+                <a href="/personer#H">h</a>
+                <a href="/personer#I">i</a>
+                <a href="/personer#J">j</a>
+                <a href="/personer#K">k</a>
+                <a href="/personer#L">l</a>
+                <a href="/personer#M">m</a>
+                <a href="/personer#N">n</a>
+                <a href="/personer#O">o</a>
+                <a href="/personer#P">p</a>
+                <a href="/personer#Q">q</a>
+                <a href="/personer#R">r</a>
+                <a href="/personer#S">s</a>
+                <a href="/personer#T">t</a>
+                <a href="/personer#U">u</a>
+                <a href="/personer#V">v</a>
+                <a href="/personer#W">w</a>
+                <a href="/personer#X">x</a>
+                <a href="/personer#Y">y</a>
+                <a href="/personer#Z">z</a>
+                <a href="/personer#Æ">Æ</a>
+                <a href="/personer#Ø">Ø</a>
+                <a href="/personer#Å">Å</a>
             </div>
 
             <div id="liste" class="hideroot">
@@ -185,178 +168,178 @@
                         <td class="navn"><h4>A</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
 
                     <tr class="bottom_border" id="B">
                         <td class="navn"><h4>B</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
 
                     <tr class="bottom_border" id="C">
                         <td class="navn"><h4>C</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
 
                     <tr class="bottom_border" id="D">
                         <td class="navn"><h4>D</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="E">
                         <td class="navn"><h4>E</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="F">
                         <td class="navn"><h4>F</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="G">
                         <td class="navn"><h4>G</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="H">
                         <td class="navn"><h4>H</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="I">
                         <td class="navn"><h4>I</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="J">
                         <td class="navn"><h4>J</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="K">
                         <td class="navn"><h4>K</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="L">
                         <td class="navn"><h4>L</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="M">
                         <td class="navn"><h4>M</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="N">
                         <td class="navn"><h4>N</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="O">
                         <td class="navn"><h4>O</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="P">
                         <td class="navn"><h4>P</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="Q">
                         <td class="navn"><h4>Q</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="R">
                         <td class="navn"><h4>R</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="S">
                         <td class="navn"><h4>S</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="T">
                         <td class="navn"><h4>T</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="U">
                         <td class="navn"><h4>U</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="V">
                         <td class="navn"><h4>V</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="W">
                         <td class="navn"><h4>W</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="X">
                         <td class="navn"><h4>X</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="Y">
                         <td class="navn"><h4>Y</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="Z">
                         <td class="navn"><h4>Z</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="Æ">
                         <td class="navn"><h4>Æ</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="Ø">
                         <td class="navn"><h4>Ø</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
                     <tr class="bottom_border" id="Å">
                         <td class="navn"><h4>Å</h4></td>
                         <td></td>
                         <td></td>
-                        <td><a class="returnTop" href="../personer#" title="til toppen">&#x25B2;</a></td>
+                        <td><a class="returnTop" href="/personer#" title="til toppen">&#x25B2;</a></td>
                     </tr>
 
                 </table>

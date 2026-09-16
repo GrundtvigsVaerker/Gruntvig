@@ -64,13 +64,7 @@
                 $heading.after(node);
             });
         });
-
-        const loc = String(document.location);
-        const idx = loc.indexOf('#');
-        const href = idx > 0 ? loc.substring(idx + 1) : '';
-        if (href) {
-            $.scrollTo('#' + href, 500);
-        }
+        
     });
 
     function alphabetize(s) {
