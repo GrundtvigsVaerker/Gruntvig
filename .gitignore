@@ -17,3 +17,4 @@ logs/
 server.pid
 nohup.out
 conf/application.conf
+/out/
